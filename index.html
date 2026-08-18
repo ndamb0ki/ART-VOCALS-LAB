@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ndambuki Art Lab</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/OBJLoader.js"></script>
+
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Theme (Blinkpath-inspired) -->
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <header class="site-header">
+    <nav class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">NDAMBUKI ART LAB</a>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="html/shop.html">Shop</a></li>
+          <li><a href="html/art-classes.html">Classes</a></li>
+          <li><a href="html/art-trips.html">Trips</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-cta">Support</button>
+        <div class="menu-overlay" role="presentation"></div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO (cinematic) -->
+  <main>
+    <section class="hero-landing">
+        <div class="hero-inner">
+        <div class="eyebrow">Ndambuki Art Lab</div>
+        <h1 class="hero-heading">
+          Vocal enough, let us paint it!
+        </h1>
+        <p class="hero-lead">Workshops, commissions and a gallery that celebrates courage, color and care.</p>
+
+        <div class="hero-ctas">
+          <div class="hero-cta-group">
+            <a class="btn primary large" href="html/shop.html">View Gallery</a>
+            <div id="cta-3d-viewer" class="cta-character" aria-label="3D character preview"></div>
+          </div>
+          <a class="btn ghost large" href="html/art-classes.html">Join A Class</a>
+        </div>
+      </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <video id="heroVideo" class="hero-video" autoplay muted loop playsinline poster="images/hero-artclass.jpg">
+            <source src="images/hero.mp4" type="video/mp4">
+            <!-- fallback: will show poster image -->
+          </video>
+          <!-- Decorative rotating flower -->
+          <img src="images/hero-flower.PNG" alt="decorative flower" class="hero-flower" loading="lazy">
+          <div class="visual-gradient"></div>
+        </div>
+    </section>
+
+    <!-- Featured / Work grid (preserve your bento content) -->
+    <section class="works">
+      <div class="works-inner">
+        <h2 class="section-title">Explore</h2>
+        <p class="section-sub">Community classes, trips and original works.</p>
+
+        <div class="cards">
+          <a href="html/art-classes.html" class="card">
+            <figure><img src="images/artclass1.jpg" alt="Art Classes" loading="lazy"></figure>
+            <div class="card-body">
+              <h3>Art Classes</h3>
+              <p>Hands-on workshops for all ages.</p>
+            </div>
+          </a>
+
+          <a href="html/shop.html" class="card">
+            <figure><img src="images/artwork1.jpg" alt="Gallery" loading="lazy"></figure>
+            <div class="card-body">
+              <h3>Gallery / Store</h3>
+              <p>Original artwork available to view and purchase.</p>
+            </div>
+          </a>
+
+          <a href="html/art-trips.html" class="card">
+            <figure><img src="images/trip1.jpg" alt="Art Trips" loading="lazy"></figure>
+            <div class="card-body">
+              <h3>Art Trips</h3>
+              <p>Field trips to inspiring places.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT (FOOTER PREVIEW) -->
+    <section id="contact" class="contact">
+      <div class="contact-inner">
+        <h2>Get in Touch</h2>
+        <p>You can reach me directly for commissions, support, or collaborations.</p>
+
+        <div class="contact-links">
+          <a href="mailto:sndambuki155@gmail.com" class="link">Email</a>
+          <a href="https://wa.me/254773754496" class="link">WhatsApp</a>
+          <a href="https://instagram.com/n.d.a.m.b.o_ke" class="link">Instagram</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <h3>Ndambuki Art Lab</h3>
+      <p>Explore, create, and support a community of creativity. Reach out to me for commissions, support, or collaborations.</p>
+      <p class="footer-copy">© 2026 Stephen Ndambuki | Ndambuki Art Lab</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
