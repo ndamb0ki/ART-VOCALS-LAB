@@ -47,9 +47,11 @@ async function checkAdminAccess(user) {
       return;
     }
 
-    console.log("Admin access confirmed.");
+console.log("Admin access confirmed.");
 
-    await loadCommissionRequests();
+hideLogin();
+
+await loadCommissionRequests();
 
   } catch (error) {
     console.error(error);
@@ -66,6 +68,8 @@ function setupLoginInterface() {
   const container = document.querySelector(".container");
 
   if (!container) return;
+
+  container.style.display = "none";
 
   const loginBox = document.createElement("div");
 
@@ -199,7 +203,18 @@ function showLogin() {
     container.style.display = "none";
   }
 }
+function hideLogin() {
+  const loginBox = document.getElementById("loginBox");
+  const container = document.querySelector(".container");
 
+  if (loginBox) {
+    loginBox.style.display = "none";
+  }
+
+  if (container) {
+    container.style.display = "block";
+  }
+}
 
 // ------------------------------------
 // Load commission requests
