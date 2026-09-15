@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  // =========================================================
+  // ARTWORK DATA
+  // =========================================================
+
   const artworkData = [
     {
       id: 1,
@@ -88,50 +92,98 @@
     }
   ];
 
+
+  // =========================================================
+  // STATE
+  // =========================================================
+
   const state = {
     activeFilter: 'all',
     query: '',
     sort: 'newest',
-    cart: JSON.parse(localStorage.getItem('ndambo-cart') || '[]'),
-    favorites: JSON.parse(localStorage.getItem('ndambo-favorites') || '[]'),
+
+    cart: JSON.parse(
+      localStorage.getItem('ndambo-cart') || '[]'
+    ),
+
+    favorites: JSON.parse(
+      localStorage.getItem('ndambo-favorites') || '[]'
+    ),
+
     commissionStep: 1,
     commissionData: {},
     commissionImages: []
   };
+
   let commissionDraftTimer = null;
+
+
+  // =========================================================
+  // DOM ELEMENTS
+  // =========================================================
 
   const artworkGrid = document.getElementById('artworkGrid');
   const searchInput = document.getElementById('searchInput');
   const sortSelect = document.getElementById('sortSelect');
   const filterBar = document.getElementById('filterBar');
+
   const cartToggle = document.getElementById('cartToggle');
   const cartPanel = document.getElementById('cartPanel');
   const closeCart = document.getElementById('closeCart');
   const overlay = document.getElementById('overlay');
+
   const quickViewModal = document.getElementById('quickViewModal');
   const modalBody = document.getElementById('modalBody');
   const closeModal = document.getElementById('closeModal');
+
   const cartCount = document.getElementById('cartCount');
   const cartItems = document.getElementById('cartItems');
   const cartSubtotal = document.getElementById('cartSubtotal');
   const cartShipping = document.getElementById('cartShipping');
   const cartTax = document.getElementById('cartTax');
   const cartGrand = document.getElementById('cartGrand');
+
   const summarySubtotal = document.getElementById('summarySubtotal');
   const summaryShipping = document.getElementById('summaryShipping');
   const summaryTax = document.getElementById('summaryTax');
   const summaryGrand = document.getElementById('summaryGrand');
+
   const estimateValue = document.getElementById('estimateValue');
-  const commissionForm = document.getElementById('commissionForm');
-  const progressBar = document.getElementById('progressBar');
-  const progressLabels = document.getElementById('progressLabels');
-  const prevStep = document.getElementById('prevStep');
-  const nextStep = document.getElementById('nextStep');
-  const submitCommission = document.getElementById('submitCommission');
-  const customSizeFields = document.getElementById('customSizeFields');
-  const referenceImages = document.getElementById('referenceImages');
-  const previewHolder = document.getElementById('previewHolder');
-  const toastStack = document.getElementById('toastStack');
+
+  const commissionForm =
+    document.getElementById('commissionForm');
+
+  const progressBar =
+    document.getElementById('progressBar');
+
+  const progressLabels =
+    document.getElementById('progressLabels');
+
+  const prevStep =
+    document.getElementById('prevStep');
+
+  const nextStep =
+    document.getElementById('nextStep');
+
+  const submitCommission =
+    document.getElementById('submitCommission');
+
+  const customSizeFields =
+    document.getElementById('customSizeFields');
+
+  const referenceImages =
+    document.getElementById('referenceImages');
+
+  const previewHolder =
+    document.getElementById('previewHolder');
+
+  const toastStack =
+    document.getElementById('toastStack');
+
+
+  // =========================================================
+  // COMMISSION STEPS
+  // =========================================================
 
   const commissionSteps = [
     'Artwork Type',
@@ -149,592 +201,2060 @@
     'Customer Info'
   ];
 
+
+  // =========================================================
+  // SAVE STATE
+  // =========================================================
+
   function saveState() {
-    localStorage.setItem('ndambo-cart', JSON.stringify(state.cart));
-    localStorage.setItem('ndambo-favorites', JSON.stringify(state.favorites));
-    localStorage.setItem('ndambo-commission', JSON.stringify(state.commissionData));
+
+    localStorage.setItem(
+      'ndambo-cart',
+      JSON.stringify(state.cart)
+    );
+
+    localStorage.setItem(
+      'ndambo-favorites',
+      JSON.stringify(state.favorites)
+    );
+
+    localStorage.setItem(
+      'ndambo-commission',
+      JSON.stringify(state.commissionData)
+    );
   }
+
+
+  // =========================================================
+  // TOAST
+  // =========================================================
 
   function showToast(message) {
+
+    if (!toastStack) return;
+
     const toast = document.createElement('div');
+
     toast.className = 'toast';
+
     toast.textContent = message;
+
     toastStack.appendChild(toast);
-    setTimeout(() => toast.remove(), 2400);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 2400);
   }
+
+
+  // =========================================================
+  // BUTTON RIPPLE
+  // =========================================================
 
   function createRipple(event) {
+
     const button = event.currentTarget;
+
+    if (!button) return;
+
     const ripple = document.createElement('span');
+
     ripple.className = 'ripple';
+
     const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height) * 1.1;
+
+    const size =
+      Math.max(rect.width, rect.height) * 1.1;
+
     ripple.style.width = `${size}px`;
     ripple.style.height = `${size}px`;
-    ripple.style.left = `${event.clientX - rect.left}px`;
-    ripple.style.top = `${event.clientY - rect.top}px`;
+
+    ripple.style.left =
+      `${event.clientX - rect.left}px`;
+
+    ripple.style.top =
+      `${event.clientY - rect.top}px`;
+
     button.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
+
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
   }
+
+
+  // =========================================================
+  // CURRENCY
+  // =========================================================
 
   function formatCurrency(value) {
-    return `KES ${value.toLocaleString()}`;
+
+    const number = Number(value) || 0;
+
+    return `KES ${number.toLocaleString()}`;
   }
 
+
+  // =========================================================
+  // FILTER ARTWORKS
+  // =========================================================
+
   function getFilteredArtworks() {
-    const query = state.query.trim().toLowerCase();
+
+    const query =
+      state.query.trim().toLowerCase();
+
     return artworkData
-      .filter((item) => state.activeFilter === 'all' || item.category === state.activeFilter || item.medium === state.activeFilter)
+
       .filter((item) => {
-        if (!query) return true;
-        const haystack = `${item.name} ${item.category} ${item.medium} ${item.description}`.toLowerCase();
-        return haystack.includes(query);
+
+        return (
+          state.activeFilter === 'all' ||
+          item.category === state.activeFilter ||
+          item.medium === state.activeFilter
+        );
+
       })
+
+      .filter((item) => {
+
+        if (!query) return true;
+
+        const haystack =
+          `${item.name} ${item.category} ${item.medium} ${item.description}`
+            .toLowerCase();
+
+        return haystack.includes(query);
+
+      })
+
       .sort((a, b) => {
+
         switch (state.sort) {
-          case 'oldest': return new Date(a.date) - new Date(b.date);f
-          case 'price-asc': return a.price - b.price;
-          case 'price-desc': return b.price - a.price;
-          case 'alpha': return a.name.localeCompare(b.name);
-          case 'popular': return b.popularity - a.popularity;
-          default: return new Date(b.date) - new Date(a.date);
+
+          case 'oldest':
+            return new Date(a.date) - new Date(b.date);
+
+          case 'price-asc':
+            return a.price - b.price;
+
+          case 'price-desc':
+            return b.price - a.price;
+
+          case 'alpha':
+            return a.name.localeCompare(b.name);
+
+          case 'popular':
+            return b.popularity - a.popularity;
+
+          default:
+            return new Date(b.date) - new Date(a.date);
         }
+
       });
   }
 
+
+  // =========================================================
+  // RENDER ARTWORKS
+  // =========================================================
+
   function renderArtworks() {
-    const items = getFilteredArtworks();
-    const empty = items.length === 0;
+
+    if (!artworkGrid) return;
+
+    const items =
+      getFilteredArtworks();
+
+    const empty =
+      items.length === 0;
+
     artworkGrid.innerHTML = empty
-      ? '<div class="art-card" style="grid-column: 1 / -1; padding: 1.2rem;">No artworks match your search yet.</div>'
+      ? `
+        <div
+          class="art-card"
+          style="grid-column: 1 / -1; padding: 1.2rem;"
+        >
+          No artworks match your search yet.
+        </div>
+      `
       : '';
 
     items.forEach((item) => {
-      const isFavorite = state.favorites.includes(item.id);
-      const card = document.createElement('article');
+
+      const isFavorite =
+        state.favorites.includes(item.id);
+
+      const card =
+        document.createElement('article');
+
       card.className = 'art-card';
+
       card.innerHTML = `
-        <img src="${item.image}" alt="${item.name}">
+        <img
+          src="${item.image}"
+          alt="${item.name}"
+        >
+
         <div class="art-card__body">
+
           <div class="art-card__top">
+
             <h3>${item.name}</h3>
-            <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}" type="button" aria-label="Favorite">♡</button>
+
+            <button
+              class="favorite-btn ${isFavorite ? 'active' : ''}"
+              data-id="${item.id}"
+              type="button"
+              aria-label="Favorite"
+            >
+              ♡
+            </button>
+
           </div>
+
           <div class="meta">
+
             <span>${item.category}</span>
             <span>${item.medium}</span>
             <span>${item.size}</span>
+
           </div>
+
           <p>${item.description}</p>
+
           <div class="price-row">
-            <span class="rating">★ ${item.rating.toFixed(1)}</span>
-            <strong>${formatCurrency(item.price)}</strong>
+
+            <span class="rating">
+              ★ ${item.rating.toFixed(1)}
+            </span>
+
+            <strong>
+              ${formatCurrency(item.price)}
+            </strong>
+
           </div>
-          <p class="meta"><span>${item.availability}</span></p>
+
+          <p class="meta">
+            <span>${item.availability}</span>
+          </p>
+
           <div class="card-actions">
-            <button class="btn btn-secondary quick-view" data-id="${item.id}" type="button">Quick View</button>
-            <button class="btn btn-primary add-to-cart" data-id="${item.id}" type="button">Add to Cart</button>
+
+            <button
+              class="btn btn-secondary quick-view"
+              data-id="${item.id}"
+              type="button"
+            >
+              Quick View
+            </button>
+
+            <button
+              class="btn btn-primary add-to-cart"
+              data-id="${item.id}"
+              type="button"
+            >
+              Add to Cart
+            </button>
+
           </div>
-        </div>`;
+
+        </div>
+      `;
+
       artworkGrid.appendChild(card);
     });
   }
 
+
+  // =========================================================
+  // CART
+  // =========================================================
+
   function renderCart() {
+
+    if (!cartItems) return;
+
     cartItems.innerHTML = '';
+
     if (!state.cart.length) {
-      cartItems.innerHTML = '<p style="color: var(--muted);">Your cart is empty.</p>';
+
+      cartItems.innerHTML =
+        '<p style="color: var(--muted);">Your cart is empty.</p>';
+
       updateTotals();
+
       return;
     }
 
     state.cart.forEach((item) => {
-      const art = artworkData.find((entry) => entry.id === item.id);
+
+      const art =
+        artworkData.find(
+          (entry) => entry.id === item.id
+        );
+
       if (!art) return;
-      const row = document.createElement('div');
+
+      const row =
+        document.createElement('div');
+
       row.className = 'cart-item';
+
       row.innerHTML = `
-        <img src="${art.image}" alt="${art.name}">
+
+        <img
+          src="${art.image}"
+          alt="${art.name}"
+        >
+
         <div class="cart-item__meta">
+
           <strong>${art.name}</strong>
-          <small>${formatCurrency(art.price)}</small>
+
+          <small>
+            ${formatCurrency(art.price)}
+          </small>
+
           <div class="qty-controls">
-            <button type="button" data-action="decrease" data-id="${art.id}">−</button>
-            <span>${item.quantity}</span>
-            <button type="button" data-action="increase" data-id="${art.id}">+</button>
+
+            <button
+              type="button"
+              data-action="decrease"
+              data-id="${art.id}"
+            >
+              −
+            </button>
+
+            <span>
+              ${item.quantity}
+            </span>
+
+            <button
+              type="button"
+              data-action="increase"
+              data-id="${art.id}"
+            >
+              +
+            </button>
+
           </div>
+
         </div>
+
         <div>
-          <strong>${formatCurrency(art.price * item.quantity)}</strong>
-          <div style="margin-top: 0.35rem;"><button class="icon-btn" type="button" data-action="remove" data-id="${art.id}">✕</button></div>
-        </div>`;
+
+          <strong>
+            ${formatCurrency(
+              art.price * item.quantity
+            )}
+          </strong>
+
+          <div style="margin-top: 0.35rem;">
+
+            <button
+              class="icon-btn"
+              type="button"
+              data-action="remove"
+              data-id="${art.id}"
+            >
+              ✕
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
       cartItems.appendChild(row);
     });
+
     updateTotals();
   }
 
+
   function updateTotals() {
-    const subtotal = state.cart.reduce((sum, item) => {
-      const art = artworkData.find((entry) => entry.id === item.id);
-      return sum + (art ? art.price * item.quantity : 0);
-    }, 0);
-    const shipping = subtotal > 0 ? 1500 : 0;
-    const tax = Math.round(subtotal * 0.08);
-    const grand = subtotal + shipping + tax;
 
-    cartSubtotal.textContent = formatCurrency(subtotal);
-    cartShipping.textContent = formatCurrency(shipping);
-    cartTax.textContent = formatCurrency(tax);
-    cartGrand.textContent = formatCurrency(grand);
+    const subtotal =
+      state.cart.reduce((sum, item) => {
 
-    summarySubtotal.textContent = formatCurrency(subtotal);
-    summaryShipping.textContent = formatCurrency(shipping);
-    summaryTax.textContent = formatCurrency(tax);
-    summaryGrand.textContent = formatCurrency(grand);
-    cartCount.textContent = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+        const art =
+          artworkData.find(
+            (entry) => entry.id === item.id
+          );
+
+        return (
+          sum +
+          (art
+            ? art.price * item.quantity
+            : 0)
+        );
+
+      }, 0);
+
+    const shipping =
+      subtotal > 0 ? 1500 : 0;
+
+    const tax =
+      Math.round(subtotal * 0.08);
+
+    const grand =
+      subtotal + shipping + tax;
+
+    if (cartSubtotal)
+      cartSubtotal.textContent =
+        formatCurrency(subtotal);
+
+    if (cartShipping)
+      cartShipping.textContent =
+        formatCurrency(shipping);
+
+    if (cartTax)
+      cartTax.textContent =
+        formatCurrency(tax);
+
+    if (cartGrand)
+      cartGrand.textContent =
+        formatCurrency(grand);
+
+    if (summarySubtotal)
+      summarySubtotal.textContent =
+        formatCurrency(subtotal);
+
+    if (summaryShipping)
+      summaryShipping.textContent =
+        formatCurrency(shipping);
+
+    if (summaryTax)
+      summaryTax.textContent =
+        formatCurrency(tax);
+
+    if (summaryGrand)
+      summaryGrand.textContent =
+        formatCurrency(grand);
+
+    if (cartCount) {
+
+      cartCount.textContent =
+        state.cart.reduce(
+          (sum, item) =>
+            sum + item.quantity,
+          0
+        );
+    }
   }
+
+
+  // =========================================================
+  // CART TOGGLE
+  // =========================================================
 
   function toggleCart(force) {
-    const shouldOpen = typeof force === 'boolean' ? force : !cartPanel.classList.contains('open');
-    cartPanel.classList.toggle('open', shouldOpen);
-    overlay.classList.toggle('show', shouldOpen);
+
+    if (!cartPanel || !overlay) return;
+
+    const shouldOpen =
+      typeof force === 'boolean'
+        ? force
+        : !cartPanel.classList.contains('open');
+
+    cartPanel.classList.toggle(
+      'open',
+      shouldOpen
+    );
+
+    overlay.classList.toggle(
+      'show',
+      shouldOpen
+    );
   }
+
+
+  // =========================================================
+  // QUICK VIEW
+  // =========================================================
 
   function openModal(id) {
-    const art = artworkData.find((item) => item.id === id);
-    if (!art) return;
+
+    const art =
+      artworkData.find(
+        (item) => item.id === id
+      );
+
+    if (!art || !modalBody || !quickViewModal)
+      return;
+
     modalBody.innerHTML = `
-      <img src="${art.image}" alt="${art.name}">
+
+      <img
+        src="${art.image}"
+        alt="${art.name}"
+      >
+
       <div>
-        <p class="eyebrow">Quick View</p>
+
+        <p class="eyebrow">
+          Quick View
+        </p>
+
         <h3>${art.name}</h3>
-        <p><strong>Artist:</strong> Ndambo Arts</p>
-        <p><strong>Medium:</strong> ${art.medium}</p>
-        <p><strong>Description:</strong> ${art.description}</p>
-        <p><strong>Dimensions:</strong> ${art.size}</p>
-        <p><strong>Estimated Delivery:</strong> 5–10 business days</p>
-        <p><strong>Availability:</strong> ${art.availability}</p>
-        <p style="font-size: 1.2rem; font-weight: 700; margin-top: 0.7rem;">${formatCurrency(art.price)}</p>
-        <button class="btn btn-primary add-to-cart" data-id="${art.id}" type="button">Add to Cart</button>
-      </div>`;
+
+        <p>
+          <strong>Artist:</strong>
+          Ndambo Arts
+        </p>
+
+        <p>
+          <strong>Medium:</strong>
+          ${art.medium}
+        </p>
+
+        <p>
+          <strong>Description:</strong>
+          ${art.description}
+        </p>
+
+        <p>
+          <strong>Dimensions:</strong>
+          ${art.size}
+        </p>
+
+        <p>
+          <strong>Estimated Delivery:</strong>
+          5–10 business days
+        </p>
+
+        <p>
+          <strong>Availability:</strong>
+          ${art.availability}
+        </p>
+
+        <p
+          style="
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 0.7rem;
+          "
+        >
+          ${formatCurrency(art.price)}
+        </p>
+
+        <button
+          class="btn btn-primary add-to-cart"
+          data-id="${art.id}"
+          type="button"
+        >
+          Add to Cart
+        </button>
+
+      </div>
+
+    `;
+
     quickViewModal.classList.add('open');
-    quickViewModal.setAttribute('aria-hidden', 'false');
+
+    quickViewModal.setAttribute(
+      'aria-hidden',
+      'false'
+    );
   }
+
 
   function closeModalFn() {
-    quickViewModal.classList.remove('open');
-    quickViewModal.setAttribute('aria-hidden', 'true');
+
+    if (!quickViewModal) return;
+
+    quickViewModal.classList.remove(
+      'open'
+    );
+
+    quickViewModal.setAttribute(
+      'aria-hidden',
+      'true'
+    );
   }
 
+
+  // =========================================================
+  // CART ACTIONS
+  // =========================================================
+
   function addToCart(id) {
-    const existing = state.cart.find((item) => item.id === id);
-    if (existing) existing.quantity += 1; else state.cart.push({ id, quantity: 1 });
+
+    const existing =
+      state.cart.find(
+        (item) => item.id === id
+      );
+
+    if (existing) {
+
+      existing.quantity += 1;
+
+    } else {
+
+      state.cart.push({
+        id,
+        quantity: 1
+      });
+
+    }
+
     saveState();
+
     renderCart();
+
     showToast('Added to Cart');
   }
 
+
   function toggleFavorite(id) {
+
     if (state.favorites.includes(id)) {
-      state.favorites = state.favorites.filter((item) => item !== id);
+
+      state.favorites =
+        state.favorites.filter(
+          (item) => item !== id
+        );
+
     } else {
+
       state.favorites.push(id);
+
     }
+
     saveState();
+
     renderArtworks();
-    showToast(state.favorites.includes(id) ? 'Added to Favorites' : 'Removed from Favorites');
+
+    showToast(
+      state.favorites.includes(id)
+        ? 'Added to Favorites'
+        : 'Removed from Favorites'
+    );
   }
+
+
+  // =========================================================
+  // COMMISSION PROGRESS
+  // =========================================================
 
   function updateCommissionProgress() {
-    const totalSteps = commissionSteps.length;
-    const progress = Math.round((state.commissionStep / totalSteps) * 100);
-    progressBar.innerHTML = `<span style="width:${progress}%"></span>`;
-    progressLabels.innerHTML = commissionSteps.map((label, index) => `<span>${index + 1}. ${label}</span>`).join('');
+
+    if (!progressBar || !progressLabels)
+      return;
+
+    const totalSteps =
+      commissionSteps.length;
+
+    const progress =
+      Math.round(
+        (state.commissionStep /
+          totalSteps) *
+          100
+      );
+
+    progressBar.innerHTML =
+      `<span style="width:${progress}%"></span>`;
+
+    progressLabels.innerHTML =
+      commissionSteps
+        .map(
+          (label, index) =>
+            `<span>${index + 1}. ${label}</span>`
+        )
+        .join('');
   }
 
-function renderCommissionSteps() {
-  const panels = document.querySelectorAll('.step-panel');
 
-  panels.forEach((panel) => {
-    const stepNumber = Number(panel.dataset.step);
+  // =========================================================
+  // RENDER COMMISSION STEPS
+  // =========================================================
 
-    panel.classList.toggle(
-      'active',
-      stepNumber === state.commissionStep
-    );
-  });
+  function renderCommissionSteps() {
 
-  // Update progress bar
-  updateCommissionProgress();
+    const panels =
+      document.querySelectorAll(
+        '.step-panel'
+      );
 
-  // Previous button
-  if (prevStep) {
-    prevStep.disabled = state.commissionStep === 1;
-  }
+    panels.forEach((panel) => {
 
-  // Next button / Submit button
-  if (nextStep && submitCommission) {
-    if (state.commissionStep === commissionSteps.length) {
-      nextStep.classList.add('hidden');
-      submitCommission.classList.remove('hidden');
-    } else {
-      nextStep.classList.remove('hidden');
-      submitCommission.classList.add('hidden');
+      const stepNumber =
+        Number(panel.dataset.step);
+
+      panel.classList.toggle(
+        'active',
+        stepNumber ===
+          Number(state.commissionStep)
+      );
+    });
+
+    updateCommissionProgress();
+
+    if (prevStep) {
+
+      prevStep.disabled =
+        state.commissionStep === 1;
+    }
+
+    if (nextStep && submitCommission) {
+
+      if (
+        state.commissionStep ===
+        commissionSteps.length
+      ) {
+
+        nextStep.classList.add(
+          'hidden'
+        );
+
+        submitCommission.classList.remove(
+          'hidden'
+        );
+
+      } else {
+
+        nextStep.classList.remove(
+          'hidden'
+        );
+
+        submitCommission.classList.add(
+          'hidden'
+        );
+      }
     }
   }
 
+
+  // =========================================================
+  // MOVE BETWEEN COMMISSION STEPS
+  // =========================================================
+
   function handleStep(direction) {
-    const nextStepIndex = state.commissionStep + direction;
-    if (nextStepIndex < 1 || nextStepIndex > commissionSteps.length) return;
-    state.commissionStep = nextStepIndex;
+
+    const nextStepIndex =
+      Number(state.commissionStep) +
+      direction;
+
+    if (
+      nextStepIndex < 1 ||
+      nextStepIndex >
+        commissionSteps.length
+    ) {
+      return;
+    }
+
+    state.commissionStep =
+      nextStepIndex;
+
     renderCommissionSteps();
+
+    saveCommissionDraft();
+
+    const commissionSection =
+      document.getElementById(
+        'commission'
+      );
+
+    if (commissionSection) {
+
+      commissionSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   }
+
+
+  // =========================================================
+  // COMMISSION ESTIMATE
+  // =========================================================
 
   function estimateCommission() {
-    const formData = new FormData(commissionForm);
-    const sizeValue = formData.get('size') || '';
+
+    if (!commissionForm || !estimateValue)
+      return;
+
+    const formData =
+      new FormData(commissionForm);
+
+    const sizeValue =
+      formData.get('size') || '';
+
     const base = 5000;
-    const sizeMultiplier = sizeValue.includes('A0') || sizeValue.includes('100 × 120') ? 2.2 : sizeValue.includes('A1') || sizeValue.includes('80 × 100') ? 1.9 : sizeValue.includes('A2') || sizeValue.includes('60 × 90') ? 1.5 : sizeValue.includes('A3') || sizeValue.includes('50 × 70') ? 1.2 : 1;
-    const styleMultiplier = formData.get('style') === 'Realistic' ? 1.4 : formData.get('style') === 'Abstract' ? 1.1 : 1;
-    const budgetMultiplier = formData.get('budget') && formData.get('budget').includes('50,000') ? 1.7 : formData.get('budget') && formData.get('budget').includes('20,000') ? 1.4 : 1;
-    const estimate = Math.round(base * sizeMultiplier * styleMultiplier * budgetMultiplier);
-    estimateValue.textContent = formatCurrency(estimate);
+
+    let sizeMultiplier = 1;
+
+    if (
+      sizeValue.includes('A0') ||
+      sizeValue.includes('100 × 120')
+    ) {
+
+      sizeMultiplier = 2.2;
+
+    } else if (
+      sizeValue.includes('A1') ||
+      sizeValue.includes('80 × 100')
+    ) {
+
+      sizeMultiplier = 1.9;
+
+    } else if (
+      sizeValue.includes('A2') ||
+      sizeValue.includes('60 × 90')
+    ) {
+
+      sizeMultiplier = 1.5;
+
+    } else if (
+      sizeValue.includes('A3') ||
+      sizeValue.includes('50 × 70')
+    ) {
+
+      sizeMultiplier = 1.2;
+    }
+
+    const style =
+      formData.get('style');
+
+    let styleMultiplier = 1;
+
+    if (style === 'Realistic') {
+
+      styleMultiplier = 1.4;
+
+    } else if (style === 'Abstract') {
+
+      styleMultiplier = 1.1;
+    }
+
+    const budget =
+      formData.get('budget') || '';
+
+    let budgetMultiplier = 1;
+
+    if (
+      budget.includes('50,000') ||
+      budget.includes('100,000')
+    ) {
+
+      budgetMultiplier = 1.7;
+
+    } else if (
+      budget.includes('20,000')
+    ) {
+
+      budgetMultiplier = 1.4;
+    }
+
+    const estimate =
+      Math.round(
+        base *
+        sizeMultiplier *
+        styleMultiplier *
+        budgetMultiplier
+      );
+
+    estimateValue.textContent =
+      formatCurrency(estimate);
   }
+
+
+  // =========================================================
+  // SAVE COMMISSION DRAFT
+  // =========================================================
 
   function saveCommissionDraft() {
-    const formData = new FormData(commissionForm);
-    const values = Object.fromEntries(formData.entries());
-    state.commissionData = { ...state.commissionData, ...values, step: state.commissionStep };
+
+    if (!commissionForm) return;
+
+    const formData =
+      new FormData(commissionForm);
+
+    const values =
+      Object.fromEntries(
+        formData.entries()
+      );
+
+    state.commissionData = {
+      ...state.commissionData,
+      ...values,
+      step: state.commissionStep
+    };
+
     saveState();
-    showToast('Commission Draft Saved');
   }
+
 
   function scheduleCommissionSave() {
-    if (commissionDraftTimer) clearTimeout(commissionDraftTimer);
-    commissionDraftTimer = setTimeout(() => {
-      saveCommissionDraft();
-    }, 700);
+
+    if (commissionDraftTimer) {
+
+      clearTimeout(
+        commissionDraftTimer
+      );
+    }
+
+    commissionDraftTimer =
+      setTimeout(() => {
+
+        saveCommissionDraft();
+
+      }, 700);
   }
 
+
+  // =========================================================
+  // RESTORE COMMISSION DRAFT
+  // =========================================================
+
   function populateCommissionFromStorage() {
-    const stored = JSON.parse(localStorage.getItem('ndambo-commission') || '{}');
-    if (!stored || Object.keys(stored).length === 0) return;
-    Object.entries(stored).forEach(([key, value]) => {
-      const input = commissionForm.elements.namedItem(key);
-      if (!input) return;
-      if (input.type === 'radio') {
-        const radio = Array.from(commissionForm.querySelectorAll(`input[name="${key}"]`)).find((el) => el.value === value);
-        if (radio) radio.checked = true;
-      } else if (input.type === 'file') {
-        return;
-      } else {
-        input.value = value;
+
+    if (!commissionForm)
+      return;
+
+    const stored =
+      JSON.parse(
+        localStorage.getItem(
+          'ndambo-commission'
+        ) || '{}'
+      );
+
+    if (
+      !stored ||
+      Object.keys(stored).length === 0
+    ) {
+      return;
+    }
+
+    Object.entries(stored).forEach(
+      ([key, value]) => {
+
+        if (key === 'step')
+          return;
+
+        const inputs =
+          commissionForm.querySelectorAll(
+            `[name="${key}"]`
+          );
+
+        if (!inputs.length)
+          return;
+
+        const firstInput =
+          inputs[0];
+
+        if (
+          firstInput.type ===
+          'radio'
+        ) {
+
+          inputs.forEach(
+            (input) => {
+
+              input.checked =
+                input.value === value;
+
+            }
+          );
+
+        } else if (
+          firstInput.type !== 'file'
+        ) {
+
+          firstInput.value =
+            value;
+        }
       }
-    });
-    state.commissionStep = stored.step || 1;
+    );
+
+    state.commissionStep =
+      Number(stored.step) || 1;
+
     renderCommissionSteps();
+
     estimateCommission();
   }
 
+
+  // =========================================================
+  // COMMISSION EMAIL
+  // =========================================================
+
   function buildCommissionEmail() {
-    const formData = new FormData(commissionForm);
-    const values = Object.fromEntries(formData.entries());
+
+    if (!commissionForm)
+      return '';
+
+    const formData =
+      new FormData(commissionForm);
+
+    const values =
+      Object.fromEntries(
+        formData.entries()
+      );
+
     const lines = [
+
       '--------------------------------------------------',
+
       'NEW COMMISSION REQUEST',
+
       '',
-      'Customer Name:', values.customerName || '',
-      'Email:', values.customerEmail || '',
-      'Phone:', values.customerPhone || '',
-      'Country:', values.customerCountry || '',
-      'Artwork Type:', values.artworkType || '',
-      'Medium:', values.artworkType || '',
-      'Canvas Size:', values.size || '',
-      'Orientation:', values.orientation || '',
-      'Style:', values.style || '',
-      'Background:', values.background || '',
-      'Subjects:', values.subjects || '',
-      'Colour Style:', values.colourStyle || '',
-      'Budget:', values.budget || '',
-      'Delivery Method:', values.delivery || '',
-      'Deadline:', values.deadline || '',
-      'Additional Notes:', values.notes || '',
+
+      'Customer Name:',
+      values.customerName || '',
+
+      'Email:',
+      values.customerEmail || '',
+
+      'Phone:',
+      values.customerPhone || '',
+
+      'Country:',
+      values.customerCountry || '',
+
+      'Artwork Type:',
+      values.artworkType || '',
+
+      'Medium:',
+      values.artworkType || '',
+
+      'Canvas Size:',
+      values.size || '',
+
+      'Orientation:',
+      values.orientation || '',
+
+      'Style:',
+      values.style || '',
+
+      'Background:',
+      values.background || '',
+
+      'Subjects:',
+      values.subjects || '',
+
+      'Colour Style:',
+      values.colourStyle || '',
+
+      'Budget:',
+      values.budget || '',
+
+      'Delivery Method:',
+      values.delivery || '',
+
+      'Deadline:',
+      values.deadline || '',
+
+      'Additional Notes:',
+      values.notes || '',
+
       '',
+
       'Please contact me regarding this commission.',
+
       '--------------------------------------------------'
+
     ];
-    return encodeURIComponent(lines.join('\n'));
+
+    return encodeURIComponent(
+      lines.join('\n')
+    );
   }
 
-function parseBudget(budgetValue) {
-  if (!budgetValue) return null;
 
-  const number = parseFloat(
-    budgetValue.replace(/[^0-9.]/g, '')
-  );
+  // =========================================================
+  // PARSE BUDGET
+  // =========================================================
 
-  return Number.isFinite(number) ? number : null;
-}
+  function parseBudget(budgetValue) {
 
-function getCurrentCommissionEstimate() {
-  const text = estimateValue.textContent || '';
+    if (!budgetValue)
+      return null;
 
-  const number = parseFloat(
-    text.replace(/[^0-9.]/g, '')
-  );
+    const matches =
+      String(budgetValue).match(
+        /\d[\d,]*/g
+      );
 
-  return Number.isFinite(number) ? number : null;
-}
+    if (!matches || !matches.length)
+      return null;
+
+    const numbers =
+      matches.map(
+        (value) =>
+          Number(
+            value.replace(/,/g, '')
+          )
+      );
+
+    const validNumbers =
+      numbers.filter(
+        (number) =>
+          Number.isFinite(number)
+      );
+
+    if (!validNumbers.length)
+      return null;
+
+    // For a range such as KES 10,000–20,000,
+    // save the lower end as the budget value.
+    return validNumbers[0];
+  }
+
+
+  // =========================================================
+  // GET CURRENT COMMISSION ESTIMATE
+  // =========================================================
+
+  function getCurrentCommissionEstimate() {
+
+    if (!estimateValue)
+      return null;
+
+    const text =
+      estimateValue.textContent || '';
+
+    const matches =
+      text.match(
+        /[\d,]+(?:\.\d+)?/
+      );
+
+    if (!matches)
+      return null;
+
+    const number =
+      Number(
+        matches[0].replace(/,/g, '')
+      );
+
+    return Number.isFinite(number)
+      ? number
+      : null;
+  }
+
+
+  // =========================================================
+  // SUBMIT COMMISSION
+  // =========================================================
+
   async function handleCommissionSubmit(event) {
-  event.preventDefault();
 
-  const formData = new FormData(commissionForm);
-  const values = Object.fromEntries(formData.entries());
+    event.preventDefault();
 
-  const referenceFiles = Array.from(referenceImages.files || []);
+    if (!commissionForm)
+      return;
 
-  const commissionRequest = {
-    name: values.customerName || '',
-    email: values.customerEmail || '',
-    phone: values.customerPhone || '',
+    const formData =
+      new FormData(
+        commissionForm
+      );
 
-    customer_country: values.customerCountry || '',
+    const values =
+      Object.fromEntries(
+        formData.entries()
+      );
 
-    artwork_type: values.artworkType || '',
-    size: values.size || '',
+    const referenceFiles =
+      referenceImages
+        ? Array.from(
+            referenceImages.files || []
+          )
+        : [];
 
-    orientation: values.orientation || '',
-    style: values.style || '',
-    background: values.background || '',
-    subjects: values.subjects || '',
-    colour_style: values.colourStyle || '',
+    // -----------------------------------------
+    // BUILD DATABASE RECORD
+    // -----------------------------------------
 
-    budget: parseBudget(values.budget),
-    currency: 'KES',
+    const commissionRequest = {
 
-    delivery: values.delivery || '',
-    deadline: values.deadline || '',
+      name:
+        values.customerName || '',
 
-    description: values.notes || 'No additional notes provided.',
+      email:
+        values.customerEmail || '',
 
-    estimated_price: getCurrentCommissionEstimate(),
+      phone:
+        values.customerPhone || '',
 
-    reference_image_names: referenceFiles
-      .map(file => file.name)
-      .join(', '),
-const { error } = await supabaseClient
-  .from('commission_requests')
-  .insert([commissionRequest]);
+      customer_country:
+        values.customerCountry || '',
 
-if (error) {
-  console.error('Supabase commission error:', error);
-  throw error;
-}
-  };
+      artwork_type:
+        values.artworkType || '',
 
-  submitCommission.disabled = true;
-  submitCommission.textContent = 'Sending...';
+      size:
+        values.size || '',
 
-  try {
-  const { error } = await supabaseClient
-  .from('commission_requests')
-  .insert([commissionRequest]);
+      orientation:
+        values.orientation || '',
 
-    if (error) {
-      console.error('Supabase commission error:', error);
-      throw error;
+      style:
+        values.style || '',
+
+      background:
+        values.background || '',
+
+      subjects:
+        values.subjects || '',
+
+      colour_style:
+        values.colourStyle || '',
+
+      budget:
+        parseBudget(
+          values.budget
+        ),
+
+      currency:
+        'KES',
+
+      delivery:
+        values.delivery || '',
+
+      deadline:
+        values.deadline || '',
+
+      description:
+        values.notes ||
+        'No additional notes provided.',
+
+      estimated_price:
+        getCurrentCommissionEstimate(),
+
+      reference_image_names:
+        referenceFiles
+          .map(
+            (file) => file.name
+          )
+          .join(', ')
+    };
+
+
+    // -----------------------------------------
+    // BUTTON STATE
+    // -----------------------------------------
+
+    if (submitCommission) {
+
+      submitCommission.disabled =
+        true;
+
+      submitCommission.textContent =
+        'Sending...';
     }
 
-    console.log('Commission request saved:', data);
 
-    showToast('Commission request sent successfully!');
+    // -----------------------------------------
+    // SEND TO SUPABASE
+    // -----------------------------------------
 
-    localStorage.removeItem('ndambo-commission');
+    try {
 
-    setTimeout(() => {
-      alert(
-        'Thank you! Your commission request has been received. ' +
-        'Stephen will contact you soon.'
+      if (
+        typeof supabaseClient ===
+        'undefined'
+      ) {
+
+        throw new Error(
+          'Supabase client is not available. Check supabase.js and the script order in shop.html.'
+        );
+      }
+
+
+      const { error } =
+        await supabaseClient
+
+          .from(
+            'commission_requests'
+          )
+
+          .insert([
+            commissionRequest
+          ]);
+
+
+      if (error) {
+
+        console.error(
+          'Supabase commission error:',
+          error
+        );
+
+        throw error;
+      }
+
+
+      // -----------------------------------------
+      // SUCCESS
+      // -----------------------------------------
+
+      console.log(
+        'Commission request saved successfully.'
       );
-    }, 300);
 
-  } catch (error) {
-    console.error(error);
+      showToast(
+        'Commission request sent successfully!'
+      );
 
-    showToast('Could not send request');
+      localStorage.removeItem(
+        'ndambo-commission'
+      );
 
-    alert(
-      'Something went wrong while sending your commission request. ' +
-      'Please try again.'
-    );
+      state.commissionData = {};
 
-  } finally {
-    submitCommission.disabled = false;
-    submitCommission.textContent = 'Submit Commission Request';
+      setTimeout(() => {
+
+        alert(
+          'Thank you! Your commission request has been received. Stephen will contact you soon.'
+        );
+
+      }, 300);
+
+
+    } catch (error) {
+
+      console.error(
+        'Commission submission failed:',
+        error
+      );
+
+      showToast(
+        'Could not send request'
+      );
+
+      alert(
+        'Something went wrong while sending your commission request. Please try again.'
+      );
+
+
+    } finally {
+
+      if (submitCommission) {
+
+        submitCommission.disabled =
+          false;
+
+        submitCommission.textContent =
+          'Request My Commission';
+      }
+    }
   }
-}
+
+
+  // =========================================================
+  // CHECKOUT
+  // =========================================================
 
   function handleCheckoutSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const values = Object.fromEntries(formData.entries());
-    const itemLines = state.cart.map((item) => {
-      const art = artworkData.find((entry) => entry.id === item.id);
-      return `${art ? art.name : 'Artwork'} | Qty: ${item.quantity} | Price: ${formatCurrency(art ? art.price : 0)} | Subtotal: ${formatCurrency((art ? art.price : 0) * item.quantity)}`;
-    }).join('\n');
 
-    const subtotal = state.cart.reduce((sum, item) => {
-      const art = artworkData.find((entry) => entry.id === item.id);
-      return sum + (art ? art.price * item.quantity : 0);
-    }, 0);
-    const shipping = subtotal > 0 ? 1500 : 0;
-    const tax = Math.round(subtotal * 0.08);
-    const grand = subtotal + shipping + tax;
+    event.preventDefault();
+
+    const formData =
+      new FormData(
+        event.target
+      );
+
+    const values =
+      Object.fromEntries(
+        formData.entries()
+      );
+
+    const itemLines =
+      state.cart
+        .map((item) => {
+
+          const art =
+            artworkData.find(
+              (entry) =>
+                entry.id === item.id
+            );
+
+          return `${
+            art
+              ? art.name
+              : 'Artwork'
+          } | Qty: ${
+            item.quantity
+          } | Price: ${
+            formatCurrency(
+              art
+                ? art.price
+                : 0
+            )
+          } | Subtotal: ${
+            formatCurrency(
+              (
+                art
+                  ? art.price
+                  : 0
+              ) *
+              item.quantity
+            )
+          }`;
+
+        })
+        .join('\n');
+
+
+    const subtotal =
+      state.cart.reduce(
+        (sum, item) => {
+
+          const art =
+            artworkData.find(
+              (entry) =>
+                entry.id === item.id
+            );
+
+          return (
+            sum +
+            (
+              art
+                ? art.price *
+                  item.quantity
+                : 0
+            )
+          );
+
+        },
+        0
+      );
+
+
+    const shipping =
+      subtotal > 0
+        ? 1500
+        : 0;
+
+
+    const tax =
+      Math.round(
+        subtotal * 0.08
+      );
+
+
+    const grand =
+      subtotal +
+      shipping +
+      tax;
+
 
     const emailBody = [
+
       'NEW ARTWORK PURCHASE',
+
       '',
+
       'Customer Information',
-      'Name:', values.fullName || '',
-      'Email:', values.email || '',
-      'Phone:', values.phone || '',
-      'Country:', values.country || '',
-      'City:', values.city || '',
-      'Delivery Address:', values.address || '',
+
+      'Name:',
+      values.fullName || '',
+
+      'Email:',
+      values.email || '',
+
+      'Phone:',
+      values.phone || '',
+
+      'Country:',
+      values.country || '',
+
+      'City:',
+      values.city || '',
+
+      'Delivery Address:',
+      values.address || '',
+
       '',
+
       'Purchased Items',
-      itemLines || 'No items selected',
+
+      itemLines ||
+        'No items selected',
+
       '',
-      'Subtotal:', formatCurrency(subtotal),
-      'Shipping:', formatCurrency(shipping),
-      'Tax:', formatCurrency(tax),
-      'Grand Total:', formatCurrency(grand),
+
+      'Subtotal:',
+      formatCurrency(subtotal),
+
+      'Shipping:',
+      formatCurrency(shipping),
+
+      'Tax:',
+      formatCurrency(tax),
+
+      'Grand Total:',
+      formatCurrency(grand),
+
       '',
-      'Special Instructions:', values.instructions || '',
+
+      'Special Instructions:',
+      values.instructions || '',
+
       '',
+
       'Please contact me regarding this order.'
+
     ].join('\n');
 
-    const subject = `New Artwork Purchase - ${values.fullName || 'Customer'}`;
-    window.location.href = `mailto:sndambuki155@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-    showToast('Order email opened');
+
+    const subject =
+      `New Artwork Purchase - ${
+        values.fullName ||
+        'Customer'
+      }`;
+
+
+    window.location.href =
+      `mailto:sndambuki155@gmail.com?subject=${
+        encodeURIComponent(subject)
+      }&body=${
+        encodeURIComponent(emailBody)
+      }`;
+
+
+    showToast(
+      'Order email opened'
+    );
   }
+
+
+  // =========================================================
+  // EVENTS
+  // =========================================================
 
   function initEvents() {
-    searchInput.addEventListener('input', (event) => {
-      state.query = event.target.value;
-      renderArtworks();
-    });
 
-    sortSelect.addEventListener('change', (event) => {
-      state.sort = event.target.value;
-      renderArtworks();
-    });
+    // -----------------------------------------
+    // SEARCH
+    // -----------------------------------------
 
-    filterBar.addEventListener('click', (event) => {
-      const button = event.target.closest('.filter-chip');
-      if (!button) return;
-      document.querySelectorAll('.filter-chip').forEach((chip) => chip.classList.remove('active'));
-      button.classList.add('active');
-      state.activeFilter = button.dataset.filter;
-      renderArtworks();
-    });
+    if (searchInput) {
 
-    cartToggle.addEventListener('click', () => toggleCart(true));
-    closeCart.addEventListener('click', () => toggleCart(false));
-    overlay.addEventListener('click', () => toggleCart(false));
-    closeModal.addEventListener('click', closeModalFn);
-    quickViewModal.addEventListener('click', (event) => {
-      if (event.target === quickViewModal) closeModalFn();
-    });
+      searchInput.addEventListener(
+        'input',
+        (event) => {
 
-    document.addEventListener('click', (event) => {
-      const interactive = event.target.closest('.btn, .filter-chip, .icon-btn, .cart-trigger, .favorite-btn');
-      if (interactive) {
-        createRipple({ currentTarget: interactive, clientX: event.clientX, clientY: event.clientY });
-      }
+          state.query =
+            event.target.value;
 
-      const favoriteButton = event.target.closest('.favorite-btn');
-      if (favoriteButton) {
-        event.preventDefault();
-        favoriteButton.classList.add('animating');
-        setTimeout(() => favoriteButton.classList.remove('animating'), 280);
-        toggleFavorite(Number(favoriteButton.dataset.id));
-        return;
-      }
-      const quickViewButton = event.target.closest('.quick-view');
-      if (quickViewButton) {
-        openModal(Number(quickViewButton.dataset.id));
-        return;
-      }
-      const addToCartButton = event.target.closest('.add-to-cart');
-      if (addToCartButton) {
-        addToCart(Number(addToCartButton.dataset.id));
-        return;
-      }
-      const cartActionButton = event.target.closest('[data-action]');
-      if (cartActionButton) {
-        const action = cartActionButton.dataset.action;
-        const id = Number(cartActionButton.dataset.id);
-        const target = state.cart.find((item) => item.id === id);
-        if (!target) return;
-        if (action === 'increase') {
-          target.quantity += 1;
-        } else if (action === 'decrease') {
-          target.quantity = Math.max(1, target.quantity - 1);
-        } else if (action === 'remove') {
-          state.cart = state.cart.filter((item) => item.id !== id);
+          renderArtworks();
         }
-        saveState();
-        renderCart();
-        return;
+      );
+    }
+
+
+    // -----------------------------------------
+    // SORT
+    // -----------------------------------------
+
+    if (sortSelect) {
+
+      sortSelect.addEventListener(
+        'change',
+        (event) => {
+
+          state.sort =
+            event.target.value;
+
+          renderArtworks();
+        }
+      );
+    }
+
+
+    // -----------------------------------------
+    // FILTER
+    // -----------------------------------------
+
+    if (filterBar) {
+
+      filterBar.addEventListener(
+        'click',
+        (event) => {
+
+          const button =
+            event.target.closest(
+              '.filter-chip'
+            );
+
+          if (!button) return;
+
+          document
+            .querySelectorAll(
+              '.filter-chip'
+            )
+            .forEach(
+              (chip) =>
+                chip.classList.remove(
+                  'active'
+                )
+            );
+
+          button.classList.add(
+            'active'
+          );
+
+          state.activeFilter =
+            button.dataset.filter;
+
+          renderArtworks();
+        }
+      );
+    }
+
+
+    // -----------------------------------------
+    // CART
+    // -----------------------------------------
+
+    if (cartToggle) {
+
+      cartToggle.addEventListener(
+        'click',
+        () =>
+          toggleCart(true)
+      );
+    }
+
+
+    if (closeCart) {
+
+      closeCart.addEventListener(
+        'click',
+        () =>
+          toggleCart(false)
+      );
+    }
+
+
+    if (overlay) {
+
+      overlay.addEventListener(
+        'click',
+        () =>
+          toggleCart(false)
+      );
+    }
+
+
+    // -----------------------------------------
+    // MODAL
+    // -----------------------------------------
+
+    if (closeModal) {
+
+      closeModal.addEventListener(
+        'click',
+        closeModalFn
+      );
+    }
+
+
+    if (quickViewModal) {
+
+      quickViewModal.addEventListener(
+        'click',
+        (event) => {
+
+          if (
+            event.target ===
+            quickViewModal
+          ) {
+
+            closeModalFn();
+          }
+        }
+      );
+    }
+
+
+    // -----------------------------------------
+    // GLOBAL BUTTON ACTIONS
+    // -----------------------------------------
+
+    document.addEventListener(
+      'click',
+      (event) => {
+
+        const interactive =
+          event.target.closest(
+            '.btn, .filter-chip, .icon-btn, .cart-trigger, .favorite-btn'
+          );
+
+        if (interactive) {
+
+          createRipple({
+            currentTarget:
+              interactive,
+
+            clientX:
+              event.clientX,
+
+            clientY:
+              event.clientY
+          });
+        }
+
+
+        // FAVORITE
+        const favoriteButton =
+          event.target.closest(
+            '.favorite-btn'
+          );
+
+        if (favoriteButton) {
+
+          event.preventDefault();
+
+          favoriteButton.classList.add(
+            'animating'
+          );
+
+          setTimeout(
+            () =>
+              favoriteButton.classList.remove(
+                'animating'
+              ),
+            280
+          );
+
+          toggleFavorite(
+            Number(
+              favoriteButton.dataset.id
+            )
+          );
+
+          return;
+        }
+
+
+        // QUICK VIEW
+        const quickViewButton =
+          event.target.closest(
+            '.quick-view'
+          );
+
+        if (quickViewButton) {
+
+          openModal(
+            Number(
+              quickViewButton.dataset.id
+            )
+          );
+
+          return;
+        }
+
+
+        // ADD TO CART
+        const addToCartButton =
+          event.target.closest(
+            '.add-to-cart'
+          );
+
+        if (addToCartButton) {
+
+          addToCart(
+            Number(
+              addToCartButton.dataset.id
+            )
+          );
+
+          return;
+        }
+
+
+        // CART ACTION
+        const cartActionButton =
+          event.target.closest(
+            '[data-action]'
+          );
+
+        if (cartActionButton) {
+
+          const action =
+            cartActionButton.dataset.action;
+
+          const id =
+            Number(
+              cartActionButton.dataset.id
+            );
+
+          const target =
+            state.cart.find(
+              (item) =>
+                item.id === id
+            );
+
+          if (!target) return;
+
+
+          if (action === 'increase') {
+
+            target.quantity += 1;
+
+          } else if (
+            action === 'decrease'
+          ) {
+
+            target.quantity =
+              Math.max(
+                1,
+                target.quantity - 1
+              );
+
+          } else if (
+            action === 'remove'
+          ) {
+
+            state.cart =
+              state.cart.filter(
+                (item) =>
+                  item.id !== id
+              );
+          }
+
+
+          saveState();
+
+          renderCart();
+
+          return;
+        }
       }
-    });
+    );
 
-    prevStep.addEventListener('click', () => handleStep(-1));
-    nextStep.addEventListener('click', () => handleStep(1));
-    commissionForm.addEventListener('input', () => {
-      estimateCommission();
-      scheduleCommissionSave();
-    });
-    commissionForm.addEventListener('change', () => {
-      estimateCommission();
-      scheduleCommissionSave();
-    });
-    commissionForm.addEventListener('submit', handleCommissionSubmit);
-    document.getElementById('checkoutForm').addEventListener('submit', handleCheckoutSubmit);
 
-    referenceImages.addEventListener('change', (event) => {
-      const files = Array.from(event.target.files || []);
-      state.commissionImages = files;
-      previewHolder.innerHTML = '';
-      files.forEach((file) => {
-        const url = URL.createObjectURL(file);
-        const img = document.createElement('img');
-        img.src = url;
-        previewHolder.appendChild(img);
-      });
-    });
+    // =====================================================
+    // COMMISSION NAVIGATION
+    // =====================================================
 
-    document.getElementById('sizeSelect').addEventListener('change', (event) => {
-      customSizeFields.classList.toggle('show', event.target.value === 'Custom Size');
-    });
+    if (prevStep) {
 
-    document.querySelector('.nav-toggle').addEventListener('click', () => {
-      const links = document.querySelector('.nav-links');
-      links.classList.toggle('active');
-    });
+      prevStep.addEventListener(
+        'click',
+        () => {
+
+          handleStep(-1);
+
+        }
+      );
+    }
+
+
+    if (nextStep) {
+
+      nextStep.addEventListener(
+        'click',
+        () => {
+
+          handleStep(1);
+
+        }
+      );
+    }
+
+
+    // =====================================================
+    // COMMISSION FORM
+    // =====================================================
+
+    if (commissionForm) {
+
+      commissionForm.addEventListener(
+        'input',
+        () => {
+
+          estimateCommission();
+
+          scheduleCommissionSave();
+
+        }
+      );
+
+
+      commissionForm.addEventListener(
+        'change',
+        () => {
+
+          estimateCommission();
+
+          scheduleCommissionSave();
+
+        }
+      );
+
+
+      commissionForm.addEventListener(
+        'submit',
+        handleCommissionSubmit
+      );
+    }
+
+
+    // =====================================================
+    // CHECKOUT FORM
+    // =====================================================
+
+    const checkoutForm =
+      document.getElementById(
+        'checkoutForm'
+      );
+
+    if (checkoutForm) {
+
+      checkoutForm.addEventListener(
+        'submit',
+        handleCheckoutSubmit
+      );
+    }
+
+
+    // =====================================================
+    // REFERENCE IMAGES
+    // =====================================================
+
+    if (
+      referenceImages &&
+      previewHolder
+    ) {
+
+      referenceImages.addEventListener(
+        'change',
+        (event) => {
+
+          const files =
+            Array.from(
+              event.target.files || []
+            );
+
+          state.commissionImages =
+            files;
+
+          previewHolder.innerHTML =
+            '';
+
+          files.forEach(
+            (file) => {
+
+              const url =
+                URL.createObjectURL(
+                  file
+                );
+
+              const img =
+                document.createElement(
+                  'img'
+                );
+
+              img.src = url;
+
+              img.alt =
+                file.name;
+
+              previewHolder.appendChild(
+                img
+              );
+            }
+          );
+        }
+      );
+    }
+
+
+    // =====================================================
+    // SIZE
+    // =====================================================
+
+    const sizeSelect =
+      document.getElementById(
+        'sizeSelect'
+      );
+
+    if (
+      sizeSelect &&
+      customSizeFields
+    ) {
+
+      sizeSelect.addEventListener(
+        'change',
+        (event) => {
+
+          customSizeFields.classList.toggle(
+            'show',
+            event.target.value ===
+              'Custom Size'
+          );
+        }
+      );
+    }
+
+
+    // =====================================================
+    // MOBILE NAVIGATION
+    // =====================================================
+
+    const navToggle =
+      document.querySelector(
+        '.nav-toggle'
+      );
+
+    const navLinks =
+      document.querySelector(
+        '.nav-links'
+      );
+
+    if (
+      navToggle &&
+      navLinks
+    ) {
+
+      navToggle.addEventListener(
+        'click',
+        () => {
+
+          navLinks.classList.toggle(
+            'active'
+          );
+
+        }
+      );
+    }
   }
+
+
+  // =========================================================
+  // INITIALIZE
+  // =========================================================
 
   function init() {
+
     renderArtworks();
+
     renderCart();
+
     updateTotals();
+
     renderCommissionSteps();
+
     populateCommissionFromStorage();
+
     initEvents();
+
     updateCommissionProgress();
+
+    estimateCommission();
   }
 
+
+  // =========================================================
+  // START
+  // =========================================================
+
   init();
+
 })();
