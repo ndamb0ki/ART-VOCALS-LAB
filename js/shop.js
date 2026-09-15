@@ -1299,8 +1299,6 @@
     if (!validNumbers.length)
       return null;
 
-    // For a range such as KES 10,000–20,000,
-    // save the lower end as the budget value.
     return validNumbers[0];
   }
 
@@ -1548,56 +1546,41 @@
   // CHECKOUT
   // =========================================================
 
-  function handleCheckoutSubmit(event) {
+  async function handleCheckoutSubmit(event) {
 
     event.preventDefault();
 
+
+    // -----------------------------------------
+    // GET CUSTOMER INFORMATION
+    // -----------------------------------------
+
     const formData =
-      new FormData(
-        event.target
-      );
+      new FormData(event.target);
 
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
-    const itemLines =
-      state.cart
-        .map((item) => {
 
-          const art =
-            artworkData.find(
-              (entry) =>
-                entry.id === item.id
-            );
+    // -----------------------------------------
+    // CHECK CART
+    // -----------------------------------------
 
-          return `${
-            art
-              ? art.name
-              : 'Artwork'
-          } | Qty: ${
-            item.quantity
-          } | Price: ${
-            formatCurrency(
-              art
-                ? art.price
-                : 0
-            )
-          } | Subtotal: ${
-            formatCurrency(
-              (
-                art
-                  ? art.price
-                  : 0
-              ) *
-              item.quantity
-            )
-          }`;
+    if (!state.cart.length) {
 
-        })
-        .join('\n');
+      showToast(
+        'Your cart is empty.'
+      );
 
+      return;
+    }
+
+
+    // -----------------------------------------
+    // CALCULATE SUBTOTAL
+    // -----------------------------------------
 
     const subtotal =
       state.cart.reduce(
@@ -1613,8 +1596,7 @@
             sum +
             (
               art
-                ? art.price *
-                  item.quantity
+                ? art.price * item.quantity
                 : 0
             )
           );
@@ -1624,11 +1606,19 @@
       );
 
 
+    // -----------------------------------------
+    // CALCULATE SHIPPING
+    // -----------------------------------------
+
     const shipping =
       subtotal > 0
         ? 1500
         : 0;
 
+
+    // -----------------------------------------
+    // CALCULATE TAX
+    // -----------------------------------------
 
     const tax =
       Math.round(
@@ -1636,88 +1626,69 @@
       );
 
 
+    // -----------------------------------------
+    // CALCULATE GRAND TOTAL
+    // -----------------------------------------
+
     const grand =
       subtotal +
       shipping +
       tax;
 
 
-    
+    // -----------------------------------------
+    // CHECK SUPABASE CONNECTION
+    // -----------------------------------------
 
-      'NEW ARTWORK PURCHASE',
+    if (
+      typeof supabaseClient ===
+      'undefined'
+    ) {
 
-      '',
+      console.error(
+        'Supabase client is not available.'
+      );
 
-      'Customer Information',
+      showToast(
+        'Supabase connection is not available.'
+      );
 
-      'Name:',
-      values.fullName || '',
-
-      'Email:',
-      values.email || '',
-
-      'Phone:',
-      values.phone || '',
-
-      'Country:',
-      values.country || '',
-
-      'City:',
-      values.city || '',
-
-      'Delivery Address:',
-      values.address || '',
-
-      '',
-
-      'Purchased Items',
-
-      itemLines ||
-        'No items selected',
-
-      '',
-
-      'Subtotal:',
-      formatCurrency(subtotal),
-
-      'Shipping:',
-      formatCurrency(shipping),
-
-      'Tax:',
-      formatCurrency(tax),
-
-      'Grand Total:',
-      formatCurrency(grand),
-
-      '',
-
-      'Special Instructions:',
-      values.instructions || '',
-
-      '',
-
-      'Please contact me regarding this order.'
-
-    ].join('\n');
+      return;
+    }
 
 
-    const subject =
-      `New Artwork Purchase - ${
-        values.fullName ||
-        'Customer'
-      }`;
-    // CREATE ORDER IN SUPABASE
+    // -----------------------------------------
+    // CREATE ORDER NUMBER
+    // -----------------------------------------
 
     const orderNumber =
       'NAL-' +
-      Date.now().toString().slice(-8);
+      Date.now()
+        .toString()
+        .slice(-8);
 
-    const { data: order, error: orderError } =
+
+    console.log(
+      'Creating order:',
+      orderNumber
+    );
+
+
+    // -----------------------------------------
+    // CREATE ORDER IN SUPABASE
+    // -----------------------------------------
+
+    const {
+      data: order,
+      error: orderError
+    } =
       await supabaseClient
         .from('orders')
         .insert([
           {
-            order_number: orderNumber,
+
+            order_number:
+              orderNumber,
 
             customer_name:
               values.fullName || '',
@@ -1731,32 +1702,41 @@
             delivery_address:
               `${values.address || ''}, ${values.city || ''}, ${values.country || ''}`,
 
-            subtotal: subtotal,
+            subtotal:
+              subtotal,
 
-            delivery_fee: shipping,
+            delivery_fee:
+              shipping,
 
-            total: grand,
+            total:
+              grand,
 
-            currency: 'KES',
+            currency:
+              'KES',
 
-            payment_status: 'pending',
+            payment_status:
+              'pending',
 
-            order_status: 'new',
+            order_status:
+              'new',
 
             notes:
               values.instructions || null
+
           }
         ])
         .select()
         .single();
 
 
-    // CHECK IF ORDER WAS CREATED
+    // -----------------------------------------
+    // CHECK ORDER CREATION
+    // -----------------------------------------
 
     if (orderError) {
 
       console.error(
-        'Order creation error:',
+        'ORDER CREATION ERROR:',
         orderError
       );
 
@@ -1764,62 +1744,113 @@
         'There was a problem submitting your order.'
       );
 
+      alert(
+        'There was a problem submitting your order. Please check again.'
+      );
+
       return;
     }
 
 
+    console.log(
+      'ORDER CREATED:',
+      order
+    );
+
+
+    // -----------------------------------------
     // CREATE ORDER ITEMS
+    // -----------------------------------------
 
     const orderItems =
-      state.cart.map(cartItem => {
+      state.cart
+        .map(
+          (cartItem) => {
 
-        const artwork =
-          artworkData.find(
-            artwork =>
-              artwork.id === cartItem.id
-          );
+            const artwork =
+              artworkData.find(
+                (item) =>
+                  item.id === cartItem.id
+              );
 
-        if (!artwork) {
-          return null;
-        }
+            if (!artwork) {
+              return null;
+            }
 
-        return {
+            return {
 
-          order_id:
-            order.id,
+              order_id:
+                order.id,
 
-          artwork_id:
-            artwork.id,
+              /*
+               * The current gallery uses numeric
+               * IDs (1, 2, 3, etc.), while the
+               * Supabase artwork_id column uses UUID.
+               *
+               * Therefore artwork_id is temporarily
+               * null. The artwork name and price are
+               * still saved below.
+               */
 
-          title_snapshot:
-            artwork.name,
+              artwork_id:
+                null,
 
-          quantity:
-            Number(cartItem.quantity),
+              title_snapshot:
+                artwork.name,
 
-          unit_price:
-            Number(artwork.price),
+              quantity:
+                Number(
+                  cartItem.quantity
+                ),
 
-          line_total:
-            Number(artwork.price) *
-            Number(cartItem.quantity)
-        };
+              unit_price:
+                Number(
+                  artwork.price
+                ),
 
-      }).filter(Boolean);
+              line_total:
+                Number(
+                  artwork.price
+                ) *
+                Number(
+                  cartItem.quantity
+                )
+
+            };
+
+          }
+        )
+        .filter(Boolean);
 
 
+    console.log(
+      'ORDER ITEMS:',
+      orderItems
+    );
+
+
+    // -----------------------------------------
     // SAVE ORDER ITEMS
+    // -----------------------------------------
 
-    const { error: itemsError } =
+    const {
+      error: itemsError
+    } =
       await supabaseClient
         .from('order_items')
-        .insert(orderItems);
+        .insert(
+          orderItems
+        );
 
+
+    // -----------------------------------------
+    // CHECK ORDER ITEMS
+    // -----------------------------------------
 
     if (itemsError) {
 
       console.error(
-        'Order items error:',
+        'ORDER ITEMS ERROR:',
         itemsError
       );
 
@@ -1827,17 +1858,32 @@
         'The order was created, but the artwork items could not be saved.'
       );
 
+      alert(
+        'The order was created, but the artwork information could not be saved. Please contact the administrator.'
+      );
+
       return;
     }
 
 
+    console.log(
+      'ORDER ITEMS SAVED SUCCESSFULLY:',
+      orderItems
+    );
+
+
+    // -----------------------------------------
     // CLEAR CART
+    // -----------------------------------------
 
     state.cart = [];
 
+
     localStorage.setItem(
       'ndambo-cart',
-      JSON.stringify(state.cart)
+      JSON.stringify(
+        state.cart
+      )
     );
 
 
@@ -1846,20 +1892,23 @@
     updateTotals();
 
 
+    // -----------------------------------------
     // SUCCESS MESSAGE
+    // -----------------------------------------
 
     showToast(
       `Order ${orderNumber} received successfully!`
     );
 
-    console.log(
-      'Order created successfully:',
-      order
+
+    alert(
+      `Thank you! Your order ${orderNumber} has been received. We will contact you shortly.`
     );
 
+
     console.log(
-      'Order items:',
-      orderItems
+      'ORDER COMPLETED SUCCESSFULLY:',
+      orderNumber
     );
   }
 
@@ -2043,6 +2092,7 @@
 
 
         // FAVORITE
+
         const favoriteButton =
           event.target.closest(
             '.favorite-btn'
@@ -2075,6 +2125,7 @@
 
 
         // QUICK VIEW
+
         const quickViewButton =
           event.target.closest(
             '.quick-view'
@@ -2093,6 +2144,7 @@
 
 
         // ADD TO CART
+
         const addToCartButton =
           event.target.closest(
             '.add-to-cart'
@@ -2111,6 +2163,7 @@
 
 
         // CART ACTION
+
         const cartActionButton =
           event.target.closest(
             '[data-action]'
