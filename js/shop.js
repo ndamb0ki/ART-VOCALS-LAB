@@ -1808,14 +1808,6 @@ order_status:
                   artwork.price
                 ),
 
-              line_total:
-                Number(
-                  artwork.price
-                ) *
-                Number(
-                  cartItem.quantity
-                )
-
             };
 
           }
