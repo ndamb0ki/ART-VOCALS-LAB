@@ -500,8 +500,14 @@ function getCurrentCommissionEstimate() {
     reference_image_names: referenceFiles
       .map(file => file.name)
       .join(', '),
+const { error } = await supabaseClient
+  .from('commission_requests')
+  .insert([commissionRequest]);
 
-    status: 'new'
+if (error) {
+  console.error('Supabase commission error:', error);
+  throw error;
+}
   };
 
   submitCommission.disabled = true;
