@@ -141,8 +141,7 @@ function setupLoginInterface() {
     </form>
   `;
 
-  container.innerHTML = "";
-  container.appendChild(loginBox);
+document.body.insertBefore(loginBox, container);
 
   const form = document.getElementById("adminLoginForm");
 
