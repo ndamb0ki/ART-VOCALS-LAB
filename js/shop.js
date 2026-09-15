@@ -192,7 +192,7 @@
       })
       .sort((a, b) => {
         switch (state.sort) {
-          case 'oldest': return new Date(a.date) - new Date(b.date);
+          case 'oldest': return new Date(a.date) - new Date(b.date);f
           case 'price-asc': return a.price - b.price;
           case 'price-desc': return b.price - a.price;
           case 'alpha': return a.name.localeCompare(b.name);
@@ -352,13 +352,35 @@
     progressLabels.innerHTML = commissionSteps.map((label, index) => `<span>${index + 1}. ${label}</span>`).join('');
   }
 
-  function renderCommissionSteps() {
-    const panels = Array.from(document.querySelectorAll('.step-panel'));
-    panels.forEach((panel) => panel.classList.toggle('active', Number(panel.dataset.step) === state.commissionStep));
-    prevStep.classList.toggle('hidden', state.commissionStep === 1);
-    nextStep.classList.toggle('hidden', state.commissionStep === commissionSteps.length);
-    submitCommission.classList.toggle('hidden', state.commissionStep !== commissionSteps.length);
-    updateCommissionProgress();
+function renderCommissionSteps() {
+  const panels = document.querySelectorAll('.step-panel');
+
+  panels.forEach((panel) => {
+    const stepNumber = Number(panel.dataset.step);
+
+    panel.classList.toggle(
+      'active',
+      stepNumber === state.commissionStep
+    );
+  });
+
+  // Update progress bar
+  updateCommissionProgress();
+
+  // Previous button
+  if (prevStep) {
+    prevStep.disabled = state.commissionStep === 1;
+  }
+
+  // Next button / Submit button
+  if (nextStep && submitCommission) {
+    if (state.commissionStep === commissionSteps.length) {
+      nextStep.classList.add('hidden');
+      submitCommission.classList.remove('hidden');
+    } else {
+      nextStep.classList.remove('hidden');
+      submitCommission.classList.add('hidden');
+    }
   }
 
   function handleStep(direction) {
