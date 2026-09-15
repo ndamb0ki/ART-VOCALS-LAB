@@ -189,9 +189,14 @@ document.body.insertBefore(loginBox, container);
 
 function showLogin() {
   const loginBox = document.getElementById("loginBox");
+  const container = document.querySelector(".container");
 
   if (loginBox) {
     loginBox.style.display = "block";
+  }
+
+  if (container) {
+    container.style.display = "none";
   }
 }
 
