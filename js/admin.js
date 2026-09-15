@@ -1,6 +1,7 @@
 // Ndambuki Art Lab — Admin Dashboard
 
 let commissionRequests = [];
+let artworkOrders = [];
 
 // ------------------------------------
 // Start dashboard
@@ -47,11 +48,12 @@ async function checkAdminAccess(user) {
       return;
     }
 
-console.log("Admin access confirmed.");
+    console.log("Admin access confirmed.");
 
-hideLogin();
+    hideLogin();
 
-await loadCommissionRequests();
+    await loadCommissionRequests();
+    await loadOrders();
 
   } catch (error) {
     console.error(error);
@@ -145,7 +147,7 @@ function setupLoginInterface() {
     </form>
   `;
 
-document.body.insertBefore(loginBox, container);
+  document.body.insertBefore(loginBox, container);
 
   const form = document.getElementById("adminLoginForm");
 
@@ -203,6 +205,12 @@ function showLogin() {
     container.style.display = "none";
   }
 }
+
+
+// ------------------------------------
+// Hide login
+// ------------------------------------
+
 function hideLogin() {
   const loginBox = document.getElementById("loginBox");
   const container = document.querySelector(".container");
@@ -215,6 +223,11 @@ function hideLogin() {
     container.style.display = "block";
   }
 }
+
+
+// ====================================
+// COMMISSION REQUESTS
+// ====================================
 
 // ------------------------------------
 // Load commission requests
@@ -286,16 +299,33 @@ function updateStatistics() {
     request => request.status === "completed"
   ).length;
 
-  document.getElementById("totalRequests").textContent = total;
+  const totalElement =
+    document.getElementById("totalRequests");
 
-  document.getElementById("newRequests").textContent =
-    newRequests;
+  const newElement =
+    document.getElementById("newRequests");
 
-  document.getElementById("progressRequests").textContent =
-    inProgress;
+  const progressElement =
+    document.getElementById("progressRequests");
 
-  document.getElementById("completedRequests").textContent =
-    completed;
+  const completedElement =
+    document.getElementById("completedRequests");
+
+  if (totalElement) {
+    totalElement.textContent = total;
+  }
+
+  if (newElement) {
+    newElement.textContent = newRequests;
+  }
+
+  if (progressElement) {
+    progressElement.textContent = inProgress;
+  }
+
+  if (completedElement) {
+    completedElement.textContent = completed;
+  }
 }
 
 
@@ -309,7 +339,7 @@ function renderRequests() {
   const body = document.getElementById("requestsBody");
   const emptyState = document.getElementById("emptyState");
 
-  if (!body) return;
+  if (!body || !table || !emptyState) return;
 
   body.innerHTML = "";
 
@@ -463,41 +493,488 @@ ${request.admin_notes || "—"}
 }
 
 
+// ====================================
+// ARTWORK ORDERS
+// ====================================
+
 // ------------------------------------
-// Refresh button
+// Load orders
 // ------------------------------------
 
-const refreshBtn = document.getElementById("refreshBtn");
+async function loadOrders() {
 
-if (refreshBtn) {
-  refreshBtn.addEventListener("click", async () => {
-    await loadCommissionRequests();
+  const loading =
+    document.getElementById("ordersLoading");
+
+  const table =
+    document.getElementById("ordersTable");
+
+  const emptyState =
+    document.getElementById("ordersEmptyState");
+
+  const body =
+    document.getElementById("ordersBody");
+
+  if (loading) {
+    loading.style.display = "block";
+  }
+
+  if (table) {
+    table.style.display = "none";
+  }
+
+  if (emptyState) {
+    emptyState.style.display = "none";
+  }
+
+  if (!body) return;
+
+  body.innerHTML = "";
+
+  // --------------------------------
+  // Get orders
+  // --------------------------------
+
+  const {
+    data: orders,
+    error: ordersError
+  } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (ordersError) {
+
+    console.error(
+      "Orders loading error:",
+      ordersError
+    );
+
+    if (loading) {
+      loading.style.display = "none";
+    }
+
+    showError(
+      "Could not load artwork orders: " +
+      ordersError.message
+    );
+
+    return;
+  }
+
+  artworkOrders = orders || [];
+
+  console.log(
+    "Artwork orders loaded:",
+    artworkOrders
+  );
+
+  // --------------------------------
+  // Get order items
+  // --------------------------------
+
+  if (artworkOrders.length === 0) {
+
+    if (loading) {
+      loading.style.display = "none";
+    }
+
+    if (emptyState) {
+      emptyState.style.display = "block";
+    }
+
+    return;
+  }
+
+  const orderIds =
+    artworkOrders.map(order => order.id);
+
+  const {
+    data: items,
+    error: itemsError
+  } = await supabaseClient
+    .from("order_items")
+    .select("*")
+    .in("order_id", orderIds);
+
+  if (itemsError) {
+
+    console.error(
+      "Order items loading error:",
+      itemsError
+    );
+
+    if (loading) {
+      loading.style.display = "none";
+    }
+
+    showError(
+      "Orders loaded, but order items could not be loaded: " +
+      itemsError.message
+    );
+
+    return;
+  }
+
+  const orderItems = items || [];
+
+  // --------------------------------
+  // Attach items to each order
+  // --------------------------------
+
+  artworkOrders =
+    artworkOrders.map(order => {
+
+      const itemsForOrder =
+        orderItems.filter(
+          item => item.order_id === order.id
+        );
+
+      return {
+        ...order,
+        items: itemsForOrder
+      };
+
+    });
+
+  renderOrders();
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+}
+
+
+// ------------------------------------
+// Render orders
+// ------------------------------------
+
+function renderOrders() {
+
+  const table =
+    document.getElementById("ordersTable");
+
+  const body =
+    document.getElementById("ordersBody");
+
+  const emptyState =
+    document.getElementById("ordersEmptyState");
+
+  if (!table || !body || !emptyState) {
+    return;
+  }
+
+  body.innerHTML = "";
+
+  if (artworkOrders.length === 0) {
+
+    table.style.display = "none";
+    emptyState.style.display = "block";
+
+    return;
+  }
+
+  table.style.display = "table";
+  emptyState.style.display = "none";
+
+  artworkOrders.forEach(order => {
+
+    const row =
+      document.createElement("tr");
+
+    const date =
+      order.created_at
+        ? new Date(
+            order.created_at
+          ).toLocaleDateString()
+        : "—";
+
+    const items =
+      order.items || [];
+
+    const itemCount =
+      items.reduce(
+        (sum, item) =>
+          sum + Number(item.quantity || 0),
+        0
+      );
+
+    const itemNames =
+      items.length
+        ? items
+            .map(
+              item =>
+                `${item.title_snapshot || "Artwork"} × ${item.quantity}`
+            )
+            .join("<br>")
+        : "No items";
+
+    const total =
+      `${order.currency || "KES"} ${Number(
+        order.total || 0
+      ).toLocaleString()}`;
+
+    const paymentStatus =
+      order.payment_status || "pending";
+
+    const orderStatus =
+      order.order_status || "pending";
+
+    const paymentClass =
+      paymentStatus
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+
+    const orderStatusClass =
+      orderStatus
+        .toLowerCase()
+        .replace(/\s+/g, "-");
+
+    row.innerHTML = `
+      <td>
+        ${escapeHTML(date)}
+      </td>
+
+      <td>
+        <strong>
+          ${escapeHTML(
+            order.order_number || "—"
+          )}
+        </strong>
+      </td>
+
+      <td>
+        <strong>
+          ${escapeHTML(
+            order.customer_name || "Unknown"
+          )}
+        </strong>
+
+        <br>
+
+        <small>
+          ${escapeHTML(
+            order.customer_email || ""
+          )}
+        </small>
+
+        <br>
+
+        <small>
+          ${escapeHTML(
+            order.customer_phone || ""
+          )}
+        </small>
+      </td>
+
+      <td>
+        <div class="order-items">
+          ${itemNames}
+        </div>
+
+        <small>
+          ${itemCount} item${itemCount === 1 ? "" : "s"}
+        </small>
+      </td>
+
+      <td>
+        <span class="order-total">
+          ${escapeHTML(total)}
+        </span>
+      </td>
+
+      <td>
+        <span class="status status-${paymentClass}">
+          ${escapeHTML(paymentStatus)}
+        </span>
+      </td>
+
+      <td>
+        <span class="status status-${orderStatusClass}">
+          ${escapeHTML(orderStatus)}
+        </span>
+      </td>
+
+      <td>
+        <button
+          class="view-btn"
+          onclick="viewOrder('${order.id}')"
+        >
+          View
+        </button>
+      </td>
+    `;
+
+    body.appendChild(row);
   });
 }
 
 
 // ------------------------------------
-// Logout
+// View order
 // ------------------------------------
 
-const logoutBtn = document.getElementById("logoutBtn");
+function viewOrder(id) {
+
+  const order =
+    artworkOrders.find(
+      item => item.id === id
+    );
+
+  if (!order) return;
+
+  const items =
+    order.items || [];
+
+  const itemDetails =
+    items.length
+      ? items.map(item => {
+
+          const lineTotal =
+            Number(item.unit_price || 0) *
+            Number(item.quantity || 0);
+
+          return `
+${item.title_snapshot || "Artwork"}
+Quantity: ${item.quantity || 0}
+Unit Price: ${order.currency || "KES"} ${lineTotal === 0 ? "—" : Number(item.unit_price).toLocaleString()}
+Total: ${order.currency || "KES"} ${lineTotal.toLocaleString()}
+`;
+
+        }).join("\n--------------------\n")
+      : "No artwork items found.";
+
+  const details = `
+ARTWORK ORDER
+
+Order Number:
+${order.order_number || "—"}
+
+Date:
+${order.created_at
+  ? new Date(order.created_at).toLocaleString()
+  : "—"}
+
+CUSTOMER
+
+Name:
+${order.customer_name || "—"}
+
+Email:
+${order.customer_email || "—"}
+
+Phone:
+${order.customer_phone || "—"}
+
+Delivery Address:
+${order.delivery_address || "—"}
+
+ARTWORK
+
+${itemDetails}
+
+ORDER SUMMARY
+
+Subtotal:
+${order.currency || "KES"} ${Number(
+    order.subtotal || 0
+  ).toLocaleString()}
+
+Delivery Fee:
+${order.currency || "KES"} ${Number(
+    order.delivery_fee || 0
+  ).toLocaleString()}
+
+Total:
+${order.currency || "KES"} ${Number(
+    order.total || 0
+  ).toLocaleString()}
+
+Payment Status:
+${order.payment_status || "pending"}
+
+Order Status:
+${order.order_status || "pending"}
+
+Notes:
+${order.notes || "—"}
+`;
+
+  alert(details);
+}
+
+
+// ====================================
+// REFRESH BUTTONS
+// ====================================
+
+// ------------------------------------
+// Commission refresh
+// ------------------------------------
+
+const refreshBtn =
+  document.getElementById("refreshBtn");
+
+if (refreshBtn) {
+
+  refreshBtn.addEventListener(
+    "click",
+    async () => {
+
+      await loadCommissionRequests();
+
+    }
+  );
+}
+
+
+// ------------------------------------
+// Orders refresh
+// ------------------------------------
+
+const refreshOrdersBtn =
+  document.getElementById(
+    "refreshOrdersBtn"
+  );
+
+if (refreshOrdersBtn) {
+
+  refreshOrdersBtn.addEventListener(
+    "click",
+    async () => {
+
+      await loadOrders();
+
+    }
+  );
+}
+
+
+// ====================================
+// LOGOUT
+// ====================================
+
+const logoutBtn =
+  document.getElementById("logoutBtn");
 
 if (logoutBtn) {
 
-  logoutBtn.addEventListener("click", async () => {
+  logoutBtn.addEventListener(
+    "click",
+    async () => {
 
-    await supabaseClient.auth.signOut();
+      await supabaseClient.auth.signOut();
 
-    window.location.reload();
+      window.location.reload();
 
-  });
-
+    }
+  );
 }
 
 
-// ------------------------------------
-// Error message
-// ------------------------------------
+// ====================================
+// ERROR MESSAGE
+// ====================================
 
 function showError(message) {
 
@@ -507,13 +984,14 @@ function showError(message) {
   if (!errorBox) return;
 
   errorBox.textContent = message;
+
   errorBox.style.display = "block";
 }
 
 
-// ------------------------------------
-// Security helper
-// ------------------------------------
+// ====================================
+// SECURITY HELPER
+// ====================================
 
 function escapeHTML(value) {
 
