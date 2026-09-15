@@ -444,15 +444,15 @@
     return encodeURIComponent(lines.join('\n'));
   }
 
-  function handleCommissionSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(commissionForm);
-    const values = Object.fromEntries(formData.entries());
-    const subject = `Commission Request - ${values.artworkType || 'Custom Artwork'} - ${values.customerName || 'Customer'}`;
-    const body = buildCommissionEmail();
-    window.location.href = `mailto:sndambuki155@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-    showToast('Commission request opened in your email app');
-  }
+function handleCommissionSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(commissionForm);
+  const values = Object.fromEntries(formData.entries());
+  const subject = `Commission Request - ${values.artworkType || 'Custom Artwork'} - ${values.customerName || 'Customer'}`;
+  const body = buildCommissionEmail();
+  window.location.href = `mailto:sndambuki155@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+  showToast('Commission request opened in your email app');
+}
 
   function handleCheckoutSubmit(event) {
     event.preventDefault();
