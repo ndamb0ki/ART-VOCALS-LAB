@@ -1362,10 +1362,6 @@
           )
         : [];
 
-    // -----------------------------------------
-    // BUILD DATABASE RECORD
-    // -----------------------------------------
-
     const commissionRequest = {
 
       name:
@@ -1431,10 +1427,6 @@
     };
 
 
-    // -----------------------------------------
-    // BUTTON STATE
-    // -----------------------------------------
-
     if (submitCommission) {
 
       submitCommission.disabled =
@@ -1444,10 +1436,6 @@
         'Sending...';
     }
 
-
-    // -----------------------------------------
-    // SEND TO SUPABASE
-    // -----------------------------------------
 
     try {
 
@@ -1484,10 +1472,6 @@
         throw error;
       }
 
-
-      // -----------------------------------------
-      // SUCCESS
-      // -----------------------------------------
 
       console.log(
         'Commission request saved successfully.'
@@ -1668,9 +1652,26 @@
         .slice(-8);
 
 
+    // -----------------------------------------
+    // CREATE A UUID FOR THE ORDER
+    // -----------------------------------------
+    //
+    // We create the UUID ourselves so we don't
+    // need SELECT permission on the orders table.
+    //
+
+    const orderId =
+      crypto.randomUUID();
+
+
     console.log(
       'Creating order:',
       orderNumber
+    );
+
+    console.log(
+      'Order ID:',
+      orderId
     );
 
 
@@ -1679,13 +1680,15 @@
     // -----------------------------------------
 
     const {
-      data: order,
       error: orderError
     } =
       await supabaseClient
         .from('orders')
         .insert([
           {
+
+            id:
+              orderId,
 
             order_number:
               orderNumber,
@@ -1717,16 +1720,14 @@
             payment_status:
               'pending',
 
-order_status:
-   'pending',
+            order_status:
+              'pending',
 
             notes:
               values.instructions || null
 
           }
-        ])
-        .select()
-        .single();
+        ]);
 
 
     // -----------------------------------------
@@ -1754,7 +1755,7 @@ order_status:
 
     console.log(
       'ORDER CREATED:',
-      order
+      orderId
     );
 
 
@@ -1780,7 +1781,7 @@ order_status:
             return {
 
               order_id:
-                order.id,
+                orderId,
 
               /*
                * The current gallery uses numeric
@@ -1788,8 +1789,14 @@ order_status:
                * Supabase artwork_id column uses UUID.
                *
                * Therefore artwork_id is temporarily
-               * null. The artwork name and price are
-               * still saved below.
+               * null. The artwork name and price
+               * are saved below.
+               *
+               * IMPORTANT:
+               * Do NOT include line_total here.
+               * Supabase calculates line_total
+               * automatically because it is a
+               * generated column.
                */
 
               artwork_id:
@@ -1806,7 +1813,7 @@ order_status:
               unit_price:
                 Number(
                   artwork.price
-                ),
+                )
 
             };
 
@@ -1819,6 +1826,28 @@ order_status:
       'ORDER ITEMS:',
       orderItems
     );
+
+
+    // -----------------------------------------
+    // MAKE SURE THERE ARE ITEMS
+    // -----------------------------------------
+
+    if (!orderItems.length) {
+
+      console.error(
+        'No valid artwork items were found in the cart.'
+      );
+
+      showToast(
+        'No artwork items were found.'
+      );
+
+      alert(
+        'The order was created, but no artwork items were found in the cart.'
+      );
+
+      return;
+    }
 
 
     // -----------------------------------------
