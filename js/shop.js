@@ -508,11 +508,9 @@ function getCurrentCommissionEstimate() {
   submitCommission.textContent = 'Sending...';
 
   try {
-    const { data, error } = await supabaseClient
-      .from('commission_requests')
-      .insert([commissionRequest])
-      .select()
-      .single();
+  const { error } = await supabaseClient
+  .from('commission_requests')
+  .insert([commissionRequest]);
 
     if (error) {
       console.error('Supabase commission error:', error);
