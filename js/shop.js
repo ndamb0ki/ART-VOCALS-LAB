@@ -1642,7 +1642,7 @@
       tax;
 
 
-    const emailBody = [
+    
 
       'NEW ARTWORK PURCHASE',
 
@@ -1706,18 +1706,160 @@
         values.fullName ||
         'Customer'
       }`;
+    // CREATE ORDER IN SUPABASE
+
+    const orderNumber =
+      'NAL-' +
+      Date.now().toString().slice(-8);
+
+    const { data: order, error: orderError } =
+      await supabaseClient
+        .from('orders')
+        .insert([
+          {
+            order_number: orderNumber,
+
+            customer_name:
+              values.fullName || '',
+
+            customer_email:
+              values.email || '',
+
+            customer_phone:
+              values.phone || '',
+
+            delivery_address:
+              `${values.address || ''}, ${values.city || ''}, ${values.country || ''}`,
+
+            subtotal: subtotal,
+
+            delivery_fee: shipping,
+
+            total: grand,
+
+            currency: 'KES',
+
+            payment_status: 'pending',
+
+            order_status: 'new',
+
+            notes:
+              values.instructions || null
+          }
+        ])
+        .select()
+        .single();
 
 
-    window.location.href =
-      `mailto:sndambuki155@gmail.com?subject=${
-        encodeURIComponent(subject)
-      }&body=${
-        encodeURIComponent(emailBody)
-      }`;
+    // CHECK IF ORDER WAS CREATED
 
+    if (orderError) {
+
+      console.error(
+        'Order creation error:',
+        orderError
+      );
+
+      showToast(
+        'There was a problem submitting your order.'
+      );
+
+      return;
+    }
+
+
+    // CREATE ORDER ITEMS
+
+    const orderItems =
+      state.cart.map(cartItem => {
+
+        const artwork =
+          artworkData.find(
+            artwork =>
+              artwork.id === cartItem.id
+          );
+
+        if (!artwork) {
+          return null;
+        }
+
+        return {
+
+          order_id:
+            order.id,
+
+          artwork_id:
+            artwork.id,
+
+          title_snapshot:
+            artwork.name,
+
+          quantity:
+            Number(cartItem.quantity),
+
+          unit_price:
+            Number(artwork.price),
+
+          line_total:
+            Number(artwork.price) *
+            Number(cartItem.quantity)
+        };
+
+      }).filter(Boolean);
+
+
+    // SAVE ORDER ITEMS
+
+    const { error: itemsError } =
+      await supabaseClient
+        .from('order_items')
+        .insert(orderItems);
+
+
+    if (itemsError) {
+
+      console.error(
+        'Order items error:',
+        itemsError
+      );
+
+      showToast(
+        'The order was created, but the artwork items could not be saved.'
+      );
+
+      return;
+    }
+
+
+    // CLEAR CART
+
+    state.cart = [];
+
+    localStorage.setItem(
+      'ndambo-cart',
+      JSON.stringify(state.cart)
+    );
+
+
+    renderCart();
+
+    updateTotals();
+
+
+    // SUCCESS MESSAGE
 
     showToast(
-      'Order email opened'
+      `Order ${orderNumber} received successfully!`
+    );
+
+    console.log(
+      'Order created successfully:',
+      order
+    );
+
+    console.log(
+      'Order items:',
+      orderItems
     );
   }
 
