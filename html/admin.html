@@ -55,6 +55,10 @@
       margin: 30px auto;
     }
 
+    /* =========================
+       DASHBOARD STATS
+    ========================= */
+
     .dashboard-stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -80,11 +84,16 @@
       font-size: 30px;
     }
 
+    /* =========================
+       SECTIONS
+    ========================= */
+
     .requests-section {
       background: white;
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,.06);
       overflow: hidden;
+      margin-bottom: 30px;
     }
 
     .section-header {
@@ -107,6 +116,14 @@
       color: white;
       cursor: pointer;
     }
+
+    .refresh-btn:hover {
+      opacity: .9;
+    }
+
+    /* =========================
+       TABLES
+    ========================= */
 
     .table-wrapper {
       overflow-x: auto;
@@ -132,6 +149,14 @@
       color: #666;
     }
 
+    td {
+      font-size: 14px;
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
     .status {
       display: inline-block;
       padding: 5px 9px;
@@ -141,25 +166,42 @@
       background: #eee;
     }
 
-    .status-new {
+    .status-new,
+    .status-pending {
       background: #e3f2fd;
       color: #1565c0;
     }
 
-    .status-in-progress {
+    .status-in-progress,
+    .status-processing {
       background: #fff3cd;
       color: #856404;
     }
 
-    .status-completed {
+    .status-confirmed {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-completed,
+    .status-delivered {
       background: #d4edda;
       color: #155724;
+    }
+
+    .status-shipped {
+      background: #e2d9f3;
+      color: #563d7c;
     }
 
     .status-cancelled {
       background: #f8d7da;
       color: #721c24;
     }
+
+    /* =========================
+       BUTTONS
+    ========================= */
 
     .view-btn {
       border: 0;
@@ -169,6 +211,14 @@
       border-radius: 5px;
       cursor: pointer;
     }
+
+    .view-btn:hover {
+      opacity: .9;
+    }
+
+    /* =========================
+       STATES
+    ========================= */
 
     .empty {
       padding: 40px;
@@ -190,7 +240,26 @@
       display: none;
     }
 
+    /* =========================
+       ORDER DETAILS
+    ========================= */
+
+    .order-items {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .order-total {
+      font-weight: bold;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
     @media (max-width: 800px) {
+
       .dashboard-stats {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -205,6 +274,7 @@
     }
 
     @media (max-width: 500px) {
+
       .dashboard-stats {
         grid-template-columns: 1fr;
       }
@@ -216,26 +286,48 @@
       .logout-btn {
         margin-top: 15px;
       }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header h2 {
+        margin-bottom: 12px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- =========================
+       HEADER
+  ========================= -->
+
   <header class="admin-header">
+
     <div>
       <h1>Ndambuki Art Lab</h1>
-      <p>Commission Admin Dashboard</p>
+      <p>Admin Dashboard</p>
     </div>
 
     <button id="logoutBtn" class="logout-btn">
       Log Out
     </button>
+
   </header>
 
-<main class="container" style="display:none;">
-  
+
+  <main class="container" style="display:none;">
+
+    <!-- ERROR MESSAGE -->
+
     <div id="errorMessage" class="error"></div>
+
+
+    <!-- =========================
+         COMMISSION STATS
+    ========================= -->
 
     <section class="dashboard-stats">
 
@@ -261,23 +353,35 @@
 
     </section>
 
+
+    <!-- =========================
+         COMMISSION REQUESTS
+    ========================= -->
+
     <section class="requests-section">
 
       <div class="section-header">
+
         <h2>Commission Requests</h2>
 
         <button id="refreshBtn" class="refresh-btn">
           Refresh
         </button>
+
       </div>
+
 
       <div id="loading" class="loading">
         Loading commission requests...
       </div>
 
+
       <div class="table-wrapper">
+
         <table id="requestsTable" style="display:none;">
+
           <thead>
+
             <tr>
               <th>Date</th>
               <th>Customer</th>
@@ -287,11 +391,15 @@
               <th>Status</th>
               <th></th>
             </tr>
+
           </thead>
 
           <tbody id="requestsBody"></tbody>
+
         </table>
+
       </div>
+
 
       <div id="emptyState" class="empty" style="display:none;">
         No commission requests found.
@@ -299,11 +407,76 @@
 
     </section>
 
+
+    <!-- =========================
+         ORDERS
+    ========================= -->
+
+    <section class="requests-section">
+
+      <div class="section-header">
+
+        <h2>Artwork Orders</h2>
+
+        <button id="refreshOrdersBtn" class="refresh-btn">
+          Refresh Orders
+        </button>
+
+      </div>
+
+
+      <div id="ordersLoading" class="loading">
+        Loading orders...
+      </div>
+
+
+      <div class="table-wrapper">
+
+        <table id="ordersTable" style="display:none;">
+
+          <thead>
+
+            <tr>
+              <th>Date</th>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Order Status</th>
+              <th></th>
+            </tr>
+
+          </thead>
+
+
+          <tbody id="ordersBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div id="ordersEmptyState" class="empty" style="display:none;">
+        No artwork orders found.
+      </div>
+
+    </section>
+
   </main>
+
+
+  <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+  <!-- YOUR SUPABASE CONNECTION -->
+
   <script src="../js/supabase.js"></script>
+
+
+  <!-- ADMIN JAVASCRIPT -->
 
   <script src="../js/admin.js"></script>
 
