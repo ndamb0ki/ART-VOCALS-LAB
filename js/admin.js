@@ -263,11 +263,6 @@ async function loadCommissionRequests() {
 
   commissionRequests = data || [];
 
-  console.log(
-    "Commission requests loaded:",
-    commissionRequests
-  );
-
   updateStatistics();
   renderRequests();
 
@@ -531,10 +526,6 @@ async function loadOrders() {
 
   body.innerHTML = "";
 
-  // --------------------------------
-  // Get orders
-  // --------------------------------
-
   const {
     data: orders,
     error: ordersError
@@ -563,15 +554,6 @@ async function loadOrders() {
   }
 
   artworkOrders = orders || [];
-
-  console.log(
-    "Artwork orders loaded:",
-    artworkOrders
-  );
-
-  // --------------------------------
-  // Get order items
-  // --------------------------------
 
   if (artworkOrders.length === 0) {
 
@@ -617,10 +599,6 @@ async function loadOrders() {
   }
 
   const orderItems = items || [];
-
-  // --------------------------------
-  // Attach items to each order
-  // --------------------------------
 
   artworkOrders =
     artworkOrders.map(order => {
@@ -704,7 +682,7 @@ function renderOrders() {
         ? items
             .map(
               item =>
-                `${item.title_snapshot || "Artwork"} × ${item.quantity}`
+                `${escapeHTML(item.title_snapshot || "Artwork")} × ${item.quantity}`
             )
             .join("<br>")
         : "No items";
@@ -790,9 +768,48 @@ function renderOrders() {
       </td>
 
       <td>
-        <span class="status status-${orderStatusClass}">
-          ${escapeHTML(orderStatus)}
-        </span>
+        <select
+          id="status-${order.id}"
+          style="
+            padding:7px;
+            border:1px solid #ddd;
+            border-radius:6px;
+            background:white;
+            min-width:130px;
+          "
+        >
+          <option value="pending" ${orderStatus === "pending" ? "selected" : ""}>
+            Pending
+          </option>
+
+          <option value="confirmed" ${orderStatus === "confirmed" ? "selected" : ""}>
+            Confirmed
+          </option>
+
+          <option value="processing" ${orderStatus === "processing" ? "selected" : ""}>
+            Processing
+          </option>
+
+          <option value="shipped" ${orderStatus === "shipped" ? "selected" : ""}>
+            Shipped
+          </option>
+
+          <option value="delivered" ${orderStatus === "delivered" ? "selected" : ""}>
+            Delivered
+          </option>
+
+          <option value="cancelled" ${orderStatus === "cancelled" ? "selected" : ""}>
+            Cancelled
+          </option>
+        </select>
+
+        <button
+          class="view-btn"
+          style="margin-top:6px;"
+          onclick="updateOrderStatus('${order.id}')"
+        >
+          Save
+        </button>
       </td>
 
       <td>
@@ -807,6 +824,86 @@ function renderOrders() {
 
     body.appendChild(row);
   });
+}
+
+
+// ------------------------------------
+// Update order status
+// ------------------------------------
+
+async function updateOrderStatus(orderId) {
+
+  const select =
+    document.getElementById(
+      `status-${orderId}`
+    );
+
+  if (!select) {
+    alert("Could not find the order status selector.");
+    return;
+  }
+
+  const newStatus = select.value;
+
+  const button =
+    select.parentElement.querySelector(
+      "button"
+    );
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Saving...";
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("orders")
+      .update({
+        order_status: newStatus
+      })
+      .eq("id", orderId);
+
+  if (error) {
+
+    console.error(
+      "Order status update error:",
+      error
+    );
+
+    alert(
+      "Could not update order status:\n\n" +
+      error.message
+    );
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Save";
+    }
+
+    return;
+  }
+
+  // Update local order data
+  artworkOrders =
+    artworkOrders.map(order => {
+
+      if (order.id === orderId) {
+        return {
+          ...order,
+          order_status: newStatus
+        };
+      }
+
+      return order;
+
+    });
+
+  renderOrders();
+
+  alert(
+    "Order status updated to: " +
+    newStatus
+  );
 }
 
 
@@ -837,7 +934,9 @@ function viewOrder(id) {
           return `
 ${item.title_snapshot || "Artwork"}
 Quantity: ${item.quantity || 0}
-Unit Price: ${order.currency || "KES"} ${lineTotal === 0 ? "—" : Number(item.unit_price).toLocaleString()}
+Unit Price: ${order.currency || "KES"} ${Number(
+            item.unit_price || 0
+          ).toLocaleString()}
 Total: ${order.currency || "KES"} ${lineTotal.toLocaleString()}
 `;
 
@@ -908,10 +1007,6 @@ ${order.notes || "—"}
 // REFRESH BUTTONS
 // ====================================
 
-// ------------------------------------
-// Commission refresh
-// ------------------------------------
-
 const refreshBtn =
   document.getElementById("refreshBtn");
 
@@ -927,10 +1022,6 @@ if (refreshBtn) {
   );
 }
 
-
-// ------------------------------------
-// Orders refresh
-// ------------------------------------
 
 const refreshOrdersBtn =
   document.getElementById(
