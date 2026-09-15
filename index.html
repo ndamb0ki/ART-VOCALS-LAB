@@ -134,6 +134,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
+
+<script>
+  console.log("Ndambuki Art Lab → Supabase connection loaded");
+
+  if (window.supabase && supabaseClient) {
+    console.log("✅ Supabase is connected to the website");
+  } else {
+    console.error("❌ Supabase connection failed");
+  }
+</script>
+
 <script src="js/main.js"></script>
 <script src="js/ui.js"></script>
 </body>
