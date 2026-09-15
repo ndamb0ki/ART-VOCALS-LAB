@@ -444,14 +444,108 @@
     return encodeURIComponent(lines.join('\n'));
   }
 
-function handleCommissionSubmit(event) {
+function parseBudget(budgetValue) {
+  if (!budgetValue) return null;
+
+  const number = parseFloat(
+    budgetValue.replace(/[^0-9.]/g, '')
+  );
+
+  return Number.isFinite(number) ? number : null;
+}
+
+function getCurrentCommissionEstimate() {
+  const text = estimateValue.textContent || '';
+
+  const number = parseFloat(
+    text.replace(/[^0-9.]/g, '')
+  );
+
+  return Number.isFinite(number) ? number : null;
+}
+  async function handleCommissionSubmit(event) {
   event.preventDefault();
+
   const formData = new FormData(commissionForm);
   const values = Object.fromEntries(formData.entries());
-  const subject = `Commission Request - ${values.artworkType || 'Custom Artwork'} - ${values.customerName || 'Customer'}`;
-  const body = buildCommissionEmail();
-  window.location.href = `mailto:sndambuki155@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-  showToast('Commission request opened in your email app');
+
+  const referenceFiles = Array.from(referenceImages.files || []);
+
+  const commissionRequest = {
+    name: values.customerName || '',
+    email: values.customerEmail || '',
+    phone: values.customerPhone || '',
+
+    customer_country: values.customerCountry || '',
+
+    artwork_type: values.artworkType || '',
+    size: values.size || '',
+
+    orientation: values.orientation || '',
+    style: values.style || '',
+    background: values.background || '',
+    subjects: values.subjects || '',
+    colour_style: values.colourStyle || '',
+
+    budget: parseBudget(values.budget),
+    currency: 'KES',
+
+    delivery: values.delivery || '',
+    deadline: values.deadline || '',
+
+    description: values.notes || 'No additional notes provided.',
+
+    estimated_price: getCurrentCommissionEstimate(),
+
+    reference_image_names: referenceFiles
+      .map(file => file.name)
+      .join(', '),
+
+    status: 'new'
+  };
+
+  submitCommission.disabled = true;
+  submitCommission.textContent = 'Sending...';
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('commission_requests')
+      .insert([commissionRequest])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase commission error:', error);
+      throw error;
+    }
+
+    console.log('Commission request saved:', data);
+
+    showToast('Commission request sent successfully!');
+
+    localStorage.removeItem('ndambo-commission');
+
+    setTimeout(() => {
+      alert(
+        'Thank you! Your commission request has been received. ' +
+        'Stephen will contact you soon.'
+      );
+    }, 300);
+
+  } catch (error) {
+    console.error(error);
+
+    showToast('Could not send request');
+
+    alert(
+      'Something went wrong while sending your commission request. ' +
+      'Please try again.'
+    );
+
+  } finally {
+    submitCommission.disabled = false;
+    submitCommission.textContent = 'Submit Commission Request';
+  }
 }
 
   function handleCheckoutSubmit(event) {
