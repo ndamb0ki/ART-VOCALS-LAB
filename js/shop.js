@@ -1717,8 +1717,8 @@
             payment_status:
               'pending',
 
-            order_status:
-              'new',
+order_status:
+   'pending',
 
             notes:
               values.instructions || null
