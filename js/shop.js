@@ -5,92 +5,7 @@
   // ARTWORK DATA
   // =========================================================
 
-  const artworkData = [
-    {
-      id: 1,
-      name: 'Golden Horizon',
-      category: 'Landscapes',
-      medium: 'Oil Paintings',
-      size: '60 × 90 cm',
-      price: 18000,
-      description: 'A luminous landscape with warm light and calm depth.',
-      rating: 4.9,
-      availability: 'In Stock',
-      image: '../images/artwork3.jpg',
-      date: '2026-07-20',
-      popularity: 95
-    },
-    {
-      id: 2,
-      name: 'Midnight Portrait',
-      category: 'Portraits',
-      medium: 'Charcoal',
-      size: '40 × 50 cm',
-      price: 12500,
-      description: 'A contemplative charcoal portrait with elegant contrast.',
-      rating: 4.8,
-      availability: 'Limited Edition',
-      image: '../images/artwork2.jpg',
-      date: '2026-06-18',
-      popularity: 88
-    },
-    {
-      id: 3,
-      name: 'Studio Bloom',
-      category: 'Abstract',
-      medium: 'Acrylic Paintings',
-      size: '50 × 70 cm',
-      price: 15000,
-      description: 'An abstract composition balancing softness and structure.',
-      rating: 4.7,
-      availability: 'In Stock',
-      image: '../images/artwork1.jpg',
-      date: '2026-08-01',
-      popularity: 82
-    },
-    {
-      id: 4,
-      name: 'Cedar Study',
-      category: 'Architecture',
-      medium: 'Ink',
-      size: '30 × 40 cm',
-      price: 9500,
-      description: 'Architectural ink work focused on rhythm and shadow.',
-      rating: 4.6,
-      availability: 'In Stock',
-      image: '../images/artclass1.jpg',
-      date: '2026-05-12',
-      popularity: 76
-    },
-    {
-      id: 5,
-      name: 'Wild Echo',
-      category: 'Wildlife',
-      medium: 'Colored Pencil',
-      size: '40 × 50 cm',
-      price: 11000,
-      description: 'A detailed wildlife piece with rich color layering.',
-      rating: 4.9,
-      availability: 'In Stock',
-      image: '../images/trip1.jpg',
-      date: '2026-07-05',
-      popularity: 91
-    },
-    {
-      id: 6,
-      name: 'Quiet Memory',
-      category: 'Pencil Drawings',
-      medium: 'Pencil Drawings',
-      size: '20 × 20 cm',
-      price: 7000,
-      description: 'A gentle graphite study with emotional clarity.',
-      rating: 4.5,
-      availability: 'Available',
-      image: '../images/artclass3.jpg',
-      date: '2026-04-22',
-      popularity: 70
-    }
-  ];
+  let artworkData = [];
 
 
   // =========================================================
@@ -122,33 +37,71 @@
   // DOM ELEMENTS
   // =========================================================
 
-  const artworkGrid = document.getElementById('artworkGrid');
-  const searchInput = document.getElementById('searchInput');
-  const sortSelect = document.getElementById('sortSelect');
-  const filterBar = document.getElementById('filterBar');
+  const artworkGrid =
+    document.getElementById('artworkGrid');
 
-  const cartToggle = document.getElementById('cartToggle');
-  const cartPanel = document.getElementById('cartPanel');
-  const closeCart = document.getElementById('closeCart');
-  const overlay = document.getElementById('overlay');
+  const searchInput =
+    document.getElementById('searchInput');
 
-  const quickViewModal = document.getElementById('quickViewModal');
-  const modalBody = document.getElementById('modalBody');
-  const closeModal = document.getElementById('closeModal');
+  const sortSelect =
+    document.getElementById('sortSelect');
 
-  const cartCount = document.getElementById('cartCount');
-  const cartItems = document.getElementById('cartItems');
-  const cartSubtotal = document.getElementById('cartSubtotal');
-  const cartShipping = document.getElementById('cartShipping');
-  const cartTax = document.getElementById('cartTax');
-  const cartGrand = document.getElementById('cartGrand');
+  const filterBar =
+    document.getElementById('filterBar');
 
-  const summarySubtotal = document.getElementById('summarySubtotal');
-  const summaryShipping = document.getElementById('summaryShipping');
-  const summaryTax = document.getElementById('summaryTax');
-  const summaryGrand = document.getElementById('summaryGrand');
+  const cartToggle =
+    document.getElementById('cartToggle');
 
-  const estimateValue = document.getElementById('estimateValue');
+  const cartPanel =
+    document.getElementById('cartPanel');
+
+  const closeCart =
+    document.getElementById('closeCart');
+
+  const overlay =
+    document.getElementById('overlay');
+
+  const quickViewModal =
+    document.getElementById('quickViewModal');
+
+  const modalBody =
+    document.getElementById('modalBody');
+
+  const closeModal =
+    document.getElementById('closeModal');
+
+  const cartCount =
+    document.getElementById('cartCount');
+
+  const cartItems =
+    document.getElementById('cartItems');
+
+  const cartSubtotal =
+    document.getElementById('cartSubtotal');
+
+  const cartShipping =
+    document.getElementById('cartShipping');
+
+  const cartTax =
+    document.getElementById('cartTax');
+
+  const cartGrand =
+    document.getElementById('cartGrand');
+
+  const summarySubtotal =
+    document.getElementById('summarySubtotal');
+
+  const summaryShipping =
+    document.getElementById('summaryShipping');
+
+  const summaryTax =
+    document.getElementById('summaryTax');
+
+  const summaryGrand =
+    document.getElementById('summaryGrand');
+
+  const estimateValue =
+    document.getElementById('estimateValue');
 
   const commissionForm =
     document.getElementById('commissionForm');
@@ -233,7 +186,8 @@
 
     if (!toastStack) return;
 
-    const toast = document.createElement('div');
+    const toast =
+      document.createElement('div');
 
     toast.className = 'toast';
 
@@ -253,21 +207,30 @@
 
   function createRipple(event) {
 
-    const button = event.currentTarget;
+    const button =
+      event.currentTarget;
 
     if (!button) return;
 
-    const ripple = document.createElement('span');
+    const ripple =
+      document.createElement('span');
 
     ripple.className = 'ripple';
 
-    const rect = button.getBoundingClientRect();
+    const rect =
+      button.getBoundingClientRect();
 
     const size =
-      Math.max(rect.width, rect.height) * 1.1;
+      Math.max(
+        rect.width,
+        rect.height
+      ) * 1.1;
 
-    ripple.style.width = `${size}px`;
-    ripple.style.height = `${size}px`;
+    ripple.style.width =
+      `${size}px`;
+
+    ripple.style.height =
+      `${size}px`;
 
     ripple.style.left =
       `${event.clientX - rect.left}px`;
@@ -289,9 +252,190 @@
 
   function formatCurrency(value) {
 
-    const number = Number(value) || 0;
+    const number =
+      Number(value) || 0;
 
     return `KES ${number.toLocaleString()}`;
+  }
+
+
+  // =========================================================
+  // LOAD ARTWORKS FROM SUPABASE
+  // =========================================================
+
+  async function loadArtworks() {
+
+    if (!artworkGrid) return;
+
+
+    // -----------------------------------------
+    // Loading message
+    // -----------------------------------------
+
+    artworkGrid.innerHTML = `
+      <div
+        class="art-card"
+        style="
+          grid-column: 1 / -1;
+          padding: 2rem;
+          text-align: center;
+        "
+      >
+        Loading artworks...
+      </div>
+    `;
+
+
+    // -----------------------------------------
+    // Check Supabase connection
+    // -----------------------------------------
+
+    if (
+      typeof supabaseClient ===
+      'undefined'
+    ) {
+
+      console.error(
+        'Supabase client is not available.'
+      );
+
+      artworkGrid.innerHTML = `
+        <div
+          class="art-card"
+          style="
+            grid-column: 1 / -1;
+            padding: 2rem;
+            text-align: center;
+          "
+        >
+          The shop could not connect to the artwork gallery.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    // -----------------------------------------
+    // Get published artworks
+    // -----------------------------------------
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from('artworks')
+        .select('*')
+        .eq('status', 'available')
+        .order('created_at', {
+          ascending: false
+        });
+
+
+    // -----------------------------------------
+    // Handle database error
+    // -----------------------------------------
+
+    if (error) {
+
+      console.error(
+        'Artwork loading error:',
+        error
+      );
+
+      artworkGrid.innerHTML = `
+        <div
+          class="art-card"
+          style="
+            grid-column: 1 / -1;
+            padding: 2rem;
+            text-align: center;
+          "
+        >
+          Could not load artworks right now.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    // -----------------------------------------
+    // Convert Supabase records into the format
+    // used by the existing shop system
+    // -----------------------------------------
+
+    artworkData =
+      (data || []).map((item) => {
+
+        return {
+
+          id:
+            item.id,
+
+          name:
+            item.title ||
+            'Untitled Artwork',
+
+          category:
+            item.category ||
+            'Artworks',
+
+          medium:
+            item.category ||
+            'Original Artwork',
+
+          size:
+            item.size ||
+            'Custom',
+
+          price:
+            Number(item.price) || 0,
+
+          description:
+            item.description ||
+            'Original artwork by Stephen Ndambuki.',
+
+          rating:
+            5,
+
+          availability:
+            item.status === 'available'
+              ? 'Available'
+              : item.status,
+
+          image:
+            item.image_url,
+
+          date:
+            item.created_at,
+
+          popularity:
+            item.featured
+              ? 100
+              : 50
+
+        };
+
+      });
+
+
+    console.log(
+      'Artworks loaded from Supabase:',
+      artworkData
+    );
+
+
+    // -----------------------------------------
+    // Render gallery
+    // -----------------------------------------
+
+    renderArtworks();
+
+    renderCart();
+
+    updateTotals();
   }
 
 
@@ -302,7 +446,9 @@
   function getFilteredArtworks() {
 
     const query =
-      state.query.trim().toLowerCase();
+      state.query
+        .trim()
+        .toLowerCase();
 
     return artworkData
 
@@ -333,22 +479,45 @@
         switch (state.sort) {
 
           case 'oldest':
-            return new Date(a.date) - new Date(b.date);
+
+            return (
+              new Date(a.date) -
+              new Date(b.date)
+            );
 
           case 'price-asc':
-            return a.price - b.price;
+
+            return (
+              a.price -
+              b.price
+            );
 
           case 'price-desc':
-            return b.price - a.price;
+
+            return (
+              b.price -
+              a.price
+            );
 
           case 'alpha':
-            return a.name.localeCompare(b.name);
+
+            return a.name.localeCompare(
+              b.name
+            );
 
           case 'popular':
-            return b.popularity - a.popularity;
+
+            return (
+              b.popularity -
+              a.popularity
+            );
 
           default:
-            return new Date(b.date) - new Date(a.date);
+
+            return (
+              new Date(b.date) -
+              new Date(a.date)
+            );
         }
 
       });
@@ -369,30 +538,41 @@
     const empty =
       items.length === 0;
 
-    artworkGrid.innerHTML = empty
-      ? `
-        <div
-          class="art-card"
-          style="grid-column: 1 / -1; padding: 1.2rem;"
-        >
-          No artworks match your search yet.
-        </div>
-      `
-      : '';
+    artworkGrid.innerHTML =
+      empty
+        ? `
+          <div
+            class="art-card"
+            style="
+              grid-column: 1 / -1;
+              padding: 1.2rem;
+            "
+          >
+            No artworks match your search yet.
+          </div>
+        `
+        : '';
+
 
     items.forEach((item) => {
 
       const isFavorite =
-        state.favorites.includes(item.id);
+        state.favorites.includes(
+          item.id
+        );
 
       const card =
-        document.createElement('article');
+        document.createElement(
+          'article'
+        );
 
-      card.className = 'art-card';
+      card.className =
+        'art-card';
 
       card.innerHTML = `
+
         <img
-          src="${item.image}"
+          src="${item.image || '../images/artwork1.jpg'}"
           alt="${item.name}"
         >
 
@@ -416,17 +596,21 @@
           <div class="meta">
 
             <span>${item.category}</span>
+
             <span>${item.medium}</span>
+
             <span>${item.size}</span>
 
           </div>
 
-          <p>${item.description}</p>
+          <p>
+            ${item.description}
+          </p>
 
           <div class="price-row">
 
             <span class="rating">
-              ★ ${item.rating.toFixed(1)}
+              ★ ${Number(item.rating).toFixed(1)}
             </span>
 
             <strong>
@@ -436,7 +620,11 @@
           </div>
 
           <p class="meta">
-            <span>${item.availability}</span>
+
+            <span>
+              ${item.availability}
+            </span>
+
           </p>
 
           <div class="card-actions">
@@ -477,6 +665,7 @@
 
     cartItems.innerHTML = '';
 
+
     if (!state.cart.length) {
 
       cartItems.innerHTML =
@@ -487,30 +676,38 @@
       return;
     }
 
+
     state.cart.forEach((item) => {
 
       const art =
         artworkData.find(
-          (entry) => entry.id === item.id
+          (entry) =>
+            entry.id === item.id
         );
 
       if (!art) return;
 
-      const row =
-        document.createElement('div');
 
-      row.className = 'cart-item';
+      const row =
+        document.createElement(
+          'div'
+        );
+
+      row.className =
+        'cart-item';
 
       row.innerHTML = `
 
         <img
-          src="${art.image}"
+          src="${art.image || '../images/artwork1.jpg'}"
           alt="${art.name}"
         >
 
         <div class="cart-item__meta">
 
-          <strong>${art.name}</strong>
+          <strong>
+            ${art.name}
+          </strong>
 
           <small>
             ${formatCurrency(art.price)}
@@ -546,11 +743,16 @@
 
           <strong>
             ${formatCurrency(
-              art.price * item.quantity
+              art.price *
+              item.quantity
             )}
           </strong>
 
-          <div style="margin-top: 0.35rem;">
+          <div
+            style="
+              margin-top: 0.35rem;
+            "
+          >
 
             <button
               class="icon-btn"
@@ -577,30 +779,47 @@
   function updateTotals() {
 
     const subtotal =
-      state.cart.reduce((sum, item) => {
+      state.cart.reduce(
+        (sum, item) => {
 
-        const art =
-          artworkData.find(
-            (entry) => entry.id === item.id
+          const art =
+            artworkData.find(
+              (entry) =>
+                entry.id === item.id
+            );
+
+          return (
+            sum +
+            (
+              art
+                ? art.price *
+                  item.quantity
+                : 0
+            )
           );
 
-        return (
-          sum +
-          (art
-            ? art.price * item.quantity
-            : 0)
-        );
+        },
+        0
+      );
 
-      }, 0);
 
     const shipping =
-      subtotal > 0 ? 1500 : 0;
+      subtotal > 0
+        ? 1500
+        : 0;
+
 
     const tax =
-      Math.round(subtotal * 0.08);
+      Math.round(
+        subtotal * 0.08
+      );
+
 
     const grand =
-      subtotal + shipping + tax;
+      subtotal +
+      shipping +
+      tax;
+
 
     if (cartSubtotal)
       cartSubtotal.textContent =
@@ -634,12 +853,14 @@
       summaryGrand.textContent =
         formatCurrency(grand);
 
+
     if (cartCount) {
 
       cartCount.textContent =
         state.cart.reduce(
           (sum, item) =>
-            sum + item.quantity,
+            sum +
+            Number(item.quantity || 0),
           0
         );
     }
@@ -652,12 +873,15 @@
 
   function toggleCart(force) {
 
-    if (!cartPanel || !overlay) return;
+    if (!cartPanel || !overlay)
+      return;
 
     const shouldOpen =
       typeof force === 'boolean'
         ? force
-        : !cartPanel.classList.contains('open');
+        : !cartPanel.classList.contains(
+            'open'
+          );
 
     cartPanel.classList.toggle(
       'open',
@@ -679,16 +903,23 @@
 
     const art =
       artworkData.find(
-        (item) => item.id === id
+        (item) =>
+          item.id === id
       );
 
-    if (!art || !modalBody || !quickViewModal)
+    if (
+      !art ||
+      !modalBody ||
+      !quickViewModal
+    ) {
       return;
+    }
+
 
     modalBody.innerHTML = `
 
       <img
-        src="${art.image}"
+        src="${art.image || '../images/artwork1.jpg'}"
         alt="${art.name}"
       >
 
@@ -698,11 +929,13 @@
           Quick View
         </p>
 
-        <h3>${art.name}</h3>
+        <h3>
+          ${art.name}
+        </h3>
 
         <p>
           <strong>Artist:</strong>
-          Ndambo Arts
+          Stephen Ndambuki
         </p>
 
         <p>
@@ -752,7 +985,10 @@
 
     `;
 
-    quickViewModal.classList.add('open');
+
+    quickViewModal.classList.add(
+      'open'
+    );
 
     quickViewModal.setAttribute(
       'aria-hidden',
@@ -763,7 +999,8 @@
 
   function closeModalFn() {
 
-    if (!quickViewModal) return;
+    if (!quickViewModal)
+      return;
 
     quickViewModal.classList.remove(
       'open'
@@ -784,8 +1021,10 @@
 
     const existing =
       state.cart.find(
-        (item) => item.id === id
+        (item) =>
+          item.id === id
       );
+
 
     if (existing) {
 
@@ -797,31 +1036,36 @@
         id,
         quantity: 1
       });
-
     }
+
 
     saveState();
 
     renderCart();
 
-    showToast('Added to Cart');
+    showToast(
+      'Added to Cart'
+    );
   }
 
 
   function toggleFavorite(id) {
 
-    if (state.favorites.includes(id)) {
+    if (
+      state.favorites.includes(id)
+    ) {
 
       state.favorites =
         state.favorites.filter(
-          (item) => item !== id
+          (item) =>
+            item !== id
         );
 
     } else {
 
       state.favorites.push(id);
-
     }
+
 
     saveState();
 
@@ -841,21 +1085,30 @@
 
   function updateCommissionProgress() {
 
-    if (!progressBar || !progressLabels)
+    if (
+      !progressBar ||
+      !progressLabels
+    ) {
       return;
+    }
+
 
     const totalSteps =
       commissionSteps.length;
 
+
     const progress =
       Math.round(
-        (state.commissionStep /
-          totalSteps) *
-          100
+        (
+          state.commissionStep /
+          totalSteps
+        ) * 100
       );
+
 
     progressBar.innerHTML =
       `<span style="width:${progress}%"></span>`;
+
 
     progressLabels.innerHTML =
       commissionSteps
@@ -878,19 +1131,28 @@
         '.step-panel'
       );
 
-    panels.forEach((panel) => {
 
-      const stepNumber =
-        Number(panel.dataset.step);
+    panels.forEach(
+      (panel) => {
 
-      panel.classList.toggle(
-        'active',
-        stepNumber ===
-          Number(state.commissionStep)
-      );
-    });
+        const stepNumber =
+          Number(
+            panel.dataset.step
+          );
+
+        panel.classList.toggle(
+          'active',
+          stepNumber ===
+            Number(
+              state.commissionStep
+            )
+        );
+      }
+    );
+
 
     updateCommissionProgress();
+
 
     if (prevStep) {
 
@@ -898,7 +1160,11 @@
         state.commissionStep === 1;
     }
 
-    if (nextStep && submitCommission) {
+
+    if (
+      nextStep &&
+      submitCommission
+    ) {
 
       if (
         state.commissionStep ===
@@ -934,8 +1200,11 @@
   function handleStep(direction) {
 
     const nextStepIndex =
-      Number(state.commissionStep) +
+      Number(
+        state.commissionStep
+      ) +
       direction;
+
 
     if (
       nextStepIndex < 1 ||
@@ -945,17 +1214,21 @@
       return;
     }
 
+
     state.commissionStep =
       nextStepIndex;
+
 
     renderCommissionSteps();
 
     saveCommissionDraft();
 
+
     const commissionSection =
       document.getElementById(
         'commission'
       );
+
 
     if (commissionSection) {
 
@@ -973,80 +1246,114 @@
 
   function estimateCommission() {
 
-    if (!commissionForm || !estimateValue)
+    if (
+      !commissionForm ||
+      !estimateValue
+    ) {
       return;
+    }
+
 
     const formData =
-      new FormData(commissionForm);
+      new FormData(
+        commissionForm
+      );
+
 
     const sizeValue =
       formData.get('size') || '';
 
-    const base = 5000;
 
-    let sizeMultiplier = 1;
+    const base =
+      5000;
+
+
+    let sizeMultiplier =
+      1;
+
 
     if (
       sizeValue.includes('A0') ||
       sizeValue.includes('100 × 120')
     ) {
 
-      sizeMultiplier = 2.2;
+      sizeMultiplier =
+        2.2;
 
     } else if (
       sizeValue.includes('A1') ||
       sizeValue.includes('80 × 100')
     ) {
 
-      sizeMultiplier = 1.9;
+      sizeMultiplier =
+        1.9;
 
     } else if (
       sizeValue.includes('A2') ||
       sizeValue.includes('60 × 90')
     ) {
 
-      sizeMultiplier = 1.5;
+      sizeMultiplier =
+        1.5;
 
     } else if (
       sizeValue.includes('A3') ||
       sizeValue.includes('50 × 70')
     ) {
 
-      sizeMultiplier = 1.2;
+      sizeMultiplier =
+        1.2;
     }
+
 
     const style =
       formData.get('style');
 
-    let styleMultiplier = 1;
 
-    if (style === 'Realistic') {
+    let styleMultiplier =
+      1;
 
-      styleMultiplier = 1.4;
 
-    } else if (style === 'Abstract') {
+    if (
+      style === 'Realistic'
+    ) {
 
-      styleMultiplier = 1.1;
+      styleMultiplier =
+        1.4;
+
+    } else if (
+      style === 'Abstract'
+    ) {
+
+      styleMultiplier =
+        1.1;
     }
+
 
     const budget =
       formData.get('budget') || '';
 
-    let budgetMultiplier = 1;
+
+    let budgetMultiplier =
+      1;
+
 
     if (
       budget.includes('50,000') ||
       budget.includes('100,000')
     ) {
 
-      budgetMultiplier = 1.7;
+      budgetMultiplier =
+        1.7;
 
     } else if (
       budget.includes('20,000')
     ) {
 
-      budgetMultiplier = 1.4;
+      budgetMultiplier =
+        1.4;
     }
+
 
     const estimate =
       Math.round(
@@ -1056,8 +1363,11 @@
         budgetMultiplier
       );
 
+
     estimateValue.textContent =
-      formatCurrency(estimate);
+      formatCurrency(
+        estimate
+      );
   }
 
 
@@ -1067,21 +1377,29 @@
 
   function saveCommissionDraft() {
 
-    if (!commissionForm) return;
+    if (!commissionForm)
+      return;
+
 
     const formData =
-      new FormData(commissionForm);
+      new FormData(
+        commissionForm
+      );
+
 
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
+
     state.commissionData = {
       ...state.commissionData,
       ...values,
-      step: state.commissionStep
+      step:
+        state.commissionStep
     };
+
 
     saveState();
   }
@@ -1096,12 +1414,16 @@
       );
     }
 
+
     commissionDraftTimer =
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        saveCommissionDraft();
+          saveCommissionDraft();
 
-      }, 700);
+        },
+        700
+      );
   }
 
 
@@ -1114,12 +1436,14 @@
     if (!commissionForm)
       return;
 
+
     const stored =
       JSON.parse(
         localStorage.getItem(
           'ndambo-commission'
         ) || '{}'
       );
+
 
     if (
       !stored ||
@@ -1128,22 +1452,27 @@
       return;
     }
 
+
     Object.entries(stored).forEach(
       ([key, value]) => {
 
         if (key === 'step')
           return;
 
+
         const inputs =
           commissionForm.querySelectorAll(
             `[name="${key}"]`
           );
 
+
         if (!inputs.length)
           return;
 
+
         const firstInput =
           inputs[0];
+
 
         if (
           firstInput.type ===
@@ -1160,7 +1489,8 @@
           );
 
         } else if (
-          firstInput.type !== 'file'
+          firstInput.type !==
+          'file'
         ) {
 
           firstInput.value =
@@ -1169,8 +1499,12 @@
       }
     );
 
+
     state.commissionStep =
-      Number(stored.step) || 1;
+      Number(
+        stored.step
+      ) || 1;
+
 
     renderCommissionSteps();
 
@@ -1187,13 +1521,18 @@
     if (!commissionForm)
       return '';
 
+
     const formData =
-      new FormData(commissionForm);
+      new FormData(
+        commissionForm
+      );
+
 
     const values =
       Object.fromEntries(
         formData.entries()
       );
+
 
     const lines = [
 
@@ -1259,6 +1598,7 @@
 
     ];
 
+
     return encodeURIComponent(
       lines.join('\n')
     );
@@ -1269,35 +1609,54 @@
   // PARSE BUDGET
   // =========================================================
 
-  function parseBudget(budgetValue) {
+  function parseBudget(
+    budgetValue
+  ) {
 
     if (!budgetValue)
       return null;
 
+
     const matches =
-      String(budgetValue).match(
+      String(
+        budgetValue
+      ).match(
         /\d[\d,]*/g
       );
 
-    if (!matches || !matches.length)
+
+    if (
+      !matches ||
+      !matches.length
+    ) {
       return null;
+    }
+
 
     const numbers =
       matches.map(
         (value) =>
           Number(
-            value.replace(/,/g, '')
+            value.replace(
+              /,/g,
+              ''
+            )
           )
       );
+
 
     const validNumbers =
       numbers.filter(
         (number) =>
-          Number.isFinite(number)
+          Number.isFinite(
+            number
+          )
       );
+
 
     if (!validNumbers.length)
       return null;
+
 
     return validNumbers[0];
   }
@@ -1312,23 +1671,34 @@
     if (!estimateValue)
       return null;
 
+
     const text =
-      estimateValue.textContent || '';
+      estimateValue.textContent ||
+      '';
+
 
     const matches =
       text.match(
         /[\d,]+(?:\.\d+)?/
       );
 
+
     if (!matches)
       return null;
 
+
     const number =
       Number(
-        matches[0].replace(/,/g, '')
+        matches[0].replace(
+          /,/g,
+          ''
+        )
       );
 
-    return Number.isFinite(number)
+
+    return Number.isFinite(
+      number
+    )
       ? number
       : null;
   }
@@ -1338,64 +1708,83 @@
   // SUBMIT COMMISSION
   // =========================================================
 
-  async function handleCommissionSubmit(event) {
+  async function handleCommissionSubmit(
+    event
+  ) {
 
     event.preventDefault();
 
+
     if (!commissionForm)
       return;
+
 
     const formData =
       new FormData(
         commissionForm
       );
 
+
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
+
     const referenceFiles =
       referenceImages
         ? Array.from(
-            referenceImages.files || []
+            referenceImages.files ||
+              []
           )
         : [];
+
 
     const commissionRequest = {
 
       name:
-        values.customerName || '',
+        values.customerName ||
+        '',
 
       email:
-        values.customerEmail || '',
+        values.customerEmail ||
+        '',
 
       phone:
-        values.customerPhone || '',
+        values.customerPhone ||
+        '',
 
       customer_country:
-        values.customerCountry || '',
+        values.customerCountry ||
+        '',
 
       artwork_type:
-        values.artworkType || '',
+        values.artworkType ||
+        '',
 
       size:
-        values.size || '',
+        values.size ||
+        '',
 
       orientation:
-        values.orientation || '',
+        values.orientation ||
+        '',
 
       style:
-        values.style || '',
+        values.style ||
+        '',
 
       background:
-        values.background || '',
+        values.background ||
+        '',
 
       subjects:
-        values.subjects || '',
+        values.subjects ||
+        '',
 
       colour_style:
-        values.colourStyle || '',
+        values.colourStyle ||
+        '',
 
       budget:
         parseBudget(
@@ -1406,10 +1795,12 @@
         'KES',
 
       delivery:
-        values.delivery || '',
+        values.delivery ||
+        '',
 
       deadline:
-        values.deadline || '',
+        values.deadline ||
+        '',
 
       description:
         values.notes ||
@@ -1421,7 +1812,8 @@
       reference_image_names:
         referenceFiles
           .map(
-            (file) => file.name
+            (file) =>
+              file.name
           )
           .join(', ')
     };
@@ -1450,7 +1842,9 @@
       }
 
 
-      const { error } =
+      const {
+        error
+      } =
         await supabaseClient
 
           .from(
@@ -1477,15 +1871,20 @@
         'Commission request saved successfully.'
       );
 
+
       showToast(
         'Commission request sent successfully!'
       );
+
 
       localStorage.removeItem(
         'ndambo-commission'
       );
 
-      state.commissionData = {};
+
+      state.commissionData =
+        {};
+
 
       setTimeout(() => {
 
@@ -1503,9 +1902,11 @@
         error
       );
 
+
       showToast(
         'Could not send request'
       );
+
 
       alert(
         'Something went wrong while sending your commission request. Please try again.'
@@ -1530,7 +1931,9 @@
   // CHECKOUT
   // =========================================================
 
-  async function handleCheckoutSubmit(event) {
+  async function handleCheckoutSubmit(
+    event
+  ) {
 
     event.preventDefault();
 
@@ -1540,7 +1943,10 @@
     // -----------------------------------------
 
     const formData =
-      new FormData(event.target);
+      new FormData(
+        event.target
+      );
+
 
     const values =
       Object.fromEntries(
@@ -1573,14 +1979,17 @@
           const art =
             artworkData.find(
               (entry) =>
-                entry.id === item.id
+                entry.id ===
+                item.id
             );
+
 
           return (
             sum +
             (
               art
-                ? art.price * item.quantity
+                ? art.price *
+                  item.quantity
                 : 0
             )
           );
@@ -1633,9 +2042,11 @@
         'Supabase client is not available.'
       );
 
+
       showToast(
         'Supabase connection is not available.'
       );
+
 
       return;
     }
@@ -1653,12 +2064,8 @@
 
 
     // -----------------------------------------
-    // CREATE A UUID FOR THE ORDER
+    // CREATE ORDER UUID
     // -----------------------------------------
-    //
-    // We create the UUID ourselves so we don't
-    // need SELECT permission on the orders table.
-    //
 
     const orderId =
       crypto.randomUUID();
@@ -1668,6 +2075,7 @@
       'Creating order:',
       orderNumber
     );
+
 
     console.log(
       'Order ID:',
@@ -1694,13 +2102,16 @@
               orderNumber,
 
             customer_name:
-              values.fullName || '',
+              values.fullName ||
+              '',
 
             customer_email:
-              values.email || '',
+              values.email ||
+              '',
 
             customer_phone:
-              values.phone || '',
+              values.phone ||
+              '',
 
             delivery_address:
               `${values.address || ''}, ${values.city || ''}, ${values.country || ''}`,
@@ -1724,7 +2135,8 @@
               'pending',
 
             notes:
-              values.instructions || null
+              values.instructions ||
+              null
 
           }
         ]);
@@ -1741,13 +2153,16 @@
         orderError
       );
 
+
       showToast(
         'There was a problem submitting your order.'
       );
 
+
       alert(
         'There was a problem submitting your order. Please check again.'
       );
+
 
       return;
     }
@@ -1771,12 +2186,15 @@
             const artwork =
               artworkData.find(
                 (item) =>
-                  item.id === cartItem.id
+                  item.id ===
+                  cartItem.id
               );
+
 
             if (!artwork) {
               return null;
             }
+
 
             return {
 
@@ -1784,23 +2202,16 @@
                 orderId,
 
               /*
-               * The current gallery uses numeric
-               * IDs (1, 2, 3, etc.), while the
-               * Supabase artwork_id column uses UUID.
+               * Supabase artwork IDs are UUIDs.
+               * The artwork ID loaded from Supabase
+               * is therefore saved directly here.
                *
-               * Therefore artwork_id is temporarily
-               * null. The artwork name and price
-               * are saved below.
-               *
-               * IMPORTANT:
-               * Do NOT include line_total here.
-               * Supabase calculates line_total
-               * automatically because it is a
-               * generated column.
+               * Do NOT include line_total because
+               * Supabase calculates it automatically.
                */
 
               artwork_id:
-                null,
+                artwork.id,
 
               title_snapshot:
                 artwork.name,
@@ -1838,13 +2249,16 @@
         'No valid artwork items were found in the cart.'
       );
 
+
       showToast(
         'No artwork items were found.'
       );
 
+
       alert(
         'The order was created, but no artwork items were found in the cart.'
       );
+
 
       return;
     }
@@ -1875,13 +2289,16 @@
         itemsError
       );
 
+
       showToast(
         'The order was created, but the artwork items could not be saved.'
       );
 
+
       alert(
         'The order was created, but the artwork information could not be saved. Please contact the administrator.'
       );
+
 
       return;
     }
@@ -1993,7 +2410,10 @@
               '.filter-chip'
             );
 
-          if (!button) return;
+
+          if (!button)
+            return;
+
 
           document
             .querySelectorAll(
@@ -2006,12 +2426,15 @@
                 )
             );
 
+
           button.classList.add(
             'active'
           );
 
+
           state.activeFilter =
             button.dataset.filter;
+
 
           renderArtworks();
         }
@@ -2097,9 +2520,11 @@
             '.btn, .filter-chip, .icon-btn, .cart-trigger, .favorite-btn'
           );
 
+
         if (interactive) {
 
           createRipple({
+
             currentTarget:
               interactive,
 
@@ -2108,24 +2533,30 @@
 
             clientY:
               event.clientY
+
           });
         }
 
 
+        // ---------------------------------------
         // FAVORITE
+        // ---------------------------------------
 
         const favoriteButton =
           event.target.closest(
             '.favorite-btn'
           );
 
+
         if (favoriteButton) {
 
           event.preventDefault();
 
+
           favoriteButton.classList.add(
             'animating'
           );
+
 
           setTimeout(
             () =>
@@ -2135,70 +2566,77 @@
             280
           );
 
+
           toggleFavorite(
-            Number(
-              favoriteButton.dataset.id
-            )
+            favoriteButton.dataset.id
           );
+
 
           return;
         }
 
 
+        // ---------------------------------------
         // QUICK VIEW
+        // ---------------------------------------
 
         const quickViewButton =
           event.target.closest(
             '.quick-view'
           );
 
+
         if (quickViewButton) {
 
           openModal(
-            Number(
-              quickViewButton.dataset.id
-            )
+            quickViewButton.dataset.id
           );
+
 
           return;
         }
 
 
+        // ---------------------------------------
         // ADD TO CART
+        // ---------------------------------------
 
         const addToCartButton =
           event.target.closest(
             '.add-to-cart'
           );
 
+
         if (addToCartButton) {
 
           addToCart(
-            Number(
-              addToCartButton.dataset.id
-            )
+            addToCartButton.dataset.id
           );
+
 
           return;
         }
 
 
+        // ---------------------------------------
         // CART ACTION
+        // ---------------------------------------
 
         const cartActionButton =
           event.target.closest(
             '[data-action]'
           );
 
+
         if (cartActionButton) {
 
           const action =
             cartActionButton.dataset.action;
 
+
           const id =
-            Number(
-              cartActionButton.dataset.id
-            );
+            cartActionButton.dataset.id;
+
 
           const target =
             state.cart.find(
@@ -2206,15 +2644,21 @@
                 item.id === id
             );
 
-          if (!target) return;
+
+          if (!target)
+            return;
 
 
-          if (action === 'increase') {
+          if (
+            action ===
+            'increase'
+          ) {
 
             target.quantity += 1;
 
           } else if (
-            action === 'decrease'
+            action ===
+            'decrease'
           ) {
 
             target.quantity =
@@ -2224,7 +2668,8 @@
               );
 
           } else if (
-            action === 'remove'
+            action ===
+            'remove'
           ) {
 
             state.cart =
@@ -2321,6 +2766,7 @@
         'checkoutForm'
       );
 
+
     if (checkoutForm) {
 
       checkoutForm.addEventListener(
@@ -2345,14 +2791,18 @@
 
           const files =
             Array.from(
-              event.target.files || []
+              event.target.files ||
+                []
             );
+
 
           state.commissionImages =
             files;
 
+
           previewHolder.innerHTML =
             '';
+
 
           files.forEach(
             (file) => {
@@ -2362,15 +2812,20 @@
                   file
                 );
 
+
               const img =
                 document.createElement(
                   'img'
                 );
 
-              img.src = url;
+
+              img.src =
+                url;
+
 
               img.alt =
                 file.name;
+
 
               previewHolder.appendChild(
                 img
@@ -2390,6 +2845,7 @@
       document.getElementById(
         'sizeSelect'
       );
+
 
     if (
       sizeSelect &&
@@ -2419,10 +2875,12 @@
         '.nav-toggle'
       );
 
+
     const navLinks =
       document.querySelector(
         '.nav-links'
       );
+
 
     if (
       navToggle &&
@@ -2449,7 +2907,13 @@
 
   function init() {
 
-    renderArtworks();
+    /*
+     * Do not render the old hard-coded artwork list.
+     * Load the current published artworks from Supabase.
+     */
+
+    loadArtworks();
+
 
     renderCart();
 
