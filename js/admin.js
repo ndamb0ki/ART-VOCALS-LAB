@@ -908,7 +908,7 @@ async function updateOrderStatus(orderId) {
 
 
 // ------------------------------------
-// View order
+// View order in professional modal
 // ------------------------------------
 
 function viewOrder(id) {
@@ -920,87 +920,570 @@ function viewOrder(id) {
 
   if (!order) return;
 
+  const modal =
+    document.getElementById("orderModal");
+
+  const modalTitle =
+    document.getElementById("orderModalTitle");
+
+  const modalSubtitle =
+    document.getElementById("orderModalSubtitle");
+
+  const modalContent =
+    document.getElementById("orderModalContent");
+
+  if (!modal || !modalContent) {
+    console.error("Order modal elements not found.");
+    return;
+  }
+
   const items =
     order.items || [];
 
-  const itemDetails =
-    items.length
-      ? items.map(item => {
+  // --------------------------------
+  // Artwork items
+  // --------------------------------
 
-          const lineTotal =
-            Number(item.unit_price || 0) *
-            Number(item.quantity || 0);
+  let itemsHTML = "";
 
-          return `
-${item.title_snapshot || "Artwork"}
-Quantity: ${item.quantity || 0}
-Unit Price: ${order.currency || "KES"} ${Number(
-            item.unit_price || 0
-          ).toLocaleString()}
-Total: ${order.currency || "KES"} ${lineTotal.toLocaleString()}
-`;
+  if (items.length === 0) {
 
-        }).join("\n--------------------\n")
-      : "No artwork items found.";
+    itemsHTML = `
+      <div
+        style="
+          padding:15px;
+          background:#f8f8f8;
+          border-radius:8px;
+          color:#777;
+        "
+      >
+        No artwork items found.
+      </div>
+    `;
 
-  const details = `
-ARTWORK ORDER
+  } else {
 
-Order Number:
-${order.order_number || "—"}
+    itemsHTML = items.map(item => {
 
-Date:
-${order.created_at
-  ? new Date(order.created_at).toLocaleString()
-  : "—"}
+      const quantity =
+        Number(item.quantity || 0);
 
-CUSTOMER
+      const unitPrice =
+        Number(item.unit_price || 0);
 
-Name:
-${order.customer_name || "—"}
+      const lineTotal =
+        unitPrice * quantity;
 
-Email:
-${order.customer_email || "—"}
+      return `
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+            padding:15px 0;
+            border-bottom:1px solid #eee;
+          "
+        >
 
-Phone:
-${order.customer_phone || "—"}
+          <div>
 
-Delivery Address:
-${order.delivery_address || "—"}
+            <strong>
+              ${escapeHTML(
+                item.title_snapshot || "Artwork"
+              )}
+            </strong>
 
-ARTWORK
+            <div
+              style="
+                margin-top:5px;
+                color:#777;
+                font-size:13px;
+              "
+            >
+              Quantity: ${quantity}
+            </div>
 
-${itemDetails}
+          </div>
 
-ORDER SUMMARY
+          <div
+            style="
+              text-align:right;
+              white-space:nowrap;
+            "
+          >
 
-Subtotal:
-${order.currency || "KES"} ${Number(
-    order.subtotal || 0
-  ).toLocaleString()}
+            <div style="font-size:13px;color:#777;">
+              ${escapeHTML(order.currency || "KES")}
+              ${unitPrice.toLocaleString()}
+              each
+            </div>
 
-Delivery Fee:
-${order.currency || "KES"} ${Number(
-    order.delivery_fee || 0
-  ).toLocaleString()}
+            <strong>
+              ${escapeHTML(order.currency || "KES")}
+              ${lineTotal.toLocaleString()}
+            </strong>
 
-Total:
-${order.currency || "KES"} ${Number(
-    order.total || 0
-  ).toLocaleString()}
+          </div>
 
-Payment Status:
-${order.payment_status || "pending"}
+        </div>
+      `;
 
-Order Status:
-${order.order_status || "pending"}
+    }).join("");
 
-Notes:
-${order.notes || "—"}
-`;
+  }
 
-  alert(details);
+
+  // --------------------------------
+  // Status
+  // --------------------------------
+
+  const orderStatus =
+    order.order_status || "pending";
+
+  const paymentStatus =
+    order.payment_status || "pending";
+
+  const orderStatusClass =
+    orderStatus
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+  const paymentStatusClass =
+    paymentStatus
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+
+  // --------------------------------
+  // Modal title
+  // --------------------------------
+
+  if (modalTitle) {
+
+    modalTitle.textContent =
+      order.order_number || "Order Details";
+
+  }
+
+  if (modalSubtitle) {
+
+    modalSubtitle.textContent =
+      "Artwork Order";
+
+  }
+
+
+  // --------------------------------
+  // Modal content
+  // --------------------------------
+
+  modalContent.innerHTML = `
+
+    <!-- CUSTOMER -->
+
+    <section style="margin-bottom:25px;">
+
+      <h3
+        style="
+          margin:0 0 15px;
+          color:#071a33;
+        "
+      >
+        Customer
+      </h3>
+
+      <div
+        style="
+          display:grid;
+          grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+          gap:15px;
+        "
+      >
+
+        <div>
+          <small style="color:#777;">
+            Name
+          </small>
+
+          <div>
+            <strong>
+              ${escapeHTML(
+                order.customer_name || "—"
+              )}
+            </strong>
+          </div>
+        </div>
+
+
+        <div>
+          <small style="color:#777;">
+            Email
+          </small>
+
+          <div>
+            ${escapeHTML(
+              order.customer_email || "—"
+            )}
+          </div>
+        </div>
+
+
+        <div>
+          <small style="color:#777;">
+            Phone
+          </small>
+
+          <div>
+            ${escapeHTML(
+              order.customer_phone || "—"
+            )}
+          </div>
+        </div>
+
+
+        <div>
+          <small style="color:#777;">
+            Order Date
+          </small>
+
+          <div>
+            ${
+              order.created_at
+                ? escapeHTML(
+                    new Date(
+                      order.created_at
+                    ).toLocaleString()
+                  )
+                : "—"
+            }
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DELIVERY -->
+
+    <section style="margin-bottom:25px;">
+
+      <h3
+        style="
+          margin:0 0 15px;
+          color:#071a33;
+        "
+      >
+        Delivery
+      </h3>
+
+      <div
+        style="
+          padding:15px;
+          background:#f8f8f8;
+          border-radius:8px;
+        "
+      >
+        ${escapeHTML(
+          order.delivery_address || "No delivery address provided."
+        )}
+      </div>
+
+    </section>
+
+
+    <!-- ARTWORK -->
+
+    <section style="margin-bottom:25px;">
+
+      <h3
+        style="
+          margin:0 0 5px;
+          color:#071a33;
+        "
+      >
+        Artwork
+      </h3>
+
+      ${itemsHTML}
+
+    </section>
+
+
+    <!-- ORDER SUMMARY -->
+
+    <section style="margin-bottom:25px;">
+
+      <h3
+        style="
+          margin:0 0 15px;
+          color:#071a33;
+        "
+      >
+        Order Summary
+      </h3>
+
+      <div
+        style="
+          background:#f8f8f8;
+          border-radius:8px;
+          padding:18px;
+        "
+      >
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            padding:7px 0;
+          "
+        >
+          <span>Subtotal</span>
+
+          <strong>
+            ${escapeHTML(order.currency || "KES")}
+            ${Number(
+              order.subtotal || 0
+            ).toLocaleString()}
+          </strong>
+        </div>
+
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            padding:7px 0;
+          "
+        >
+          <span>Delivery Fee</span>
+
+          <strong>
+            ${escapeHTML(order.currency || "KES")}
+            ${Number(
+              order.delivery_fee || 0
+            ).toLocaleString()}
+          </strong>
+        </div>
+
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-between;
+            padding:12px 0 0;
+            margin-top:8px;
+            border-top:1px solid #ddd;
+            font-size:18px;
+          "
+        >
+          <strong>Total</strong>
+
+          <strong>
+            ${escapeHTML(order.currency || "KES")}
+            ${Number(
+              order.total || 0
+            ).toLocaleString()}
+          </strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- STATUS -->
+
+    <section style="margin-bottom:25px;">
+
+      <h3
+        style="
+          margin:0 0 15px;
+          color:#071a33;
+        "
+      >
+        Status
+      </h3>
+
+      <div
+        style="
+          display:flex;
+          flex-wrap:wrap;
+          gap:15px;
+        "
+      >
+
+        <div>
+
+          <small
+            style="
+              display:block;
+              color:#777;
+              margin-bottom:6px;
+            "
+          >
+            Payment
+          </small>
+
+          <span class="status status-${paymentStatusClass}">
+            ${escapeHTML(paymentStatus)}
+          </span>
+
+        </div>
+
+
+        <div>
+
+          <small
+            style="
+              display:block;
+              color:#777;
+              margin-bottom:6px;
+            "
+          >
+            Order
+          </small>
+
+          <span class="status status-${orderStatusClass}">
+            ${escapeHTML(orderStatus)}
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- NOTES -->
+
+    <section>
+
+      <h3
+        style="
+          margin:0 0 10px;
+          color:#071a33;
+        "
+      >
+        Customer Notes
+      </h3>
+
+      <div
+        style="
+          padding:15px;
+          background:#f8f8f8;
+          border-radius:8px;
+          color:#555;
+          white-space:pre-wrap;
+        "
+      >
+        ${escapeHTML(
+          order.notes || "No notes provided."
+        )}
+      </div>
+
+    </section>
+
+  `;
+
+
+  // --------------------------------
+  // Show modal
+  // --------------------------------
+
+  modal.style.display = "block";
+
+  document.body.style.overflow = "hidden";
 }
+
+
+// ------------------------------------
+// Close order modal
+// ------------------------------------
+
+function closeOrderModal() {
+
+  const modal =
+    document.getElementById("orderModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+
+  document.body.style.overflow = "";
+}
+
+
+// ------------------------------------
+// Modal buttons
+// ------------------------------------
+
+const closeOrderModalButton =
+  document.getElementById("closeOrderModal");
+
+if (closeOrderModalButton) {
+
+  closeOrderModalButton.addEventListener(
+    "click",
+    closeOrderModal
+  );
+
+}
+
+
+const closeOrderModalBottom =
+  document.getElementById(
+    "closeOrderModalBottom"
+  );
+
+if (closeOrderModalBottom) {
+
+  closeOrderModalBottom.addEventListener(
+    "click",
+    closeOrderModal
+  );
+
+}
+
+
+// ------------------------------------
+// Close modal when clicking outside
+// ------------------------------------
+
+const orderModal =
+  document.getElementById("orderModal");
+
+if (orderModal) {
+
+  orderModal.addEventListener(
+    "click",
+    event => {
+
+      if (event.target === orderModal) {
+        closeOrderModal();
+      }
+
+    }
+  );
+
+}
+
+
+// ------------------------------------
+// Close modal with Escape key
+// ------------------------------------
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if (event.key === "Escape") {
+      closeOrderModal();
+    }
+
+  }
+);
 
 
 // ====================================
