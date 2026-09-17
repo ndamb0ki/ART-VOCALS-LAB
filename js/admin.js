@@ -397,12 +397,31 @@ function renderRequests() {
       </td>
 
       <td>
+
         <button
           class="view-btn"
           onclick="viewCommission('${request.id}')"
         >
           View
         </button>
+
+        <button
+          type="button"
+          onclick="deleteCommission('${request.id}')"
+          style="
+            display:block;
+            margin-top:6px;
+            background:#b00020;
+            color:white;
+            border:0;
+            padding:7px 12px;
+            border-radius:6px;
+            cursor:pointer;
+          "
+        >
+          Delete
+        </button>
+
       </td>
     `;
 
@@ -2263,25 +2282,11 @@ async function loadAdminArtworks() {
     const artworkForm =
       document.getElementById("artworkForm");
 
-    if (artworkForm) {
+     const container =
+      document.querySelector(".container");
 
-      const formContainer =
-        artworkForm.closest("section") ||
-        artworkForm.parentElement;
-
-      if (formContainer) {
-        formContainer.parentElement.appendChild(section);
-      }
-
-    } else {
-
-      const container =
-        document.querySelector(".container");
-
-      if (container) {
-        container.appendChild(section);
-      }
-
+    if (container) {
+      container.appendChild(section);
     }
   }
 
@@ -2902,4 +2907,90 @@ async function deleteOrder(orderId) {
 
   }
 
+}
+// ====================================
+// DELETE COMMISSION REQUEST
+// ====================================
+
+async function deleteCommission(commissionId) {
+
+  const request =
+    commissionRequests.find(
+      item => item.id === commissionId
+    );
+
+  if (!request) {
+
+    alert(
+      "Commission request could not be found."
+    );
+
+    return;
+  }
+
+  const customerName =
+    request.name || "Unknown customer";
+
+  const confirmed =
+    confirm(
+      "DELETE COMMISSION REQUEST?\n\n" +
+      `Customer: ${customerName}\n` +
+      `Artwork: ${request.artwork_type || "—"}\n\n` +
+      "This will permanently delete this commission request.\n\n" +
+      "This cannot be undone."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    const {
+      error
+    } = await supabaseClient
+      .from("commission_requests")
+      .delete()
+      .eq("id", commissionId);
+
+    if (error) {
+
+      console.error(
+        "Commission delete error:",
+        error
+      );
+
+      throw new Error(
+        "Could not delete commission request:\n\n" +
+        error.message
+      );
+    }
+
+    // Remove it from the local dashboard
+    commissionRequests =
+      commissionRequests.filter(
+        item => item.id !== commissionId
+      );
+
+    // Refresh dashboard
+    updateStatistics();
+    renderRequests();
+
+    alert(
+      "Commission request deleted successfully."
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Delete commission error:",
+      error
+    );
+
+    alert(
+      "Could not delete commission request:\n\n" +
+      error.message
+    );
+
+  }
 }
