@@ -761,11 +761,46 @@ function renderOrders() {
         </span>
       </td>
 
-      <td>
-        <span class="status status-${paymentClass}">
-          ${escapeHTML(paymentStatus)}
-        </span>
-      </td>
+   <td>
+
+  <select
+    id="payment-${order.id}"
+    style="
+      padding:7px;
+      border:1px solid #ddd;
+      border-radius:6px;
+      background:white;
+      min-width:120px;
+    "
+  >
+
+    <option value="pending" ${paymentStatus === "pending" ? "selected" : ""}>
+      Pending
+    </option>
+
+    <option value="paid" ${paymentStatus === "paid" ? "selected" : ""}>
+      Paid
+    </option>
+
+    <option value="failed" ${paymentStatus === "failed" ? "selected" : ""}>
+      Failed
+    </option>
+
+    <option value="refunded" ${paymentStatus === "refunded" ? "selected" : ""}>
+      Refunded
+    </option>
+
+  </select>
+
+  <button
+    class="view-btn"
+    style="margin-top:6px;"
+    onclick="updatePaymentStatus('${order.id}')"
+  >
+    Save
+  </button>
+
+</td>
 
       <td>
         <select
@@ -828,18 +863,18 @@ function renderOrders() {
 
 
 // ------------------------------------
-// Update order status
+// Update payment status
 // ------------------------------------
 
-async function updateOrderStatus(orderId) {
+async function updatePaymentStatus(orderId) {
 
   const select =
     document.getElementById(
-      `status-${orderId}`
+      `payment-${orderId}`
     );
 
   if (!select) {
-    alert("Could not find the order status selector.");
+    alert("Could not find the payment status selector.");
     return;
   }
 
@@ -859,19 +894,19 @@ async function updateOrderStatus(orderId) {
     await supabaseClient
       .from("orders")
       .update({
-        order_status: newStatus
+        payment_status: newStatus
       })
       .eq("id", orderId);
 
   if (error) {
 
     console.error(
-      "Order status update error:",
+      "Payment status update error:",
       error
     );
 
     alert(
-      "Could not update order status:\n\n" +
+      "Could not update payment status:\n\n" +
       error.message
     );
 
@@ -882,6 +917,29 @@ async function updateOrderStatus(orderId) {
 
     return;
   }
+
+  // Update local order data
+  artworkOrders =
+    artworkOrders.map(order => {
+
+      if (order.id === orderId) {
+        return {
+          ...order,
+          payment_status: newStatus
+        };
+      }
+
+      return order;
+
+    });
+
+  renderOrders();
+
+  alert(
+    "Payment status updated to: " +
+    newStatus
+  );
+}
 
   // Update local order data
   artworkOrders =
