@@ -1025,6 +1025,7 @@ async function updateOrderStatus(orderId) {
     newStatus
   );
 }
+
 // ------------------------------------
 // View order in professional modal
 // ------------------------------------
