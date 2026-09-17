@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="../images/icons8-homer-simpson-40.apng.png">
+
+  <link rel="icon" type="image/png" href="../images/icons8-homer-simpson-40.apng.png">
+
   <title>Admin Dashboard | Ndambuki Art Lab</title>
 
   <style>
@@ -255,6 +257,160 @@
     }
 
     /* =========================
+       SHOP / ARTWORK MANAGEMENT
+    ========================= */
+
+    .artwork-form {
+      padding: 25px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+    }
+
+    .form-group textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #071a33;
+    }
+
+    .image-upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .image-upload-box:hover {
+      border-color: #071a33;
+      background: #f5f7fa;
+    }
+
+    .image-upload-box input {
+      display: none;
+    }
+
+    .image-upload-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .image-upload-help {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .image-preview {
+      display: none;
+      margin-top: 15px;
+      max-width: 250px;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .checkbox-row input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .publish-btn {
+      margin-top: 25px;
+      padding: 13px 24px;
+      border: 0;
+      border-radius: 7px;
+      background: #071a33;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .publish-btn:hover {
+      opacity: .9;
+    }
+
+    .publish-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .form-message {
+      display: none;
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-radius: 7px;
+      font-size: 14px;
+    }
+
+    .form-message.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .form-message.error-message {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .shop-note {
+      padding: 0 25px 25px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* =========================
        RESPONSIVE
     ========================= */
 
@@ -270,6 +426,14 @@
 
       .admin-header h1 {
         font-size: 19px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full-width {
+        grid-column: auto;
       }
     }
 
@@ -293,6 +457,14 @@
 
       .section-header h2 {
         margin-bottom: 12px;
+      }
+
+      .artwork-form {
+        padding: 18px;
+      }
+
+      .shop-note {
+        padding: 0 18px 20px;
       }
     }
   </style>
@@ -463,7 +635,288 @@
 
     </section>
 
+
+    <!-- =========================
+         SHOP / ADD ARTWORK
+    ========================= -->
+
+    <section class="requests-section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Shop Management</h2>
+        </div>
+
+      </div>
+
+
+      <div class="shop-note">
+        Add a new artwork to the Ndambuki Art Lab Shop. Upload the artwork image,
+        add its details, set the price and publish it. The artwork will be stored
+        in Supabase and can later appear automatically on the public Shop page.
+      </div>
+
+
+      <form id="artworkForm" class="artwork-form">
+
+        <div class="form-grid">
+
+
+          <!-- IMAGE -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Artwork Image *
+            </label>
+
+            <label
+              for="artworkImage"
+              class="image-upload-box"
+            >
+
+              <div class="image-upload-title">
+                Click to upload artwork image
+              </div>
+
+              <div class="image-upload-help">
+                JPG, PNG, WEBP or similar image
+              </div>
+
+              <input
+                type="file"
+                id="artworkImage"
+                accept="image/*"
+                required
+              >
+
+              <img
+                id="artworkImagePreview"
+                class="image-preview"
+                alt="Artwork preview"
+              >
+
+            </label>
+
+          </div>
+
+
+          <!-- TITLE -->
+
+          <div class="form-group full-width">
+
+            <label for="artworkTitle">
+              Artwork Title *
+            </label>
+
+            <input
+              type="text"
+              id="artworkTitle"
+              placeholder="Example: Dreams of Mathare"
+              required
+            >
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group full-width">
+
+            <label for="artworkDescription">
+              Description
+            </label>
+
+            <textarea
+              id="artworkDescription"
+              placeholder="Tell the story behind this artwork..."
+            ></textarea>
+
+          </div>
+
+
+          <!-- PRICE -->
+
+          <div class="form-group">
+
+            <label for="artworkPrice">
+              Price *
+            </label>
+
+            <input
+              type="number"
+              id="artworkPrice"
+              min="0"
+              step="0.01"
+              placeholder="35000"
+              required
+            >
+
+          </div>
+
+
+          <!-- CURRENCY -->
+
+          <div class="form-group">
+
+            <label for="artworkCurrency">
+              Currency
+            </label>
+
+            <select id="artworkCurrency">
+
+              <option value="KES">
+                KES - Kenyan Shilling
+              </option>
+
+              <option value="USD">
+                USD - US Dollar
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="form-group">
+
+            <label for="artworkCategory">
+              Category
+            </label>
+
+            <select id="artworkCategory">
+
+              <option value="Original Painting">
+                Original Painting
+              </option>
+
+              <option value="Custom Painting">
+                Custom Painting
+              </option>
+
+              <option value="Pencil Drawing">
+                Pencil Drawing
+              </option>
+
+              <option value="Print">
+                Print
+              </option>
+
+              <option value="Customized Object">
+                Customized Object
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- SIZE -->
+
+          <div class="form-group">
+
+            <label for="artworkSize">
+              Size
+            </label>
+
+            <input
+              type="text"
+              id="artworkSize"
+              placeholder="Example: 60cm × 90cm"
+            >
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div class="form-group">
+
+            <label for="artworkStatus">
+              Status
+            </label>
+
+            <select id="artworkStatus">
+
+              <option value="available">
+                Available
+              </option>
+
+              <option value="sold">
+                Sold
+              </option>
+
+              <option value="reserved">
+                Reserved
+              </option>
+
+              <option value="draft">
+                Draft
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- FEATURED -->
+
+          <div class="form-group">
+
+            <label>
+              Featured Artwork
+            </label>
+
+            <div class="checkbox-row">
+
+              <input
+                type="checkbox"
+                id="artworkFeatured"
+              >
+
+              <span>
+                Show this artwork as featured
+              </span>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+          id="artworkFormMessage"
+          class="form-message"
+        ></div>
+
+
+        <!-- PUBLISH BUTTON -->
+
+        <button
+          type="submit"
+          id="publishArtworkBtn"
+          class="publish-btn"
+        >
+          Publish Artwork
+        </button>
+
+      </form>
+
+    </section>
+
   </main>
+
 
   <!-- =========================
        ORDER DETAILS MODAL
@@ -508,6 +961,7 @@
       >
 
         <div>
+
           <h2
             id="orderModalTitle"
             style="margin:0;"
@@ -521,7 +975,9 @@
           >
             Artwork Order
           </small>
+
         </div>
+
 
         <button
           id="closeOrderModal"
@@ -576,15 +1032,17 @@
     </div>
 
   </div>
-  <!-- SUPABASE -->
+
+
+  <!-- =========================
+       SUPABASE
+  ========================= -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
   <!-- YOUR SUPABASE CONNECTION -->
 
   <script src="../js/supabase.js"></script>
-
 
   <!-- ADMIN JAVASCRIPT -->
 
