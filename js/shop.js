@@ -7,7 +7,6 @@
 
   let artworkData = [];
 
-
   // =========================================================
   // STATE
   // =========================================================
@@ -32,107 +31,49 @@
 
   let commissionDraftTimer = null;
 
-
   // =========================================================
   // DOM ELEMENTS
   // =========================================================
 
-  const artworkGrid =
-    document.getElementById('artworkGrid');
+  const artworkGrid = document.getElementById('artworkGrid');
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
+  const filterBar = document.getElementById('filterBar');
 
-  const searchInput =
-    document.getElementById('searchInput');
+  const cartToggle = document.getElementById('cartToggle');
+  const cartPanel = document.getElementById('cartPanel');
+  const closeCart = document.getElementById('closeCart');
+  const overlay = document.getElementById('overlay');
 
-  const sortSelect =
-    document.getElementById('sortSelect');
+  const quickViewModal = document.getElementById('quickViewModal');
+  const modalBody = document.getElementById('modalBody');
+  const closeModal = document.getElementById('closeModal');
 
-  const filterBar =
-    document.getElementById('filterBar');
+  const cartCount = document.getElementById('cartCount');
+  const cartItems = document.getElementById('cartItems');
+  const cartSubtotal = document.getElementById('cartSubtotal');
+  const cartShipping = document.getElementById('cartShipping');
+  const cartTax = document.getElementById('cartTax');
+  const cartGrand = document.getElementById('cartGrand');
 
-  const cartToggle =
-    document.getElementById('cartToggle');
+  const summarySubtotal = document.getElementById('summarySubtotal');
+  const summaryShipping = document.getElementById('summaryShipping');
+  const summaryTax = document.getElementById('summaryTax');
+  const summaryGrand = document.getElementById('summaryGrand');
 
-  const cartPanel =
-    document.getElementById('cartPanel');
+  const estimateValue = document.getElementById('estimateValue');
+  const commissionForm = document.getElementById('commissionForm');
 
-  const closeCart =
-    document.getElementById('closeCart');
+  const progressBar = document.getElementById('progressBar');
+  const progressLabels = document.getElementById('progressLabels');
+  const prevStep = document.getElementById('prevStep');
+  const nextStep = document.getElementById('nextStep');
+  const submitCommission = document.getElementById('submitCommission');
 
-  const overlay =
-    document.getElementById('overlay');
-
-  const quickViewModal =
-    document.getElementById('quickViewModal');
-
-  const modalBody =
-    document.getElementById('modalBody');
-
-  const closeModal =
-    document.getElementById('closeModal');
-
-  const cartCount =
-    document.getElementById('cartCount');
-
-  const cartItems =
-    document.getElementById('cartItems');
-
-  const cartSubtotal =
-    document.getElementById('cartSubtotal');
-
-  const cartShipping =
-    document.getElementById('cartShipping');
-
-  const cartTax =
-    document.getElementById('cartTax');
-
-  const cartGrand =
-    document.getElementById('cartGrand');
-
-  const summarySubtotal =
-    document.getElementById('summarySubtotal');
-
-  const summaryShipping =
-    document.getElementById('summaryShipping');
-
-  const summaryTax =
-    document.getElementById('summaryTax');
-
-  const summaryGrand =
-    document.getElementById('summaryGrand');
-
-  const estimateValue =
-    document.getElementById('estimateValue');
-
-  const commissionForm =
-    document.getElementById('commissionForm');
-
-  const progressBar =
-    document.getElementById('progressBar');
-
-  const progressLabels =
-    document.getElementById('progressLabels');
-
-  const prevStep =
-    document.getElementById('prevStep');
-
-  const nextStep =
-    document.getElementById('nextStep');
-
-  const submitCommission =
-    document.getElementById('submitCommission');
-
-  const customSizeFields =
-    document.getElementById('customSizeFields');
-
-  const referenceImages =
-    document.getElementById('referenceImages');
-
-  const previewHolder =
-    document.getElementById('previewHolder');
-
-  const toastStack =
-    document.getElementById('toastStack');
-
+  const customSizeFields = document.getElementById('customSizeFields');
+  const referenceImages = document.getElementById('referenceImages');
+  const previewHolder = document.getElementById('previewHolder');
+  const toastStack = document.getElementById('toastStack');
 
   // =========================================================
   // COMMISSION STEPS
@@ -154,13 +95,11 @@
     'Customer Info'
   ];
 
-
   // =========================================================
   // SAVE STATE
   // =========================================================
 
   function saveState() {
-
     localStorage.setItem(
       'ndambo-cart',
       JSON.stringify(state.cart)
@@ -177,135 +116,123 @@
     );
   }
 
-
   // =========================================================
   // TOAST
   // =========================================================
 
   function showToast(message) {
-
     if (!toastStack) return;
 
-    const toast =
-      document.createElement('div');
-
+    const toast = document.createElement('div');
     toast.className = 'toast';
-
     toast.textContent = message;
 
     toastStack.appendChild(toast);
 
-    setTimeout(() => {
-      toast.remove();
-    }, 2400);
+    setTimeout(() => toast.remove(), 2400);
   }
-
 
   // =========================================================
   // BUTTON RIPPLE
   // =========================================================
 
   function createRipple(event) {
-
-    const button =
-      event.currentTarget;
-
+    const button = event.currentTarget;
     if (!button) return;
 
-    const ripple =
-      document.createElement('span');
-
+    const ripple = document.createElement('span');
     ripple.className = 'ripple';
 
-    const rect =
-      button.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
 
     const size =
-      Math.max(
-        rect.width,
-        rect.height
-      ) * 1.1;
+      Math.max(rect.width, rect.height) * 1.1;
 
-    ripple.style.width =
-      `${size}px`;
-
-    ripple.style.height =
-      `${size}px`;
-
+    ripple.style.width = `${size}px`;
+    ripple.style.height = `${size}px`;
     ripple.style.left =
       `${event.clientX - rect.left}px`;
-
     ripple.style.top =
       `${event.clientY - rect.top}px`;
 
     button.appendChild(ripple);
 
-    setTimeout(() => {
-      ripple.remove();
-    }, 600);
+    setTimeout(() => ripple.remove(), 600);
   }
-
 
   // =========================================================
   // CURRENCY
   // =========================================================
 
   function formatCurrency(value) {
-
-    const number =
-      Number(value) || 0;
-
+    const number = Number(value) || 0;
     return `KES ${number.toLocaleString()}`;
   }
 
+  // =========================================================
+  // ESCAPE HTML
+  // =========================================================
+
+  function escapeHTML(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // =========================================================
+  // NORMALIZE STATUS
+  // =========================================================
+
+  function normalizeStatus(status) {
+    const value =
+      String(status || 'available')
+        .trim()
+        .toLowerCase();
+
+    if (
+      value === 'sold' ||
+      value === 'unavailable' ||
+      value === 'unavailable.'
+    ) {
+      return 'sold';
+    }
+
+    return 'available';
+  }
 
   // =========================================================
   // LOAD ARTWORKS FROM SUPABASE
   // =========================================================
 
   async function loadArtworks() {
-
     if (!artworkGrid) return;
-
-
-    // -----------------------------------------
-    // Loading message
-    // -----------------------------------------
 
     artworkGrid.innerHTML = `
       <div
         class="art-card"
         style="
-          grid-column: 1 / -1;
-          padding: 2rem;
-          text-align: center;
+          grid-column:1 / -1;
+          padding:2rem;
+          text-align:center;
         "
       >
         Loading artworks...
       </div>
     `;
 
-
-    // -----------------------------------------
-    // Check Supabase connection
-    // -----------------------------------------
-
-    if (
-      typeof supabaseClient ===
-      'undefined'
-    ) {
-
-      console.error(
-        'Supabase client is not available.'
-      );
+    if (typeof supabaseClient === 'undefined') {
+      console.error('Supabase client is not available.');
 
       artworkGrid.innerHTML = `
         <div
           class="art-card"
           style="
-            grid-column: 1 / -1;
-            padding: 2rem;
-            text-align: center;
+            grid-column:1 / -1;
+            padding:2rem;
+            text-align:center;
           "
         >
           The shop could not connect to the artwork gallery.
@@ -315,63 +242,45 @@
       return;
     }
 
-
-    // -----------------------------------------
-    // Get published artworks
-    // -----------------------------------------
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
+    try {
+      const {
+        data,
+        error
+      } = await supabaseClient
         .from('artworks')
         .select('*')
         .order('created_at', {
           ascending: false
         });
 
+      if (error) {
+        console.error(
+          'Artwork loading error:',
+          error
+        );
 
-    // -----------------------------------------
-    // Handle database error
-    // -----------------------------------------
+        artworkGrid.innerHTML = `
+          <div
+            class="art-card"
+            style="
+              grid-column:1 / -1;
+              padding:2rem;
+              text-align:center;
+            "
+          >
+            Could not load artworks right now.
+          </div>
+        `;
 
-    if (error) {
+        return;
+      }
 
-      console.error(
-        'Artwork loading error:',
-        error
-      );
-
-      artworkGrid.innerHTML = `
-        <div
-          class="art-card"
-          style="
-            grid-column: 1 / -1;
-            padding: 2rem;
-            text-align: center;
-          "
-        >
-          Could not load artworks right now.
-        </div>
-      `;
-
-      return;
-    }
-
-
-    // -----------------------------------------
-    // Convert Supabase records into the format
-    // used by the existing shop system
-    // -----------------------------------------
-
-    artworkData =
-      (data || []).map((item) => {
+      artworkData = (data || []).map(item => {
+        const status =
+          normalizeStatus(item.status);
 
         return {
-
-          id:
-            item.id,
+          id: item.id,
 
           name:
             item.title ||
@@ -396,13 +305,16 @@
             item.description ||
             'Original artwork by Stephen Ndambuki.',
 
-          rating:
-            5,
+          rating: 5,
+
+          // IMPORTANT:
+          // Always store the real normalized status.
+          status: status,
 
           availability:
-            item.status === 'available'
-              ? 'Available'
-              : item.status,
+            status === 'sold'
+              ? 'SOLD'
+              : 'Available',
 
           image:
             item.image_url,
@@ -411,39 +323,87 @@
             item.created_at,
 
           popularity:
-            item.featured
-              ? 100
-              : 50
-
+            item.featured ? 100 : 50
         };
-
       });
 
+      console.log(
+        'ALL ARTWORKS LOADED FROM SUPABASE:',
+        artworkData
+      );
 
-    console.log(
-      'Artworks loaded from Supabase:',
-      artworkData
-    );
+      console.log(
+        'Available artworks:',
+        artworkData.filter(
+          item => item.status === 'available'
+        )
+      );
 
+      console.log(
+        'Sold artworks:',
+        artworkData.filter(
+          item => item.status === 'sold'
+        )
+      );
 
-    // -----------------------------------------
-    // Render gallery
-    // -----------------------------------------
+      /*
+       * Remove sold items that may still be sitting
+       * in an old customer's localStorage cart.
+       */
+      const validCart = state.cart.filter(cartItem => {
+        const artwork =
+          artworkData.find(
+            item => item.id === cartItem.id
+          );
 
-    renderArtworks();
+        return (
+          artwork &&
+          artwork.status === 'available'
+        );
+      });
 
-    renderCart();
+      if (
+        validCart.length !==
+        state.cart.length
+      ) {
+        state.cart = validCart;
+        saveState();
 
-    updateTotals();
+        showToast(
+          'Unavailable artwork was removed from your cart.'
+        );
+      }
+
+      renderArtworks();
+      renderCart();
+      updateTotals();
+
+    } catch (error) {
+      console.error(
+        'Unexpected artwork loading error:',
+        error
+      );
+
+      artworkGrid.innerHTML = `
+        <div
+          class="art-card"
+          style="
+            grid-column:1 / -1;
+            padding:2rem;
+            text-align:center;
+          "
+        >
+          Could not load artworks right now.
+        </div>
+      `;
+    }
   }
-
 
   // =========================================================
   // FILTER ARTWORKS
   // =========================================================
 
   function getFilteredArtworks() {
-
     const query =
       state.query
         .trim()
@@ -451,138 +411,166 @@
 
     return artworkData
 
-      .filter((item) => {
+      .filter(item => {
+        /*
+         * "all" MUST show BOTH available and sold artwork.
+         */
+        if (
+          !state.activeFilter ||
+          state.activeFilter === 'all'
+        ) {
+          return true;
+        }
 
         return (
-          state.activeFilter === 'all' ||
           item.category === state.activeFilter ||
           item.medium === state.activeFilter
         );
-
       })
 
-      .filter((item) => {
-
+      .filter(item => {
         if (!query) return true;
 
         const haystack =
-          `${item.name} ${item.category} ${item.medium} ${item.description}`
+          `${item.name} ${item.category} ${item.medium} ${item.description} ${item.status}`
             .toLowerCase();
 
         return haystack.includes(query);
-
       })
 
       .sort((a, b) => {
-
         switch (state.sort) {
-
           case 'oldest':
-
             return (
               new Date(a.date) -
               new Date(b.date)
             );
 
           case 'price-asc':
-
-            return (
-              a.price -
-              b.price
-            );
+            return a.price - b.price;
 
           case 'price-desc':
-
-            return (
-              b.price -
-              a.price
-            );
+            return b.price - a.price;
 
           case 'alpha':
-
-            return a.name.localeCompare(
-              b.name
-            );
+            return a.name.localeCompare(b.name);
 
           case 'popular':
-
-            return (
-              b.popularity -
-              a.popularity
-            );
+            return b.popularity - a.popularity;
 
           default:
-
             return (
               new Date(b.date) -
               new Date(a.date)
             );
         }
-
       });
   }
-
 
   // =========================================================
   // RENDER ARTWORKS
   // =========================================================
 
   function renderArtworks() {
-
     if (!artworkGrid) return;
 
     const items =
       getFilteredArtworks();
 
-    const empty =
-      items.length === 0;
+    console.log(
+      'RENDERING ARTWORKS:',
+      items
+    );
 
-    artworkGrid.innerHTML =
-      empty
-        ? `
-          <div
-            class="art-card"
-            style="
-              grid-column: 1 / -1;
-              padding: 1.2rem;
-            "
-          >
-            No artworks match your search yet.
-          </div>
-        `
-        : '';
+    artworkGrid.innerHTML = '';
 
+    if (!items.length) {
+      artworkGrid.innerHTML = `
+        <div
+          class="art-card"
+          style="
+            grid-column:1 / -1;
+            padding:1.2rem;
+          "
+        >
+          No artworks match your search yet.
+        </div>
+      `;
 
-    items.forEach((item) => {
+      return;
+    }
 
+    items.forEach(item => {
       const isFavorite =
-        state.favorites.includes(
-          item.id
-        );
+        state.favorites.includes(item.id);
+
+      const isSold =
+        item.status === 'sold';
 
       const card =
-        document.createElement(
-          'article'
-        );
+        document.createElement('article');
 
       card.className =
         'art-card';
 
-      card.innerHTML = `
+      /*
+       * Add a class to sold cards so you can style
+       * them later in CSS if desired.
+       */
+      if (isSold) {
+        card.classList.add('sold-artwork');
+      }
 
-        <img
-          src="${item.image || '../images/artwork1.jpg'}"
-          alt="${item.name}"
-        >
+      card.innerHTML = `
+        <div style="position:relative;">
+
+          <img
+            src="${escapeHTML(
+              item.image ||
+              '../images/artwork1.jpg'
+            )}"
+            alt="${escapeHTML(item.name)}"
+          >
+
+          ${
+            isSold
+              ? `
+                <div
+                  class="sold-badge"
+                  style="
+                    position:absolute;
+                    top:12px;
+                    left:12px;
+                    z-index:2;
+                    background:#111;
+                    color:#fff;
+                    padding:7px 12px;
+                    border-radius:6px;
+                    font-size:.75rem;
+                    font-weight:800;
+                    letter-spacing:.08em;
+                  "
+                >
+                  SOLD
+                </div>
+              `
+              : ''
+          }
+
+        </div>
 
         <div class="art-card__body">
 
           <div class="art-card__top">
 
-            <h3>${item.name}</h3>
+            <h3>
+              ${escapeHTML(item.name)}
+            </h3>
 
             <button
-              class="favorite-btn ${isFavorite ? 'active' : ''}"
+              class="favorite-btn ${
+                isFavorite ? 'active' : ''
+              }"
               data-id="${item.id}"
               type="button"
               aria-label="Favorite"
@@ -594,16 +582,22 @@
 
           <div class="meta">
 
-            <span>${item.category}</span>
+            <span>
+              ${escapeHTML(item.category)}
+            </span>
 
-            <span>${item.medium}</span>
+            <span>
+              ${escapeHTML(item.medium)}
+            </span>
 
-            <span>${item.size}</span>
+            <span>
+              ${escapeHTML(item.size)}
+            </span>
 
           </div>
 
           <p>
-            ${item.description}
+            ${escapeHTML(item.description)}
           </p>
 
           <div class="price-row">
@@ -620,8 +614,23 @@
 
           <p class="meta">
 
-            <span>
-              ${item.availability}
+            <span
+              ${
+                isSold
+                  ? `
+                    style="
+                      color:#b42318;
+                      font-weight:800;
+                    "
+                  `
+                  : ''
+              }
+            >
+              ${
+                isSold
+                  ? 'SOLD'
+                  : 'Available'
+              }
             </span>
 
           </p>
@@ -636,13 +645,31 @@
               Quick View
             </button>
 
-            <button
-              class="btn btn-primary add-to-cart"
-              data-id="${item.id}"
-              type="button"
-            >
-              Add to Cart
-            </button>
+            ${
+              isSold
+                ? `
+                  <button
+                    class="btn btn-secondary"
+                    type="button"
+                    disabled
+                    style="
+                      opacity:.65;
+                      cursor:not-allowed;
+                    "
+                  >
+                    SOLD
+                  </button>
+                `
+                : `
+                  <button
+                    class="btn btn-primary add-to-cart"
+                    data-id="${item.id}"
+                    type="button"
+                  >
+                    Add to Cart
+                  </button>
+                `
+            }
 
           </div>
 
@@ -653,59 +680,55 @@
     });
   }
 
-
   // =========================================================
   // CART
   // =========================================================
 
   function renderCart() {
-
     if (!cartItems) return;
 
     cartItems.innerHTML = '';
 
-
     if (!state.cart.length) {
-
       cartItems.innerHTML =
-        '<p style="color: var(--muted);">Your cart is empty.</p>';
+        '<p style="color:var(--muted);">Your cart is empty.</p>';
 
       updateTotals();
-
       return;
     }
 
-
-    state.cart.forEach((item) => {
-
+    state.cart.forEach(item => {
       const art =
         artworkData.find(
-          (entry) =>
-            entry.id === item.id
+          entry => entry.id === item.id
         );
 
-      if (!art) return;
-
+      if (
+        !art ||
+        art.status !== 'available'
+      ) {
+        return;
+      }
 
       const row =
-        document.createElement(
-          'div'
-        );
+        document.createElement('div');
 
       row.className =
         'cart-item';
 
       row.innerHTML = `
-
         <img
-          src="${art.image || '../images/artwork1.jpg'}"
-          alt="${art.name}"
+          src="${escapeHTML(
+            art.image ||
+            '../images/artwork1.jpg'
+          )}"
+          alt="${escapeHTML(art.name)}"
         >
 
         <div class="cart-item__meta">
 
           <strong>
-            ${art.name}
+            ${escapeHTML(art.name)}
           </strong>
 
           <small>
@@ -747,11 +770,7 @@
             )}
           </strong>
 
-          <div
-            style="
-              margin-top: 0.35rem;
-            "
-          >
+          <div style="margin-top:.35rem;">
 
             <button
               class="icon-btn"
@@ -765,60 +784,62 @@
           </div>
 
         </div>
-
       `;
 
       cartItems.appendChild(row);
     });
 
+    if (!cartItems.children.length) {
+      cartItems.innerHTML =
+        '<p style="color:var(--muted);">Your cart is empty.</p>';
+    }
+
     updateTotals();
   }
 
+  // =========================================================
+  // CART TOTALS
+  // =========================================================
 
   function updateTotals() {
-
     const subtotal =
       state.cart.reduce(
         (sum, item) => {
-
           const art =
             artworkData.find(
-              (entry) =>
-                entry.id === item.id
+              entry => entry.id === item.id
             );
+
+          if (
+            !art ||
+            art.status !== 'available'
+          ) {
+            return sum;
+          }
 
           return (
             sum +
-            (
-              art
-                ? art.price *
-                  item.quantity
-                : 0
-            )
+            art.price *
+            Number(item.quantity || 0)
           );
-
         },
         0
       );
-
 
     const shipping =
       subtotal > 0
         ? 1500
         : 0;
 
-
     const tax =
       Math.round(
         subtotal * 0.08
       );
 
-
     const grand =
       subtotal +
       shipping +
       tax;
-
 
     if (cartSubtotal)
       cartSubtotal.textContent =
@@ -852,9 +873,7 @@
       summaryGrand.textContent =
         formatCurrency(grand);
 
-
     if (cartCount) {
-
       cartCount.textContent =
         state.cart.reduce(
           (sum, item) =>
@@ -865,22 +884,17 @@
     }
   }
 
-
   // =========================================================
   // CART TOGGLE
   // =========================================================
 
   function toggleCart(force) {
-
-    if (!cartPanel || !overlay)
-      return;
+    if (!cartPanel || !overlay) return;
 
     const shouldOpen =
       typeof force === 'boolean'
         ? force
-        : !cartPanel.classList.contains(
-            'open'
-          );
+        : !cartPanel.classList.contains('open');
 
     cartPanel.classList.toggle(
       'open',
@@ -893,17 +907,14 @@
     );
   }
 
-
   // =========================================================
   // QUICK VIEW
   // =========================================================
 
   function openModal(id) {
-
     const art =
       artworkData.find(
-        (item) =>
-          item.id === id
+        item => item.id === id
       );
 
     if (
@@ -914,12 +925,16 @@
       return;
     }
 
+    const isSold =
+      art.status === 'sold';
 
     modalBody.innerHTML = `
-
       <img
-        src="${art.image || '../images/artwork1.jpg'}"
-        alt="${art.name}"
+        src="${escapeHTML(
+          art.image ||
+          '../images/artwork1.jpg'
+        )}"
+        alt="${escapeHTML(art.name)}"
       >
 
       <div>
@@ -929,7 +944,7 @@
         </p>
 
         <h3>
-          ${art.name}
+          ${escapeHTML(art.name)}
         </h3>
 
         <p>
@@ -939,17 +954,17 @@
 
         <p>
           <strong>Medium:</strong>
-          ${art.medium}
+          ${escapeHTML(art.medium)}
         </p>
 
         <p>
           <strong>Description:</strong>
-          ${art.description}
+          ${escapeHTML(art.description)}
         </p>
 
         <p>
           <strong>Dimensions:</strong>
-          ${art.size}
+          ${escapeHTML(art.size)}
         </p>
 
         <p>
@@ -959,35 +974,67 @@
 
         <p>
           <strong>Availability:</strong>
-          ${art.availability}
+
+          <span
+            ${
+              isSold
+                ? `
+                  style="
+                    color:#b42318;
+                    font-weight:800;
+                  "
+                `
+                : ''
+            }
+          >
+            ${
+              isSold
+                ? 'SOLD'
+                : 'Available'
+            }
+          </span>
         </p>
 
         <p
           style="
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-top: 0.7rem;
+            font-size:1.2rem;
+            font-weight:700;
+            margin-top:.7rem;
           "
         >
           ${formatCurrency(art.price)}
         </p>
 
-        <button
-          class="btn btn-primary add-to-cart"
-          data-id="${art.id}"
-          type="button"
-        >
-          Add to Cart
-        </button>
+        ${
+          isSold
+            ? `
+              <button
+                class="btn btn-secondary"
+                type="button"
+                disabled
+                style="
+                  opacity:.65;
+                  cursor:not-allowed;
+                "
+              >
+                SOLD
+              </button>
+            `
+            : `
+              <button
+                class="btn btn-primary add-to-cart"
+                data-id="${art.id}"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            `
+        }
 
       </div>
-
     `;
 
-
-    quickViewModal.classList.add(
-      'open'
-    );
+    quickViewModal.classList.add('open');
 
     quickViewModal.setAttribute(
       'aria-hidden',
@@ -995,15 +1042,10 @@
     );
   }
 
-
   function closeModalFn() {
+    if (!quickViewModal) return;
 
-    if (!quickViewModal)
-      return;
-
-    quickViewModal.classList.remove(
-      'open'
-    );
+    quickViewModal.classList.remove('open');
 
     quickViewModal.setAttribute(
       'aria-hidden',
@@ -1011,63 +1053,75 @@
     );
   }
 
-
   // =========================================================
-  // CART ACTIONS
+  // ADD TO CART
   // =========================================================
 
   function addToCart(id) {
+    const artwork =
+      artworkData.find(
+        item => item.id === id
+      );
+
+    if (!artwork) {
+      showToast(
+        'Artwork could not be found.'
+      );
+
+      return;
+    }
+
+    /*
+     * IMPORTANT:
+     * Sold artwork can never enter the cart.
+     */
+    if (
+      artwork.status !== 'available'
+    ) {
+      showToast(
+        'This artwork has already been sold.'
+      );
+
+      return;
+    }
 
     const existing =
       state.cart.find(
-        (item) =>
-          item.id === id
+        item => item.id === id
       );
 
-
     if (existing) {
-
       existing.quantity += 1;
-
     } else {
-
       state.cart.push({
         id,
         quantity: 1
       });
     }
 
-
     saveState();
-
     renderCart();
 
-    showToast(
-      'Added to Cart'
-    );
+    showToast('Added to Cart');
   }
 
+  // =========================================================
+  // FAVORITES
+  // =========================================================
 
   function toggleFavorite(id) {
-
     if (
       state.favorites.includes(id)
     ) {
-
       state.favorites =
         state.favorites.filter(
-          (item) =>
-            item !== id
+          item => item !== id
         );
-
     } else {
-
       state.favorites.push(id);
     }
 
-
     saveState();
-
     renderArtworks();
 
     showToast(
@@ -1077,13 +1131,11 @@
     );
   }
 
-
   // =========================================================
   // COMMISSION PROGRESS
   // =========================================================
 
   function updateCommissionProgress() {
-
     if (
       !progressBar ||
       !progressLabels
@@ -1091,10 +1143,8 @@
       return;
     }
 
-
     const totalSteps =
       commissionSteps.length;
-
 
     const progress =
       Math.round(
@@ -1104,10 +1154,8 @@
         ) * 100
       );
 
-
     progressBar.innerHTML =
       `<span style="width:${progress}%"></span>`;
-
 
     progressLabels.innerHTML =
       commissionSteps
@@ -1118,92 +1166,59 @@
         .join('');
   }
 
-
   // =========================================================
-  // RENDER COMMISSION STEPS
+  // COMMISSION STEPS
   // =========================================================
 
   function renderCommissionSteps() {
-
     const panels =
       document.querySelectorAll(
         '.step-panel'
       );
 
+    panels.forEach(panel => {
+      const stepNumber =
+        Number(panel.dataset.step);
 
-    panels.forEach(
-      (panel) => {
-
-        const stepNumber =
-          Number(
-            panel.dataset.step
-          );
-
-        panel.classList.toggle(
-          'active',
-          stepNumber ===
-            Number(
-              state.commissionStep
-            )
-        );
-      }
-    );
-
+      panel.classList.toggle(
+        'active',
+        stepNumber ===
+        Number(state.commissionStep)
+      );
+    });
 
     updateCommissionProgress();
 
-
     if (prevStep) {
-
       prevStep.disabled =
         state.commissionStep === 1;
     }
-
 
     if (
       nextStep &&
       submitCommission
     ) {
-
       if (
         state.commissionStep ===
         commissionSteps.length
       ) {
-
-        nextStep.classList.add(
-          'hidden'
-        );
-
-        submitCommission.classList.remove(
-          'hidden'
-        );
-
+        nextStep.classList.add('hidden');
+        submitCommission.classList.remove('hidden');
       } else {
-
-        nextStep.classList.remove(
-          'hidden'
-        );
-
-        submitCommission.classList.add(
-          'hidden'
-        );
+        nextStep.classList.remove('hidden');
+        submitCommission.classList.add('hidden');
       }
     }
   }
 
-
   // =========================================================
-  // MOVE BETWEEN COMMISSION STEPS
+  // COMMISSION NAVIGATION
   // =========================================================
 
   function handleStep(direction) {
-
     const nextStepIndex =
-      Number(
-        state.commissionStep
-      ) +
+      Number(state.commissionStep) +
       direction;
-
 
     if (
       nextStepIndex < 1 ||
@@ -1213,24 +1228,18 @@
       return;
     }
 
-
     state.commissionStep =
       nextStepIndex;
 
-
     renderCommissionSteps();
-
     saveCommissionDraft();
-
 
     const commissionSection =
       document.getElementById(
         'commission'
       );
 
-
     if (commissionSection) {
-
       commissionSection.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
@@ -1238,13 +1247,11 @@
     }
   }
 
-
   // =========================================================
   // COMMISSION ESTIMATE
   // =========================================================
 
   function estimateCommission() {
-
     if (
       !commissionForm ||
       !estimateValue
@@ -1252,107 +1259,66 @@
       return;
     }
 
-
     const formData =
       new FormData(
         commissionForm
       );
 
-
     const sizeValue =
       formData.get('size') || '';
 
+    const base = 5000;
 
-    const base =
-      5000;
-
-
-    let sizeMultiplier =
-      1;
-
+    let sizeMultiplier = 1;
 
     if (
       sizeValue.includes('A0') ||
       sizeValue.includes('100 × 120')
     ) {
-
-      sizeMultiplier =
-        2.2;
-
+      sizeMultiplier = 2.2;
     } else if (
       sizeValue.includes('A1') ||
       sizeValue.includes('80 × 100')
     ) {
-
-      sizeMultiplier =
-        1.9;
-
+      sizeMultiplier = 1.9;
     } else if (
       sizeValue.includes('A2') ||
       sizeValue.includes('60 × 90')
     ) {
-
-      sizeMultiplier =
-        1.5;
-
+      sizeMultiplier = 1.5;
     } else if (
       sizeValue.includes('A3') ||
       sizeValue.includes('50 × 70')
     ) {
-
-      sizeMultiplier =
-        1.2;
+      sizeMultiplier = 1.2;
     }
-
 
     const style =
       formData.get('style');
 
+    let styleMultiplier = 1;
 
-    let styleMultiplier =
-      1;
-
-
-    if (
-      style === 'Realistic'
-    ) {
-
-      styleMultiplier =
-        1.4;
-
-    } else if (
-      style === 'Abstract'
-    ) {
-
-      styleMultiplier =
-        1.1;
+    if (style === 'Realistic') {
+      styleMultiplier = 1.4;
+    } else if (style === 'Abstract') {
+      styleMultiplier = 1.1;
     }
-
 
     const budget =
       formData.get('budget') || '';
 
-
-    let budgetMultiplier =
-      1;
-
+    let budgetMultiplier = 1;
 
     if (
       budget.includes('50,000') ||
       budget.includes('100,000')
     ) {
-
-      budgetMultiplier =
-        1.7;
-
+      budgetMultiplier = 1.7;
     } else if (
       budget.includes('20,000')
     ) {
-
-      budgetMultiplier =
-        1.4;
+      budgetMultiplier = 1.4;
     }
-
 
     const estimate =
       Math.round(
@@ -1362,79 +1328,56 @@
         budgetMultiplier
       );
 
-
     estimateValue.textContent =
-      formatCurrency(
-        estimate
-      );
+      formatCurrency(estimate);
   }
-
 
   // =========================================================
   // SAVE COMMISSION DRAFT
   // =========================================================
 
   function saveCommissionDraft() {
-
-    if (!commissionForm)
-      return;
-
+    if (!commissionForm) return;
 
     const formData =
       new FormData(
         commissionForm
       );
 
-
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
-
     state.commissionData = {
       ...state.commissionData,
       ...values,
-      step:
-        state.commissionStep
+      step: state.commissionStep
     };
-
 
     saveState();
   }
 
-
   function scheduleCommissionSave() {
-
     if (commissionDraftTimer) {
-
       clearTimeout(
         commissionDraftTimer
       );
     }
 
-
     commissionDraftTimer =
       setTimeout(
-        () => {
-
-          saveCommissionDraft();
-
-        },
+        saveCommissionDraft,
         700
       );
   }
-
 
   // =========================================================
   // RESTORE COMMISSION DRAFT
   // =========================================================
 
   function populateCommissionFromStorage() {
-
-    if (!commissionForm)
-      return;
-
+    if (!commissionForm) return;
 
     const stored =
       JSON.parse(
@@ -1443,7 +1386,6 @@
         ) || '{}'
       );
 
-
     if (
       !stored ||
       Object.keys(stored).length === 0
@@ -1451,178 +1393,116 @@
       return;
     }
 
-
     Object.entries(stored).forEach(
       ([key, value]) => {
-
-        if (key === 'step')
-          return;
-
+        if (key === 'step') return;
 
         const inputs =
           commissionForm.querySelectorAll(
             `[name="${key}"]`
           );
 
-
-        if (!inputs.length)
-          return;
-
+        if (!inputs.length) return;
 
         const firstInput =
           inputs[0];
 
-
         if (
-          firstInput.type ===
-          'radio'
+          firstInput.type === 'radio'
         ) {
-
-          inputs.forEach(
-            (input) => {
-
-              input.checked =
-                input.value === value;
-
-            }
-          );
-
+          inputs.forEach(input => {
+            input.checked =
+              input.value === value;
+          });
         } else if (
-          firstInput.type !==
-          'file'
+          firstInput.type !== 'file'
         ) {
-
-          firstInput.value =
-            value;
+          firstInput.value = value;
         }
       }
     );
 
-
     state.commissionStep =
-      Number(
-        stored.step
-      ) || 1;
-
+      Number(stored.step) || 1;
 
     renderCommissionSteps();
-
     estimateCommission();
   }
-
 
   // =========================================================
   // COMMISSION EMAIL
   // =========================================================
 
   function buildCommissionEmail() {
-
-    if (!commissionForm)
-      return '';
-
+    if (!commissionForm) return '';
 
     const formData =
       new FormData(
         commissionForm
       );
 
-
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
-
     const lines = [
-
       '--------------------------------------------------',
-
       'NEW COMMISSION REQUEST',
-
       '',
-
       'Customer Name:',
       values.customerName || '',
-
       'Email:',
       values.customerEmail || '',
-
       'Phone:',
       values.customerPhone || '',
-
       'Country:',
       values.customerCountry || '',
-
       'Artwork Type:',
       values.artworkType || '',
-
       'Medium:',
       values.artworkType || '',
-
       'Canvas Size:',
       values.size || '',
-
       'Orientation:',
       values.orientation || '',
-
       'Style:',
       values.style || '',
-
       'Background:',
       values.background || '',
-
       'Subjects:',
       values.subjects || '',
-
       'Colour Style:',
       values.colourStyle || '',
-
       'Budget:',
       values.budget || '',
-
       'Delivery Method:',
       values.delivery || '',
-
       'Deadline:',
       values.deadline || '',
-
       'Additional Notes:',
       values.notes || '',
-
       '',
-
       'Please contact me regarding this commission.',
-
       '--------------------------------------------------'
-
     ];
-
 
     return encodeURIComponent(
       lines.join('\n')
     );
   }
 
-
   // =========================================================
   // PARSE BUDGET
   // =========================================================
 
-  function parseBudget(
-    budgetValue
-  ) {
-
-    if (!budgetValue)
-      return null;
-
+  function parseBudget(budgetValue) {
+    if (!budgetValue) return null;
 
     const matches =
-      String(
-        budgetValue
-      ).match(
+      String(budgetValue).match(
         /\d[\d,]*/g
       );
-
 
     if (
       !matches ||
@@ -1631,175 +1511,124 @@
       return null;
     }
 
-
     const numbers =
       matches.map(
-        (value) =>
+        value =>
           Number(
-            value.replace(
-              /,/g,
-              ''
-            )
+            value.replace(/,/g, '')
           )
       );
-
 
     const validNumbers =
       numbers.filter(
-        (number) =>
-          Number.isFinite(
-            number
-          )
+        number =>
+          Number.isFinite(number)
       );
 
-
-    if (!validNumbers.length)
+    if (!validNumbers.length) {
       return null;
-
+    }
 
     return validNumbers[0];
   }
 
-
   // =========================================================
-  // GET CURRENT COMMISSION ESTIMATE
+  // CURRENT COMMISSION ESTIMATE
   // =========================================================
 
   function getCurrentCommissionEstimate() {
-
-    if (!estimateValue)
-      return null;
-
+    if (!estimateValue) return null;
 
     const text =
-      estimateValue.textContent ||
-      '';
-
+      estimateValue.textContent || '';
 
     const matches =
       text.match(
         /[\d,]+(?:\.\d+)?/
       );
 
-
-    if (!matches)
-      return null;
-
+    if (!matches) return null;
 
     const number =
       Number(
-        matches[0].replace(
-          /,/g,
-          ''
-        )
+        matches[0].replace(/,/g, '')
       );
 
-
-    return Number.isFinite(
-      number
-    )
+    return Number.isFinite(number)
       ? number
       : null;
   }
-
 
   // =========================================================
   // SUBMIT COMMISSION
   // =========================================================
 
-  async function handleCommissionSubmit(
-    event
-  ) {
-
+  async function handleCommissionSubmit(event) {
     event.preventDefault();
 
-
-    if (!commissionForm)
-      return;
-
+    if (!commissionForm) return;
 
     const formData =
       new FormData(
         commissionForm
       );
 
-
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
-
     const referenceFiles =
       referenceImages
         ? Array.from(
-            referenceImages.files ||
-              []
+            referenceImages.files || []
           )
         : [];
 
-
     const commissionRequest = {
-
       name:
-        values.customerName ||
-        '',
+        values.customerName || '',
 
       email:
-        values.customerEmail ||
-        '',
+        values.customerEmail || '',
 
       phone:
-        values.customerPhone ||
-        '',
+        values.customerPhone || '',
 
       customer_country:
-        values.customerCountry ||
-        '',
+        values.customerCountry || '',
 
       artwork_type:
-        values.artworkType ||
-        '',
+        values.artworkType || '',
 
       size:
-        values.size ||
-        '',
+        values.size || '',
 
       orientation:
-        values.orientation ||
-        '',
+        values.orientation || '',
 
       style:
-        values.style ||
-        '',
+        values.style || '',
 
       background:
-        values.background ||
-        '',
+        values.background || '',
 
       subjects:
-        values.subjects ||
-        '',
+        values.subjects || '',
 
       colour_style:
-        values.colourStyle ||
-        '',
+        values.colourStyle || '',
 
       budget:
-        parseBudget(
-          values.budget
-        ),
+        parseBudget(values.budget),
 
-      currency:
-        'KES',
+      currency: 'KES',
 
       delivery:
-        values.delivery ||
-        '',
+        values.delivery || '',
 
       deadline:
-        values.deadline ||
-        '',
+        values.deadline || '',
 
       description:
         values.notes ||
@@ -1810,53 +1639,33 @@
 
       reference_image_names:
         referenceFiles
-          .map(
-            (file) =>
-              file.name
-          )
+          .map(file => file.name)
           .join(', ')
     };
 
-
     if (submitCommission) {
-
-      submitCommission.disabled =
-        true;
-
-      submitCommission.textContent =
-        'Sending...';
+      submitCommission.disabled = true;
+      submitCommission.textContent = 'Sending...';
     }
 
-
     try {
-
       if (
         typeof supabaseClient ===
         'undefined'
       ) {
-
         throw new Error(
-          'Supabase client is not available. Check supabase.js and the script order in shop.html.'
+          'Supabase client is not available.'
         );
       }
 
-
-      const {
-        error
-      } =
+      const { error } =
         await supabaseClient
-
-          .from(
-            'commission_requests'
-          )
-
+          .from('commission_requests')
           .insert([
             commissionRequest
           ]);
 
-
       if (error) {
-
         console.error(
           'Supabase commission error:',
           error
@@ -1865,100 +1674,63 @@
         throw error;
       }
 
-
-      console.log(
-        'Commission request saved successfully.'
-      );
-
-
       showToast(
         'Commission request sent successfully!'
       );
-
 
       localStorage.removeItem(
         'ndambo-commission'
       );
 
-
-      state.commissionData =
-        {};
-
+      state.commissionData = {};
 
       setTimeout(() => {
-
         alert(
           'Thank you! Your commission request has been received. Stephen will contact you soon.'
         );
-
       }, 300);
 
-
     } catch (error) {
-
       console.error(
         'Commission submission failed:',
         error
       );
 
-
       showToast(
         'Could not send request'
       );
-
 
       alert(
         'Something went wrong while sending your commission request. Please try again.'
       );
 
-
     } finally {
-
       if (submitCommission) {
-
-        submitCommission.disabled =
-          false;
-
+        submitCommission.disabled = false;
         submitCommission.textContent =
           'Request My Commission';
       }
     }
   }
 
-
   // =========================================================
   // CHECKOUT
   // =========================================================
 
-  async function handleCheckoutSubmit(
-    event
-  ) {
-
+  async function handleCheckoutSubmit(event) {
     event.preventDefault();
-
-
-    // -----------------------------------------
-    // GET CUSTOMER INFORMATION
-    // -----------------------------------------
 
     const formData =
       new FormData(
         event.target
       );
 
-
     const values =
       Object.fromEntries(
         formData.entries()
       );
 
-
-    // -----------------------------------------
-    // CHECK CART
-    // -----------------------------------------
-
     if (!state.cart.length) {
-
       showToast(
         'Your cart is empty.'
       );
@@ -1966,22 +1738,59 @@
       return;
     }
 
+    /*
+     * IMPORTANT:
+     * Re-check every item against the current artwork
+     * data before creating an order.
+     */
+    const unavailableItems =
+      state.cart.filter(cartItem => {
+        const artwork =
+          artworkData.find(
+            item =>
+              item.id === cartItem.id
+          );
 
-    // -----------------------------------------
-    // CALCULATE SUBTOTAL
-    // -----------------------------------------
+        return (
+          !artwork ||
+          artwork.status !== 'available'
+        );
+      });
+
+    if (unavailableItems.length) {
+      state.cart =
+        state.cart.filter(cartItem => {
+          const artwork =
+            artworkData.find(
+              item =>
+                item.id === cartItem.id
+            );
+
+          return (
+            artwork &&
+            artwork.status === 'available'
+          );
+        });
+
+      saveState();
+      renderCart();
+      updateTotals();
+
+      showToast(
+        'One or more artworks are no longer available.'
+      );
+
+      return;
+    }
 
     const subtotal =
       state.cart.reduce(
         (sum, item) => {
-
           const art =
             artworkData.find(
-              (entry) =>
-                entry.id ===
-                item.id
+              entry =>
+                entry.id === item.id
             );
-
 
           return (
             sum +
@@ -1992,68 +1801,35 @@
                 : 0
             )
           );
-
         },
         0
       );
-
-
-    // -----------------------------------------
-    // CALCULATE SHIPPING
-    // -----------------------------------------
 
     const shipping =
       subtotal > 0
         ? 1500
         : 0;
 
-
-    // -----------------------------------------
-    // CALCULATE TAX
-    // -----------------------------------------
-
     const tax =
       Math.round(
         subtotal * 0.08
       );
-
-
-    // -----------------------------------------
-    // CALCULATE GRAND TOTAL
-    // -----------------------------------------
 
     const grand =
       subtotal +
       shipping +
       tax;
 
-
-    // -----------------------------------------
-    // CHECK SUPABASE CONNECTION
-    // -----------------------------------------
-
     if (
       typeof supabaseClient ===
       'undefined'
     ) {
-
-      console.error(
-        'Supabase client is not available.'
-      );
-
-
       showToast(
         'Supabase connection is not available.'
       );
 
-
       return;
     }
-
-
-    // -----------------------------------------
-    // CREATE ORDER NUMBER
-    // -----------------------------------------
 
     const orderNumber =
       'NAL-' +
@@ -2061,30 +1837,13 @@
         .toString()
         .slice(-8);
 
-
-    // -----------------------------------------
-    // CREATE ORDER UUID
-    // -----------------------------------------
-
     const orderId =
       crypto.randomUUID();
-
 
     console.log(
       'Creating order:',
       orderNumber
     );
-
-
-    console.log(
-      'Order ID:',
-      orderId
-    );
-
-
-    // -----------------------------------------
-    // CREATE ORDER IN SUPABASE
-    // -----------------------------------------
 
     const {
       error: orderError
@@ -2093,24 +1852,19 @@
         .from('orders')
         .insert([
           {
-
-            id:
-              orderId,
+            id: orderId,
 
             order_number:
               orderNumber,
 
             customer_name:
-              values.fullName ||
-              '',
+              values.fullName || '',
 
             customer_email:
-              values.email ||
-              '',
+              values.email || '',
 
             customer_phone:
-              values.phone ||
-              '',
+              values.phone || '',
 
             delivery_address:
               `${values.address || ''}, ${values.city || ''}, ${values.country || ''}`,
@@ -2136,212 +1890,109 @@
             notes:
               values.instructions ||
               null
-
           }
         ]);
 
-
-    // -----------------------------------------
-    // CHECK ORDER CREATION
-    // -----------------------------------------
-
     if (orderError) {
-
       console.error(
         'ORDER CREATION ERROR:',
         orderError
       );
 
-
       showToast(
         'There was a problem submitting your order.'
       );
-
 
       alert(
         'There was a problem submitting your order. Please check again.'
       );
 
-
       return;
     }
 
-
-    console.log(
-      'ORDER CREATED:',
-      orderId
-    );
-
-
-    // -----------------------------------------
-    // CREATE ORDER ITEMS
-    // -----------------------------------------
-
     const orderItems =
       state.cart
-        .map(
-          (cartItem) => {
+        .map(cartItem => {
+          const artwork =
+            artworkData.find(
+              item =>
+                item.id ===
+                cartItem.id
+            );
 
-            const artwork =
-              artworkData.find(
-                (item) =>
-                  item.id ===
-                  cartItem.id
-              );
-
-
-            if (!artwork) {
-              return null;
-            }
-
-
-            return {
-
-              order_id:
-                orderId,
-
-              /*
-               * Supabase artwork IDs are UUIDs.
-               * The artwork ID loaded from Supabase
-               * is therefore saved directly here.
-               *
-               * Do NOT include line_total because
-               * Supabase calculates it automatically.
-               */
-
-              artwork_id:
-                artwork.id,
-
-              title_snapshot:
-                artwork.name,
-
-              quantity:
-                Number(
-                  cartItem.quantity
-                ),
-
-              unit_price:
-                Number(
-                  artwork.price
-                )
-
-            };
-
+          if (!artwork) {
+            return null;
           }
-        )
+
+          return {
+            order_id:
+              orderId,
+
+            artwork_id:
+              artwork.id,
+
+            title_snapshot:
+              artwork.name,
+
+            quantity:
+              Number(
+                cartItem.quantity
+              ),
+
+            unit_price:
+              Number(
+                artwork.price
+              )
+          };
+        })
         .filter(Boolean);
 
-
-    console.log(
-      'ORDER ITEMS:',
-      orderItems
-    );
-
-
-    // -----------------------------------------
-    // MAKE SURE THERE ARE ITEMS
-    // -----------------------------------------
-
     if (!orderItems.length) {
-
-      console.error(
-        'No valid artwork items were found in the cart.'
-      );
-
-
       showToast(
         'No artwork items were found.'
       );
 
-
-      alert(
-        'The order was created, but no artwork items were found in the cart.'
-      );
-
-
       return;
     }
-
-
-    // -----------------------------------------
-    // SAVE ORDER ITEMS
-    // -----------------------------------------
 
     const {
       error: itemsError
     } =
       await supabaseClient
         .from('order_items')
-        .insert(
-          orderItems
-        );
-
-
-    // -----------------------------------------
-    // CHECK ORDER ITEMS
-    // -----------------------------------------
+        .insert(orderItems);
 
     if (itemsError) {
-
       console.error(
         'ORDER ITEMS ERROR:',
         itemsError
       );
 
-
       showToast(
         'The order was created, but the artwork items could not be saved.'
       );
-
 
       alert(
         'The order was created, but the artwork information could not be saved. Please contact the administrator.'
       );
 
-
       return;
     }
 
-
-    console.log(
-      'ORDER ITEMS SAVED SUCCESSFULLY:',
-      orderItems
-    );
-
-
-    // -----------------------------------------
-    // CLEAR CART
-    // -----------------------------------------
-
     state.cart = [];
 
-
-    localStorage.setItem(
-      'ndambo-cart',
-      JSON.stringify(
-        state.cart
-      )
-    );
-
+    saveState();
 
     renderCart();
-
     updateTotals();
-
-
-    // -----------------------------------------
-    // SUCCESS MESSAGE
-    // -----------------------------------------
 
     showToast(
       `Order ${orderNumber} received successfully!`
     );
 
-
     alert(
       `Thank you! Your order ${orderNumber} has been received. We will contact you shortly.`
     );
-
 
     console.log(
       'ORDER COMPLETED SUCCESSFULLY:',
@@ -2349,23 +2000,17 @@
     );
   }
 
-
   // =========================================================
   // EVENTS
   // =========================================================
 
   function initEvents() {
 
-    // -----------------------------------------
     // SEARCH
-    // -----------------------------------------
-
     if (searchInput) {
-
       searchInput.addEventListener(
         'input',
-        (event) => {
-
+        event => {
           state.query =
             event.target.value;
 
@@ -2374,17 +2019,11 @@
       );
     }
 
-
-    // -----------------------------------------
     // SORT
-    // -----------------------------------------
-
     if (sortSelect) {
-
       sortSelect.addEventListener(
         'change',
-        (event) => {
-
+        event => {
           state.sort =
             event.target.value;
 
@@ -2393,137 +2032,97 @@
       );
     }
 
-
-    // -----------------------------------------
     // FILTER
-    // -----------------------------------------
-
     if (filterBar) {
-
       filterBar.addEventListener(
         'click',
-        (event) => {
-
+        event => {
           const button =
             event.target.closest(
               '.filter-chip'
             );
 
-
-          if (!button)
-            return;
-
+          if (!button) return;
 
           document
             .querySelectorAll(
               '.filter-chip'
             )
-            .forEach(
-              (chip) =>
-                chip.classList.remove(
-                  'active'
-                )
+            .forEach(chip =>
+              chip.classList.remove(
+                'active'
+              )
             );
-
 
           button.classList.add(
             'active'
           );
 
-
           state.activeFilter =
-            button.dataset.filter;
-
+            button.dataset.filter ||
+            'all';
 
           renderArtworks();
         }
       );
     }
 
-
-    // -----------------------------------------
     // CART
-    // -----------------------------------------
-
     if (cartToggle) {
-
       cartToggle.addEventListener(
         'click',
-        () =>
-          toggleCart(true)
+        () => toggleCart(true)
       );
     }
-
 
     if (closeCart) {
-
       closeCart.addEventListener(
         'click',
-        () =>
-          toggleCart(false)
+        () => toggleCart(false)
       );
     }
-
 
     if (overlay) {
-
       overlay.addEventListener(
         'click',
-        () =>
-          toggleCart(false)
+        () => toggleCart(false)
       );
     }
 
-
-    // -----------------------------------------
     // MODAL
-    // -----------------------------------------
-
     if (closeModal) {
-
       closeModal.addEventListener(
         'click',
         closeModalFn
       );
     }
 
-
     if (quickViewModal) {
-
       quickViewModal.addEventListener(
         'click',
-        (event) => {
-
+        event => {
           if (
             event.target ===
             quickViewModal
           ) {
-
             closeModalFn();
           }
         }
       );
     }
 
-
-    // -----------------------------------------
     // GLOBAL BUTTON ACTIONS
-    // -----------------------------------------
-
     document.addEventListener(
       'click',
-      (event) => {
+      event => {
 
         const interactive =
           event.target.closest(
             '.btn, .filter-chip, .icon-btn, .cart-trigger, .favorite-btn'
           );
 
-
         if (interactive) {
-
           createRipple({
-
             currentTarget:
               interactive,
 
@@ -2532,30 +2131,21 @@
 
             clientY:
               event.clientY
-
           });
         }
 
-
-        // ---------------------------------------
         // FAVORITE
-        // ---------------------------------------
-
         const favoriteButton =
           event.target.closest(
             '.favorite-btn'
           );
 
-
         if (favoriteButton) {
-
           event.preventDefault();
-
 
           favoriteButton.classList.add(
             'animating'
           );
-
 
           setTimeout(
             () =>
@@ -2565,189 +2155,125 @@
             280
           );
 
-
           toggleFavorite(
             favoriteButton.dataset.id
           );
 
-
           return;
         }
 
-
-        // ---------------------------------------
         // QUICK VIEW
-        // ---------------------------------------
-
         const quickViewButton =
           event.target.closest(
             '.quick-view'
           );
 
-
         if (quickViewButton) {
-
           openModal(
             quickViewButton.dataset.id
           );
 
-
           return;
         }
 
-
-        // ---------------------------------------
         // ADD TO CART
-        // ---------------------------------------
-
         const addToCartButton =
           event.target.closest(
             '.add-to-cart'
           );
 
-
         if (addToCartButton) {
-
           addToCart(
             addToCartButton.dataset.id
           );
 
-
           return;
         }
 
-
-        // ---------------------------------------
         // CART ACTION
-        // ---------------------------------------
-
         const cartActionButton =
           event.target.closest(
             '[data-action]'
           );
 
-
         if (cartActionButton) {
-
           const action =
             cartActionButton.dataset.action;
-
 
           const id =
             cartActionButton.dataset.id;
 
-
           const target =
             state.cart.find(
-              (item) =>
+              item =>
                 item.id === id
             );
 
+          if (!target) return;
 
-          if (!target)
-            return;
-
-
-          if (
-            action ===
-            'increase'
-          ) {
-
+          if (action === 'increase') {
             target.quantity += 1;
+          }
 
-          } else if (
-            action ===
-            'decrease'
+          else if (
+            action === 'decrease'
           ) {
-
             target.quantity =
               Math.max(
                 1,
                 target.quantity - 1
               );
+          }
 
-          } else if (
-            action ===
-            'remove'
+          else if (
+            action === 'remove'
           ) {
-
             state.cart =
               state.cart.filter(
-                (item) =>
+                item =>
                   item.id !== id
               );
           }
 
-
           saveState();
-
           renderCart();
-
-          return;
         }
       }
     );
 
-
-    // =====================================================
     // COMMISSION NAVIGATION
-    // =====================================================
-
     if (prevStep) {
-
       prevStep.addEventListener(
         'click',
-        () => {
-
-          handleStep(-1);
-
-        }
+        () => handleStep(-1)
       );
     }
-
 
     if (nextStep) {
-
       nextStep.addEventListener(
         'click',
-        () => {
-
-          handleStep(1);
-
-        }
+        () => handleStep(1)
       );
     }
 
-
-    // =====================================================
     // COMMISSION FORM
-    // =====================================================
-
     if (commissionForm) {
 
       commissionForm.addEventListener(
         'input',
         () => {
-
           estimateCommission();
-
           scheduleCommissionSave();
-
         }
       );
-
 
       commissionForm.addEventListener(
         'change',
         () => {
-
           estimateCommission();
-
           scheduleCommissionSave();
-
         }
       );
-
 
       commissionForm.addEventListener(
         'submit',
@@ -2755,150 +2281,106 @@
       );
     }
 
-
-    // =====================================================
-    // CHECKOUT FORM
-    // =====================================================
-
+    // CHECKOUT
     const checkoutForm =
       document.getElementById(
         'checkoutForm'
       );
 
-
     if (checkoutForm) {
-
       checkoutForm.addEventListener(
         'submit',
         handleCheckoutSubmit
       );
     }
 
-
-    // =====================================================
     // REFERENCE IMAGES
-    // =====================================================
-
     if (
       referenceImages &&
       previewHolder
     ) {
-
       referenceImages.addEventListener(
         'change',
-        (event) => {
-
+        event => {
           const files =
             Array.from(
-              event.target.files ||
-                []
+              event.target.files || []
             );
-
 
           state.commissionImages =
             files;
 
+          previewHolder.innerHTML = '';
 
-          previewHolder.innerHTML =
-            '';
-
-
-          files.forEach(
-            (file) => {
-
-              const url =
-                URL.createObjectURL(
-                  file
-                );
-
-
-              const img =
-                document.createElement(
-                  'img'
-                );
-
-
-              img.src =
-                url;
-
-
-              img.alt =
-                file.name;
-
-
-              previewHolder.appendChild(
-                img
+          files.forEach(file => {
+            const url =
+              URL.createObjectURL(
+                file
               );
-            }
-          );
+
+            const img =
+              document.createElement(
+                'img'
+              );
+
+            img.src = url;
+            img.alt = file.name;
+
+            previewHolder.appendChild(
+              img
+            );
+          });
         }
       );
     }
 
-
-    // =====================================================
     // SIZE
-    // =====================================================
-
     const sizeSelect =
       document.getElementById(
         'sizeSelect'
       );
 
-
     if (
       sizeSelect &&
       customSizeFields
     ) {
-
       sizeSelect.addEventListener(
         'change',
-        (event) => {
-
+        event => {
           customSizeFields.classList.toggle(
             'show',
             event.target.value ===
-              'Custom Size'
+            'Custom Size'
           );
         }
       );
     }
 
-
-    // =====================================================
     // MOBILE NAVIGATION
-    // =====================================================
-
     const navToggle =
       document.querySelector(
         '.nav-toggle'
       );
-
 
     const navLinks =
       document.querySelector(
         '.nav-links'
       );
 
-
     if (
       navToggle &&
       navLinks
     ) {
-
       navToggle.addEventListener(
         'click',
         () => {
-
           navLinks.classList.toggle(
             'active'
           );
-
         }
       );
     }
   }
-
 
   // =========================================================
   // INITIALIZE
@@ -2907,28 +2389,45 @@
   function init() {
 
     /*
-     * Do not render the old hard-coded artwork list.
-     * Load the current published artworks from Supabase.
+     * Start with ALL artwork.
+     * This includes both AVAILABLE and SOLD artwork.
      */
+    state.activeFilter = 'all';
+
+    // Make sure the "All" filter visually agrees
+    // with the JavaScript state.
+    const allFilter =
+      document.querySelector(
+        '.filter-chip[data-filter="all"]'
+      );
+
+    if (allFilter) {
+      document
+        .querySelectorAll('.filter-chip')
+        .forEach(chip =>
+          chip.classList.remove(
+            'active'
+          )
+        );
+
+      allFilter.classList.add(
+        'active'
+      );
+    }
 
     loadArtworks();
 
-
     renderCart();
-
     updateTotals();
 
     renderCommissionSteps();
-
     populateCommissionFromStorage();
 
     initEvents();
 
     updateCommissionProgress();
-
     estimateCommission();
   }
-
 
   // =========================================================
   // START
