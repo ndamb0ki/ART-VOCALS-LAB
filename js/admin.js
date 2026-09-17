@@ -944,9 +944,7 @@ async function updatePaymentStatus(orderId) {
 
 async function updateOrderStatus(orderId) {
 
-  const select = document.getElementById(
-    `status-${orderId}`
-  );
+  const select = document.getElementById(`status-${orderId}`);
 
   if (!select) {
     alert("Could not find the order status selector.");
@@ -955,9 +953,7 @@ async function updateOrderStatus(orderId) {
 
   const newStatus = select.value;
 
-  const button = select.parentElement.querySelector(
-    "button"
-  );
+  const button = select.parentElement.querySelector("button");
 
   if (button) {
     button.disabled = true;
@@ -973,10 +969,7 @@ async function updateOrderStatus(orderId) {
 
   if (error) {
 
-    console.error(
-      "Order status update error:",
-      error
-    );
+    console.error("Order status update error:", error);
 
     alert(
       "Could not update order status:\n\n" +
@@ -991,6 +984,26 @@ async function updateOrderStatus(orderId) {
     return;
   }
 
+  artworkOrders = artworkOrders.map(order => {
+
+    if (order.id === orderId) {
+      return {
+        ...order,
+        order_status: newStatus
+      };
+    }
+
+    return order;
+
+  });
+
+  renderOrders();
+
+  alert(
+    "Order status updated to: " +
+    newStatus
+  );
+}
   // Update local order data
   artworkOrders = artworkOrders.map(order => {
 
