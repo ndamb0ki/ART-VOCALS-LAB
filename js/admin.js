@@ -848,12 +848,31 @@ function renderOrders() {
       </td>
 
       <td>
+
         <button
           class="view-btn"
           onclick="viewOrder('${order.id}')"
         >
           View
         </button>
+
+        <button
+          type="button"
+          onclick="deleteOrder('${order.id}')"
+          style="
+            display:block;
+            margin-top:6px;
+            background:#b00020;
+            color:white;
+            border:0;
+            padding:7px 12px;
+            border-radius:6px;
+            cursor:pointer;
+          "
+        >
+          Delete
+        </button>
+
       </td>
     `;
 
@@ -2771,5 +2790,116 @@ async function toggleArtworkFeatured(
   }
 
   await loadAdminArtworks();
+
+}
+// ====================================
+// DELETE ORDER
+// ====================================
+
+async function deleteOrder(orderId) {
+
+  const order =
+    artworkOrders.find(
+      item => item.id === orderId
+    );
+
+  if (!order) {
+    alert("Order could not be found.");
+    return;
+  }
+
+  const orderNumber =
+    order.order_number || orderId;
+
+  const confirmed =
+    confirm(
+      "DELETE ORDER?\n\n" +
+      `Order: ${orderNumber}\n\n` +
+      "This will permanently delete the order " +
+      "and its order items.\n\n" +
+      "This cannot be undone."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    // --------------------------------
+    // Delete order items first
+    // --------------------------------
+
+    const {
+      error: itemsError
+    } =
+      await supabaseClient
+        .from("order_items")
+        .delete()
+        .eq("order_id", orderId);
+
+    if (itemsError) {
+
+      console.error(
+        "Order items delete error:",
+        itemsError
+      );
+
+      throw new Error(
+        "Could not delete order items:\n\n" +
+        itemsError.message
+      );
+    }
+
+
+    // --------------------------------
+    // Delete order
+    // --------------------------------
+
+    const {
+      error: orderError
+    } =
+      await supabaseClient
+        .from("orders")
+        .delete()
+        .eq("id", orderId);
+
+    if (orderError) {
+
+      console.error(
+        "Order delete error:",
+        orderError
+      );
+
+      throw new Error(
+        "Could not delete order:\n\n" +
+        orderError.message
+      );
+    }
+
+
+    // --------------------------------
+    // Refresh orders
+    // --------------------------------
+
+    alert(
+      `Order ${orderNumber} was deleted successfully.`
+    );
+
+    await loadOrders();
+
+  } catch (error) {
+
+    console.error(
+      "Delete order error:",
+      error
+    );
+
+    alert(
+      "Could not delete order:\n\n" +
+      error.message
+    );
+
+  }
 
 }
