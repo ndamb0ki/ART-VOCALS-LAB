@@ -52,8 +52,9 @@ async function checkAdminAccess(user) {
 
     hideLogin();
 
-    await loadCommissionRequests();
-    await loadOrders();
+await loadCommissionRequests();
+await loadOrders();
+await loadAdminArtworks();
 
   } catch (error) {
     console.error(error);
