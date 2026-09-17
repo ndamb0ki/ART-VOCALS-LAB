@@ -1012,8 +1012,7 @@ async function updateOrderStatus(orderId) {
         ...order,
         order_status: newStatus
       };
-    }
-
+    
     return order;
 
   });
