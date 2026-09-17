@@ -327,7 +327,6 @@
       await supabaseClient
         .from('artworks')
         .select('*')
-        .eq('status', 'available')
         .order('created_at', {
           ascending: false
         });
