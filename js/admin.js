@@ -2212,3 +2212,564 @@ function showArtworkMessage(
     "block";
 
 }
+// ====================================
+// ARTWORK MANAGEMENT
+// ====================================
+
+// ------------------------------------
+// Load artworks for admin management
+// ------------------------------------
+
+async function loadAdminArtworks() {
+
+  let section =
+    document.getElementById("adminArtworkManagement");
+
+  // Create management section if it doesn't
+  // already exist in admin.html
+  if (!section) {
+
+    section = document.createElement("section");
+
+    section.id = "adminArtworkManagement";
+
+    section.style.cssText = `
+      margin-top:40px;
+      padding:25px;
+      background:white;
+      border-radius:12px;
+      box-shadow:0 2px 15px rgba(0,0,0,.06);
+    `;
+
+    const artworkForm =
+      document.getElementById("artworkForm");
+
+    if (artworkForm) {
+
+      const formContainer =
+        artworkForm.closest("section") ||
+        artworkForm.parentElement;
+
+      if (formContainer) {
+        formContainer.parentElement.appendChild(section);
+      }
+
+    } else {
+
+      const container =
+        document.querySelector(".container");
+
+      if (container) {
+        container.appendChild(section);
+      }
+
+    }
+  }
+
+  section.innerHTML = `
+    <h2 style="
+      margin-top:0;
+      color:#071a33;
+    ">
+      Artwork Management
+    </h2>
+
+    <p style="
+      color:#777;
+      margin-bottom:25px;
+    ">
+      Manage artworks currently published in your shop.
+    </p>
+
+    <div id="adminArtworkLoading"
+      style="
+        padding:20px;
+        text-align:center;
+        color:#777;
+      "
+    >
+      Loading artworks...
+    </div>
+
+    <div
+      id="adminArtworkGrid"
+      style="
+        display:grid;
+        grid-template-columns:
+          repeat(auto-fit,minmax(250px,1fr));
+        gap:20px;
+      "
+    ></div>
+  `;
+
+  const {
+    data: artworks,
+    error
+  } = await supabaseClient
+    .from("artworks")
+    .select("*")
+    .order("created_at", {
+      ascending:false
+    });
+
+  const loading =
+    document.getElementById(
+      "adminArtworkLoading"
+    );
+
+  const grid =
+    document.getElementById(
+      "adminArtworkGrid"
+    );
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+  if (error) {
+
+    console.error(
+      "Admin artworks loading error:",
+      error
+    );
+
+    if (grid) {
+
+      grid.innerHTML = `
+        <div style="
+          padding:20px;
+          color:#b00020;
+        ">
+          Could not load artworks:
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+
+    }
+
+    return;
+  }
+
+  if (!artworks || artworks.length === 0) {
+
+    if (grid) {
+
+      grid.innerHTML = `
+        <div style="
+          padding:25px;
+          background:#f8f8f8;
+          border-radius:8px;
+          color:#777;
+        ">
+          No artworks have been published yet.
+        </div>
+      `;
+
+    }
+
+    return;
+  }
+
+  artworks.forEach(artwork => {
+
+    const card =
+      document.createElement("div");
+
+    card.style.cssText = `
+      border:1px solid #e5e5e5;
+      border-radius:10px;
+      overflow:hidden;
+      background:white;
+    `;
+
+    const image =
+      artwork.image_url || "";
+
+    const title =
+      artwork.title || "Untitled Artwork";
+
+    const status =
+      artwork.status || "available";
+
+    const statusLabel =
+      status.toLowerCase() === "sold"
+        ? "SOLD"
+        : "AVAILABLE";
+
+    const statusBackground =
+      status.toLowerCase() === "sold"
+        ? "#b00020"
+        : "#176b35";
+
+    const price =
+      Number(artwork.price || 0)
+        .toLocaleString();
+
+    card.innerHTML = `
+
+      <div style="
+        height:220px;
+        background:#f5f5f5;
+        overflow:hidden;
+      ">
+
+        ${
+          image
+            ? `
+              <img
+                src="${escapeHTML(image)}"
+                alt="${escapeHTML(title)}"
+                style="
+                  width:100%;
+                  height:100%;
+                  object-fit:cover;
+                "
+              >
+            `
+            : `
+              <div style="
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#999;
+              ">
+                No Image
+              </div>
+            `
+        }
+
+      </div>
+
+      <div style="
+        padding:18px;
+      ">
+
+        <h3 style="
+          margin:0 0 8px;
+          color:#071a33;
+        ">
+          ${escapeHTML(title)}
+        </h3>
+
+        <div style="
+          margin-bottom:8px;
+          color:#555;
+        ">
+          ${escapeHTML(
+            artwork.currency || "KES"
+          )}
+          ${price}
+        </div>
+
+        <div style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+          margin-bottom:15px;
+        ">
+
+          <span style="
+            background:${statusBackground};
+            color:white;
+            padding:5px 9px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:bold;
+          ">
+            ${statusLabel}
+          </span>
+
+          ${
+            artwork.featured
+              ? `
+                <span style="
+                  background:#071a33;
+                  color:white;
+                  padding:5px 9px;
+                  border-radius:20px;
+                  font-size:12px;
+                ">
+                  FEATURED
+                </span>
+              `
+              : ""
+          }
+
+        </div>
+
+        <div style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+        ">
+
+          <button
+            type="button"
+            class="view-btn"
+            onclick="toggleArtworkStatus('${artwork.id}', '${status}')"
+          >
+            ${
+              status.toLowerCase() === "sold"
+                ? "Mark Available"
+                : "Mark Sold"
+            }
+          </button>
+
+          <button
+            type="button"
+            class="view-btn"
+            onclick="toggleArtworkFeatured('${artwork.id}', ${Boolean(
+              artwork.featured
+            )})"
+          >
+            ${
+              artwork.featured
+                ? "Unfeature"
+                : "Feature"
+            }
+          </button>
+
+          <button
+            type="button"
+            onclick="deleteArtwork('${artwork.id}')"
+            style="
+              background:#b00020;
+              color:white;
+              border:0;
+              padding:8px 12px;
+              border-radius:6px;
+              cursor:pointer;
+            "
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+  });
+}
+
+
+// ------------------------------------
+// Delete artwork
+// ------------------------------------
+
+async function deleteArtwork(artworkId) {
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this artwork?\n\n" +
+      "This will remove the artwork from the shop."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    // Get artwork first so we know
+    // which image belongs to it
+    const {
+      data: artwork,
+      error: fetchError
+    } = await supabaseClient
+      .from("artworks")
+      .select("id, title, image_url")
+      .eq("id", artworkId)
+      .single();
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    // Delete database record
+    const {
+      error: deleteError
+    } = await supabaseClient
+      .from("artworks")
+      .delete()
+      .eq("id", artworkId);
+
+    if (deleteError) {
+
+      console.error(
+        "Artwork delete error:",
+        deleteError
+      );
+
+      throw new Error(
+        "Could not delete artwork:\n\n" +
+        deleteError.message
+      );
+    }
+
+    // --------------------------------
+    // Remove Storage image
+    // --------------------------------
+
+    if (artwork?.image_url) {
+
+      try {
+
+        const marker =
+          "/storage/v1/object/public/artworks/";
+
+        const markerIndex =
+          artwork.image_url.indexOf(marker);
+
+        if (markerIndex !== -1) {
+
+          const filePath =
+            decodeURIComponent(
+              artwork.image_url.substring(
+                markerIndex + marker.length
+              )
+            );
+
+          if (filePath) {
+
+            const {
+              error: storageError
+            } =
+              await supabaseClient
+                .storage
+                .from("artworks")
+                .remove([
+                  filePath
+                ]);
+
+            if (storageError) {
+
+              console.warn(
+                "Artwork database record deleted, " +
+                "but image could not be removed:",
+                storageError
+              );
+
+            }
+
+          }
+
+        }
+
+      } catch (storageError) {
+
+        console.warn(
+          "Storage cleanup error:",
+          storageError
+        );
+
+      }
+
+    }
+
+    alert(
+      `"${artwork?.title || "Artwork"}" was deleted successfully.`
+    );
+
+    await loadAdminArtworks();
+
+  } catch (error) {
+
+    console.error(
+      "Delete artwork error:",
+      error
+    );
+
+    alert(
+      "Could not delete artwork:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ------------------------------------
+// Toggle artwork status
+// ------------------------------------
+
+async function toggleArtworkStatus(
+  artworkId,
+  currentStatus
+) {
+
+  const newStatus =
+    String(currentStatus).toLowerCase() === "sold"
+      ? "available"
+      : "sold";
+
+  const { error } =
+    await supabaseClient
+      .from("artworks")
+      .update({
+        status:newStatus
+      })
+      .eq("id", artworkId);
+
+  if (error) {
+
+    console.error(
+      "Artwork status update error:",
+      error
+    );
+
+    alert(
+      "Could not update artwork status:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  await loadAdminArtworks();
+
+}
+
+
+// ------------------------------------
+// Toggle featured status
+// ------------------------------------
+
+async function toggleArtworkFeatured(
+  artworkId,
+  currentFeatured
+) {
+
+  const newFeatured =
+    !Boolean(currentFeatured);
+
+  const { error } =
+    await supabaseClient
+      .from("artworks")
+      .update({
+        featured:newFeatured
+      })
+      .eq("id", artworkId);
+
+  if (error) {
+
+    console.error(
+      "Artwork featured update error:",
+      error
+    );
+
+    alert(
+      "Could not update featured status:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+  await loadAdminArtworks();
+
+}
