@@ -868,10 +868,9 @@ function renderOrders() {
 
 async function updatePaymentStatus(orderId) {
 
-  const select =
-    document.getElementById(
-      `payment-${orderId}`
-    );
+  const select = document.getElementById(
+    `payment-${orderId}`
+  );
 
   if (!select) {
     alert("Could not find the payment status selector.");
@@ -880,23 +879,21 @@ async function updatePaymentStatus(orderId) {
 
   const newStatus = select.value;
 
-  const button =
-    select.parentElement.querySelector(
-      "button"
-    );
+  const button = select.parentElement.querySelector(
+    "button"
+  );
 
   if (button) {
     button.disabled = true;
     button.textContent = "Saving...";
   }
 
-  const { error } =
-    await supabaseClient
-      .from("orders")
-      .update({
-        payment_status: newStatus
-      })
-      .eq("id", orderId);
+  const { error } = await supabaseClient
+    .from("orders")
+    .update({
+      payment_status: newStatus
+    })
+    .eq("id", orderId);
 
   if (error) {
 
@@ -919,19 +916,18 @@ async function updatePaymentStatus(orderId) {
   }
 
   // Update local order data
-  artworkOrders =
-    artworkOrders.map(order => {
+  artworkOrders = artworkOrders.map(order => {
 
-      if (order.id === orderId) {
-        return {
-          ...order,
-          payment_status: newStatus
-        };
-      }
+    if (order.id === orderId) {
+      return {
+        ...order,
+        payment_status: newStatus
+      };
+    }
 
-      return order;
+    return order;
 
-    });
+  });
 
   renderOrders();
 
@@ -941,20 +937,73 @@ async function updatePaymentStatus(orderId) {
   );
 }
 
+
+// ------------------------------------
+// Update order status
+// ------------------------------------
+
+async function updateOrderStatus(orderId) {
+
+  const select = document.getElementById(
+    `status-${orderId}`
+  );
+
+  if (!select) {
+    alert("Could not find the order status selector.");
+    return;
+  }
+
+  const newStatus = select.value;
+
+  const button = select.parentElement.querySelector(
+    "button"
+  );
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Saving...";
+  }
+
+  const { error } = await supabaseClient
+    .from("orders")
+    .update({
+      order_status: newStatus
+    })
+    .eq("id", orderId);
+
+  if (error) {
+
+    console.error(
+      "Order status update error:",
+      error
+    );
+
+    alert(
+      "Could not update order status:\n\n" +
+      error.message
+    );
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Save";
+    }
+
+    return;
+  }
+
   // Update local order data
-  artworkOrders =
-    artworkOrders.map(order => {
+  artworkOrders = artworkOrders.map(order => {
 
-      if (order.id === orderId) {
-        return {
-          ...order,
-          order_status: newStatus
-        };
-      }
+    if (order.id === orderId) {
+      return {
+        ...order,
+        order_status: newStatus
+      };
+    }
 
-      return order;
+    return order;
 
-    });
+  });
 
   renderOrders();
 
@@ -963,8 +1012,6 @@ async function updatePaymentStatus(orderId) {
     newStatus
   );
 }
-
-
 // ------------------------------------
 // View order in professional modal
 // ------------------------------------
