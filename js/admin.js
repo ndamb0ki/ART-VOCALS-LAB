@@ -1670,3 +1670,545 @@ function escapeHTML(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+// ====================================
+// SHOP — ADD / PUBLISH ARTWORK
+// ====================================
+
+// ------------------------------------
+// Artwork image preview
+// ------------------------------------
+
+const artworkImage =
+  document.getElementById("artworkImage");
+
+const artworkImagePreview =
+  document.getElementById("artworkImagePreview");
+
+if (artworkImage) {
+
+  artworkImage.addEventListener(
+    "change",
+    () => {
+
+      const file = artworkImage.files[0];
+
+      if (!file) {
+
+        if (artworkImagePreview) {
+          artworkImagePreview.style.display = "none";
+          artworkImagePreview.src = "";
+        }
+
+        return;
+      }
+
+      const imageURL =
+        URL.createObjectURL(file);
+
+      if (artworkImagePreview) {
+
+        artworkImagePreview.src = imageURL;
+
+        artworkImagePreview.style.display = "block";
+      }
+
+    }
+  );
+}
+
+
+// ------------------------------------
+// Artwork publishing form
+// ------------------------------------
+
+const artworkForm =
+  document.getElementById("artworkForm");
+
+if (artworkForm) {
+
+  artworkForm.addEventListener(
+    "submit",
+    async (event) => {
+
+      event.preventDefault();
+
+      const publishButton =
+        document.getElementById(
+          "publishArtworkBtn"
+        );
+
+      const messageBox =
+        document.getElementById(
+          "artworkFormMessage"
+        );
+
+      const imageInput =
+        document.getElementById(
+          "artworkImage"
+        );
+
+      const titleInput =
+        document.getElementById(
+          "artworkTitle"
+        );
+
+      const descriptionInput =
+        document.getElementById(
+          "artworkDescription"
+        );
+
+      const priceInput =
+        document.getElementById(
+          "artworkPrice"
+        );
+
+      const currencyInput =
+        document.getElementById(
+          "artworkCurrency"
+        );
+
+      const categoryInput =
+        document.getElementById(
+          "artworkCategory"
+        );
+
+      const sizeInput =
+        document.getElementById(
+          "artworkSize"
+        );
+
+      const statusInput =
+        document.getElementById(
+          "artworkStatus"
+        );
+
+      const featuredInput =
+        document.getElementById(
+          "artworkFeatured"
+        );
+
+
+      // --------------------------------
+      // Clear previous message
+      // --------------------------------
+
+      if (messageBox) {
+
+        messageBox.className =
+          "form-message";
+
+        messageBox.textContent = "";
+
+        messageBox.style.display = "none";
+      }
+
+
+      // --------------------------------
+      // Get form values
+      // --------------------------------
+
+      const file =
+        imageInput?.files?.[0];
+
+      const title =
+        titleInput?.value.trim();
+
+      const description =
+        descriptionInput?.value.trim();
+
+      const price =
+        Number(priceInput?.value);
+
+      const currency =
+        currencyInput?.value || "KES";
+
+      const category =
+        categoryInput?.value || "";
+
+      const size =
+        sizeInput?.value.trim();
+
+      const status =
+        statusInput?.value || "available";
+
+      const featured =
+        featuredInput?.checked || false;
+
+
+      // --------------------------------
+      // Validate
+      // --------------------------------
+
+      if (!file) {
+
+        showArtworkMessage(
+          "Please select an artwork image.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (!title) {
+
+        showArtworkMessage(
+          "Please enter the artwork title.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (
+        !priceInput?.value ||
+        Number.isNaN(price) ||
+        price < 0
+      ) {
+
+        showArtworkMessage(
+          "Please enter a valid artwork price.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      // --------------------------------
+      // Check image type
+      // --------------------------------
+
+      if (!file.type.startsWith("image/")) {
+
+        showArtworkMessage(
+          "Please upload a valid image file.",
+          "error"
+        );
+
+        return;
+      }
+
+
+      // --------------------------------
+      // Disable button
+      // --------------------------------
+
+      if (publishButton) {
+
+        publishButton.disabled = true;
+
+        publishButton.textContent =
+          "Uploading artwork...";
+      }
+
+
+      let uploadedFilePath = null;
+
+
+      try {
+
+        // --------------------------------
+        // Create safe filename
+        // --------------------------------
+
+        const originalName =
+          file.name
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9._-]/g, "");
+
+        const uniqueName =
+          `${crypto.randomUUID()}-${originalName}`;
+
+        uploadedFilePath =
+          `artworks/${uniqueName}`;
+
+
+        // --------------------------------
+        // Upload image to Supabase Storage
+        // --------------------------------
+
+        const {
+          error: uploadError
+        } =
+          await supabaseClient
+            .storage
+            .from("artworks")
+            .upload(
+              uploadedFilePath,
+              file,
+              {
+                cacheControl: "3600",
+                upsert: false
+              }
+            );
+
+
+        if (uploadError) {
+
+          console.error(
+            "Artwork image upload error:",
+            uploadError
+          );
+
+          throw new Error(
+            "Image upload failed: " +
+            uploadError.message
+          );
+        }
+
+
+        // --------------------------------
+        // Get public image URL
+        // --------------------------------
+
+        const {
+          data: publicURLData
+        } =
+          supabaseClient
+            .storage
+            .from("artworks")
+            .getPublicUrl(
+              uploadedFilePath
+            );
+
+
+        const imageURL =
+          publicURLData?.publicUrl;
+
+
+        if (!imageURL) {
+
+          throw new Error(
+            "Could not create the public image URL."
+          );
+        }
+
+
+        // --------------------------------
+        // Create slug
+        // --------------------------------
+
+        let slug =
+          title
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9\s-]/g, "")
+            .replace(/\s+/g, "-")
+            .replace(/-+/g, "-");
+
+
+        // Add unique ending to avoid
+        // duplicate slug problems
+
+        slug =
+          `${slug}-${Date.now()}`;
+
+
+        // --------------------------------
+        // Update button
+        // --------------------------------
+
+        if (publishButton) {
+
+          publishButton.textContent =
+            "Publishing artwork...";
+        }
+
+
+        // --------------------------------
+        // Insert artwork into database
+        // --------------------------------
+
+        const {
+          data: artwork,
+          error: artworkError
+        } =
+          await supabaseClient
+            .from("artworks")
+            .insert([
+              {
+                title: title,
+
+                slug: slug,
+
+                description:
+                  description || null,
+
+                category:
+                  category || null,
+
+                size:
+                  size || null,
+
+                price:
+                  price,
+
+                currency:
+                  currency,
+
+                image_url:
+                  imageURL,
+
+                status:
+                  status,
+
+                featured:
+                  featured
+              }
+            ])
+            .select()
+            .single();
+
+
+        if (artworkError) {
+
+          console.error(
+            "Artwork database error:",
+            artworkError
+          );
+
+
+          // --------------------------------
+          // Remove uploaded image if
+          // database insertion failed
+          // --------------------------------
+
+          if (uploadedFilePath) {
+
+            await supabaseClient
+              .storage
+              .from("artworks")
+              .remove([
+                uploadedFilePath
+              ]);
+
+          }
+
+
+          throw new Error(
+            "Artwork could not be published: " +
+            artworkError.message
+          );
+        }
+
+
+        // --------------------------------
+        // Success
+        // --------------------------------
+
+        console.log(
+          "Artwork published:",
+          artwork
+        );
+
+
+        showArtworkMessage(
+          "Artwork published successfully!",
+          "success"
+        );
+
+
+        // --------------------------------
+        // Reset form
+        // --------------------------------
+
+        artworkForm.reset();
+
+
+        if (artworkImagePreview) {
+
+          artworkImagePreview.src = "";
+
+          artworkImagePreview.style.display =
+            "none";
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Artwork publishing error:",
+          error
+        );
+
+
+        showArtworkMessage(
+          error.message ||
+          "Something went wrong while publishing the artwork.",
+          "error"
+        );
+
+      } finally {
+
+        // --------------------------------
+        // Re-enable button
+        // --------------------------------
+
+        if (publishButton) {
+
+          publishButton.disabled = false;
+
+          publishButton.textContent =
+            "Publish Artwork";
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+// ------------------------------------
+// Shop form message
+// ------------------------------------
+
+function showArtworkMessage(
+  message,
+  type
+) {
+
+  const messageBox =
+    document.getElementById(
+      "artworkFormMessage"
+    );
+
+  if (!messageBox) {
+
+    alert(message);
+
+    return;
+  }
+
+
+  messageBox.textContent =
+    message;
+
+
+  messageBox.className =
+    "form-message";
+
+
+  if (type === "success") {
+
+    messageBox.classList.add(
+      "success"
+    );
+
+  } else {
+
+    messageBox.classList.add(
+      "error-message"
+    );
+
+  }
+
+
+  messageBox.style.display =
+    "block";
+
+}
