@@ -939,6 +939,77 @@ async function updatePaymentStatus(orderId) {
 
 
 // ------------------------------------
+// Update payment status
+// ------------------------------------
+
+async function updatePaymentStatus(orderId) {
+
+  const select = document.getElementById(`payment-${orderId}`);
+
+  if (!select) {
+    alert("Could not find the payment status selector.");
+    return;
+  }
+
+  const newStatus = select.value;
+
+  const button = select.parentElement.querySelector("button");
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Saving...";
+  }
+
+  const { error } = await supabaseClient
+    .from("orders")
+    .update({
+      payment_status: newStatus
+    })
+    .eq("id", orderId);
+
+  if (error) {
+
+    console.error(
+      "Payment status update error:",
+      error
+    );
+
+    alert(
+      "Could not update payment status:\n\n" +
+      error.message
+    );
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Save";
+    }
+
+    return;
+  }
+
+  artworkOrders = artworkOrders.map(order => {
+
+    if (order.id === orderId) {
+      return {
+        ...order,
+        payment_status: newStatus
+      };
+    }
+
+    return order;
+
+  });
+
+  renderOrders();
+
+  alert(
+    "Payment status updated to: " +
+    newStatus
+  );
+}
+
+
+// ------------------------------------
 // Update order status
 // ------------------------------------
 
@@ -969,7 +1040,10 @@ async function updateOrderStatus(orderId) {
 
   if (error) {
 
-    console.error("Order status update error:", error);
+    console.error(
+      "Order status update error:",
+      error
+    );
 
     alert(
       "Could not update order status:\n\n" +
@@ -1004,27 +1078,6 @@ async function updateOrderStatus(orderId) {
     newStatus
   );
 }
-  // Update local order data
-  artworkOrders = artworkOrders.map(order => {
-
-    if (order.id === orderId) {
-      return {
-        ...order,
-        order_status: newStatus
-      };
-    
-    return order;
-
-  });
-
-  renderOrders();
-
-  alert(
-    "Order status updated to: " +
-    newStatus
-  );
-}
-
 // ------------------------------------
 // View order in professional modal
 // ------------------------------------
