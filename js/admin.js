@@ -54,7 +54,12 @@ async function checkAdminAccess(user) {
 
 await loadCommissionRequests();
 await loadOrders();
+
+console.log("ABOUT TO LOAD ARTWORKS");
+
 await loadAdminArtworks();
+
+console.log("ARTWORKS FINISHED LOADING");
 
   } catch (error) {
     console.error(error);
