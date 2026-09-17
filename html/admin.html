@@ -465,7 +465,117 @@
 
   </main>
 
+  <!-- =========================
+       ORDER DETAILS MODAL
+  ========================= -->
 
+  <div
+    id="orderModal"
+    style="
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.65);
+      z-index:9999;
+      padding:30px 15px;
+      overflow-y:auto;
+    "
+  >
+
+    <div
+      style="
+        max-width:700px;
+        margin:30px auto;
+        background:white;
+        border-radius:14px;
+        box-shadow:0 10px 40px rgba(0,0,0,.25);
+        overflow:hidden;
+      "
+    >
+
+      <!-- MODAL HEADER -->
+
+      <div
+        style="
+          background:#071a33;
+          color:white;
+          padding:20px 24px;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:15px;
+        "
+      >
+
+        <div>
+          <h2
+            id="orderModalTitle"
+            style="margin:0;"
+          >
+            Order Details
+          </h2>
+
+          <small
+            id="orderModalSubtitle"
+            style="opacity:.75;"
+          >
+            Artwork Order
+          </small>
+        </div>
+
+        <button
+          id="closeOrderModal"
+          style="
+            border:0;
+            background:rgba(255,255,255,.15);
+            color:white;
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            font-size:22px;
+            cursor:pointer;
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- MODAL CONTENT -->
+
+      <div
+        id="orderModalContent"
+        style="padding:25px;"
+      >
+      </div>
+
+
+      <!-- MODAL FOOTER -->
+
+      <div
+        style="
+          padding:18px 25px;
+          border-top:1px solid #eee;
+          text-align:right;
+        "
+      >
+
+        <button
+          id="closeOrderModalBottom"
+          class="view-btn"
+          style="
+            padding:10px 20px;
+          "
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
   <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
