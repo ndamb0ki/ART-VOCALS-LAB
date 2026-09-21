@@ -1,32 +1,17 @@
 // =====================================================
 // NDAMBUKI ART LAB — ART CLASS COMMUNITY
+// Public feed: posts + likes + comments
 // =====================================================
 
-const communityGrid =
-  document.getElementById("communityGrid");
+const communityGrid = document.getElementById("communityGrid");
 
+let artClassPosts = [];
+let visitorId = localStorage.getItem("ndambuki_visitor_id");
 
-// =====================================================
-// VISITOR ID
-// =====================================================
-
-function getVisitorId() {
-
-  let visitorId =
-    localStorage.getItem("ndambuki-visitor-id");
-
-  if (!visitorId) {
-
-    visitorId =
-      crypto.randomUUID();
-
-    localStorage.setItem(
-      "ndambuki-visitor-id",
-      visitorId
-    );
-  }
-
-  return visitorId;
+// Create a unique visitor ID for likes
+if (!visitorId) {
+  visitorId = crypto.randomUUID();
+  localStorage.setItem("ndambuki_visitor_id", visitorId);
 }
 
 
@@ -44,465 +29,284 @@ async function loadArtClassPosts() {
     </div>
   `;
 
-
-  const { data, error } =
-    await supabaseClient
-      .from("art_class_posts")
-      .select("*")
-      .eq("published", true)
-      .order("created_at", {
-        ascending: false
-      });
-
+  const { data, error } = await supabaseClient
+    .from("art_class_posts")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false });
 
   if (error) {
 
-    console.error(
-      "Error loading art class posts:",
-      error
-    );
-
+    console.error("Art Class posts error:", error);
 
     communityGrid.innerHTML = `
       <div class="feed-empty">
-        <h3>Something went wrong.</h3>
-        <p>We couldn't load the Art Lab posts.</p>
+        <p>We couldn't load the Art Lab right now.</p>
       </div>
     `;
 
     return;
   }
 
+  artClassPosts = data || [];
 
-  if (!data || data.length === 0) {
+  if (!artClassPosts.length) {
 
     communityGrid.innerHTML = `
       <div class="feed-empty">
-        <h3>No posts yet.</h3>
-        <p>New Art Lab stories are coming soon.</p>
+        <p>No Art Lab posts yet.</p>
       </div>
     `;
 
     return;
   }
 
-
-  communityGrid.innerHTML = "";
-
-
-  data.forEach((post, index) => {
-
-    const card =
-      createPostCard(post, index);
-
-
-    communityGrid.appendChild(card);
-
-
-    loadComments(post.id);
-
-  });
-
+  renderArtClassPosts();
 }
 
 
 // =====================================================
-// BENTO PATTERN
-// =====================================================
-//
-// Pattern:
-//
-// 0 = LARGE
-// 1 = NORMAL
-// 2 = TALL
-// 3 = NORMAL
-// 4 = WIDE
-// 5 = NORMAL
-// 6 = LARGE
-// 7 = NORMAL
-// 8 = TALL
-// 9 = WIDE
-//
-// This repeats as more posts are added.
+// RENDER POSTS
 // =====================================================
 
-function getBentoClass(index) {
+async function renderArtClassPosts() {
 
-  const pattern =
-    index % 10;
+  const cards = await Promise.all(
+    artClassPosts.map(async (post, index) => {
+
+      const { count } = await supabaseClient
+        .from("art_class_comments")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq("post_id", post.id);
+
+      const commentCount = count || 0;
+
+      const sizeClass = getCardSize(index, post);
+
+      const liked = await hasLiked(post.id);
+
+      return createPostCard(
+        post,
+        commentCount,
+        liked,
+        sizeClass
+      );
+
+    })
+  );
+
+  communityGrid.innerHTML = cards.join("");
+}
 
 
-  if (
-    pattern === 0 ||
-    pattern === 6
-  ) {
+// =====================================================
+// BENTO CARD SIZING
+// =====================================================
 
+function getCardSize(index, post) {
+
+  if (post.featured) {
     return "large";
-
   }
 
+  const pattern = index % 6;
 
-  if (
-    pattern === 2 ||
-    pattern === 8
-  ) {
-
-    return "tall";
-
-  }
-
-
-  if (
-    pattern === 4 ||
-    pattern === 9
-  ) {
-
-    return "wide";
-
-  }
-
+  if (pattern === 1) return "wide";
+  if (pattern === 2) return "tall";
+  if (pattern === 4) return "large";
 
   return "";
-
 }
 
 
 // =====================================================
-// CREATE POST CARD
+// CREATE CARD
 // =====================================================
 
 function createPostCard(
   post,
-  index
+  commentCount,
+  liked,
+  sizeClass
 ) {
 
-  const card =
-    document.createElement("article");
+  const safeTitle = escapeHTML(post.title || "");
+  const safeDescription =
+    escapeHTML(post.description || "");
 
-
-  const bentoClass =
-    getBentoClass(index);
-
-
-  card.className =
-    `community-card ${bentoClass}`;
-
+  const safeCategory =
+    escapeHTML(post.category || "Art Lab");
 
   const image =
-    escapeHTML(
-      post.image_url || ""
-    );
+    post.image_url ||
+    "../images/placeholder.jpg";
 
+  const likes =
+    Number(post.likes_count || 0);
 
-  const title =
-    escapeHTML(
-      post.title || "Art Lab"
-    );
+  return `
 
-
-  const description =
-    escapeHTML(
-      post.description || ""
-    );
-
-
-  const category =
-    escapeHTML(
-      post.category || "Art Class"
-    );
-
-
-  card.innerHTML = `
-
-    <!-- IMAGE -->
-
-    <img
-      src="${image}"
-      alt="${title}"
-      loading="lazy"
-      class="community-image"
+    <article
+      class="community-card ${sizeClass}"
+      data-post-id="${post.id}"
     >
 
+      <img
+        src="${escapeAttribute(image)}"
+        alt="${escapeAttribute(safeTitle)}"
+        loading="lazy"
+      >
 
-    <!-- DARK OVERLAY -->
+      <div class="card-gradient"></div>
 
-    <div class="card-gradient"></div>
+      <div class="card-content">
 
+        <span class="card-category">
+          ${safeCategory}
+        </span>
 
-    <!-- CARD CONTENT -->
+        <h3>
+          ${safeTitle}
+        </h3>
 
-    <div class="card-content">
+        ${
+          safeDescription
+            ? `<p>${safeDescription}</p>`
+            : ""
+        }
 
-      <span class="card-category">
-        ${category}
-      </span>
+        <div class="card-actions">
 
+          <button
+            class="card-action like-button ${liked ? "liked" : ""}"
+            onclick="toggleArtClassLike('${post.id}')"
+            aria-label="Like post"
+          >
 
-      <h3>
-        ${title}
-      </h3>
+            <span class="heart">
+              ${liked ? "♥" : "♡"}
+            </span>
 
+            <span class="like-count">
+              ${likes}
+            </span>
 
-      <p>
-        ${description}
-      </p>
-
-
-      <div class="card-actions">
-
-        <button
-          class="card-action like-button"
-          data-post-id="${post.id}"
-          aria-label="Like this post"
-          type="button"
-        >
-
-          <span class="heart">
-            ♡
-          </span>
-
-          <span class="like-count">
-            ${post.likes_count || 0}
-          </span>
-
-        </button>
+          </button>
 
 
-        <button
-          class="card-action comment-button"
-          data-post-id="${post.id}"
-          type="button"
-        >
+          <button
+            class="card-action comment-button"
+            onclick="openComments('${post.id}')"
+          >
 
-          💬 Comments
+            💬
 
-        </button>
+            <span>
+              ${commentCount}
+            </span>
+
+          </button>
+
+        </div>
 
       </div>
 
-    </div>
-
-
-    <!-- COMMENTS -->
-
-    <div
-      class="comments-panel"
-      id="comments-${post.id}"
-    >
-
-      <div class="comments-header">
-
-        <h4>
-          Comments
-        </h4>
-
-
-        <button
-          class="close-comments"
-          data-post-id="${post.id}"
-          type="button"
-          aria-label="Close comments"
-        >
-          ×
-        </button>
-
-      </div>
-
+      <!-- COMMENTS PANEL -->
 
       <div
-        class="comment-list"
-        id="comment-list-${post.id}"
+        class="comments-panel"
+        id="comments-${post.id}"
       >
 
-        <p>
+        <div class="comments-header">
+
+          <h4>
+            Comments
+          </h4>
+
+          <button
+            class="close-comments"
+            onclick="closeComments('${post.id}')"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div
+          class="comment-list"
+          id="comment-list-${post.id}"
+        >
           Loading comments...
-        </p>
+        </div>
+
+
+        <form
+          class="comment-form"
+          onsubmit="submitComment(event, '${post.id}')"
+        >
+
+          <input
+            type="text"
+            id="comment-name-${post.id}"
+            placeholder="Your name"
+            maxlength="50"
+            required
+          >
+
+          <textarea
+            id="comment-text-${post.id}"
+            placeholder="Write a comment..."
+            maxlength="500"
+            required
+          ></textarea>
+
+          <button type="submit">
+            Post Comment
+          </button>
+
+        </form>
 
       </div>
 
-
-      <form
-        class="comment-form"
-        data-post-id="${post.id}"
-      >
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Your name"
-          maxlength="50"
-          required
-        >
-
-
-        <textarea
-          name="comment"
-          placeholder="Write a comment..."
-          maxlength="500"
-          required
-        ></textarea>
-
-
-        <button
-          type="submit"
-        >
-          Post comment
-        </button>
-
-      </form>
-
-    </div>
-
+    </article>
   `;
-
-
-  // ===================================================
-  // LIKE
-  // ===================================================
-
-  const likeButton =
-    card.querySelector(
-      ".like-button"
-    );
-
-
-  likeButton.addEventListener(
-    "click",
-    () => {
-
-      likePost(
-        post.id,
-        likeButton
-      );
-
-    }
-  );
-
-
-  // ===================================================
-  // OPEN COMMENTS
-  // ===================================================
-
-  const commentButton =
-    card.querySelector(
-      ".comment-button"
-    );
-
-
-  commentButton.addEventListener(
-    "click",
-    () => {
-
-      const panel =
-        document.getElementById(
-          `comments-${post.id}`
-        );
-
-
-      if (panel) {
-
-        panel.classList.add(
-          "active"
-        );
-
-      }
-
-    }
-  );
-
-
-  // ===================================================
-  // CLOSE COMMENTS
-  // ===================================================
-
-  const closeButton =
-    card.querySelector(
-      ".close-comments"
-    );
-
-
-  closeButton.addEventListener(
-    "click",
-    () => {
-
-      const panel =
-        document.getElementById(
-          `comments-${post.id}`
-        );
-
-
-      if (panel) {
-
-        panel.classList.remove(
-          "active"
-        );
-
-      }
-
-    }
-  );
-
-
-  // ===================================================
-  // COMMENT FORM
-  // ===================================================
-
-  const form =
-    card.querySelector(
-      ".comment-form"
-    );
-
-
-  form.addEventListener(
-    "submit",
-    event => {
-
-      event.preventDefault();
-
-
-      submitComment(
-        post.id,
-        form
-      );
-
-    }
-  );
-
-
-  return card;
-
 }
 
 
 // =====================================================
-// LIKE POST
+// CHECK IF VISITOR LIKED
 // =====================================================
 
-async function likePost(
-  postId,
-  button
-) {
+async function hasLiked(postId) {
 
-  const visitorId =
-    getVisitorId();
+  const { data, error } = await supabaseClient
+    .from("art_class_likes")
+    .select("id")
+    .eq("post_id", postId)
+    .eq("visitor_id", visitorId)
+    .maybeSingle();
 
+  if (error) {
+    console.error("Like check error:", error);
+    return false;
+  }
 
-  const heart =
-    button.querySelector(
-      ".heart"
-    );
-
-
-  const count =
-    button.querySelector(
-      ".like-count"
-    );
+  return !!data;
+}
 
 
-  const {
-    data: existingLike,
-    error: checkError
-  } =
+// =====================================================
+// LIKE / UNLIKE
+// =====================================================
+
+async function toggleArtClassLike(postId) {
+
+  const { data: existing, error: checkError } =
     await supabaseClient
       .from("art_class_likes")
       .select("id")
@@ -510,202 +314,164 @@ async function likePost(
       .eq("visitor_id", visitorId)
       .maybeSingle();
 
-
   if (checkError) {
 
-    console.error(
-      "Like check error:",
-      checkError
-    );
+    console.error(checkError);
+
+    alert("We couldn't process your like.");
 
     return;
   }
 
 
-  if (existingLike) {
+  if (existing) {
 
-    await supabaseClient
+    const { error } = await supabaseClient
       .from("art_class_likes")
       .delete()
-      .eq(
-        "id",
-        existingLike.id
-      );
-
-
-    heart.textContent =
-      "♡";
-
-  }
-
-  else {
-
-    const { error } =
-      await supabaseClient
-        .from("art_class_likes")
-        .insert({
-          post_id: postId,
-          visitor_id: visitorId
-        });
-
+      .eq("id", existing.id);
 
     if (error) {
 
-      console.error(
-        "Like error:",
-        error
-      );
+      console.error(error);
+
+      alert("Unable to remove like.");
 
       return;
     }
 
+  } else {
 
-    heart.textContent =
-      "♥";
+    const { error } = await supabaseClient
+      .from("art_class_likes")
+      .insert({
+        post_id: postId,
+        visitor_id: visitorId
+      });
 
+    if (error) {
+
+      console.error(error);
+
+      alert("Unable to like this post.");
+
+      return;
+    }
   }
 
 
-  // ===================================================
-  // GET UPDATED LIKE COUNT
-  // ===================================================
-
-  const {
-    count: newCount
-  } =
+  // Recalculate likes from database
+  const { count, error: countError } =
     await supabaseClient
       .from("art_class_likes")
       .select("*", {
         count: "exact",
         head: true
       })
-      .eq(
-        "post_id",
-        postId
-      );
+      .eq("post_id", postId);
 
+  if (countError) {
 
-  count.textContent =
-    newCount || 0;
+    console.error(countError);
 
+    return;
+  }
 
-  // ===================================================
-  // SAVE COUNT
-  // ===================================================
 
   await supabaseClient
     .from("art_class_posts")
     .update({
-      likes_count:
-        newCount || 0
+      likes_count: count || 0
     })
-    .eq(
-      "id",
-      postId
-    );
+    .eq("id", postId);
 
+
+  loadArtClassPosts();
 }
 
 
 // =====================================================
-// LOAD COMMENTS
+// OPEN COMMENTS
 // =====================================================
 
-async function loadComments(
-  postId
-) {
+async function openComments(postId) {
+
+  const panel =
+    document.getElementById(`comments-${postId}`);
+
+  if (!panel) return;
+
+  panel.classList.add("active");
 
   const list =
-    document.getElementById(
-      `comment-list-${postId}`
-    );
+    document.getElementById(`comment-list-${postId}`);
+
+  list.innerHTML = "Loading comments...";
 
 
-  if (!list) return;
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("art_class_comments")
-      .select("*")
-      .eq(
-        "post_id",
-        postId
-      )
-      .order(
-        "created_at",
-        {
-          ascending: true
-        }
-      );
+  const { data, error } = await supabaseClient
+    .from("art_class_comments")
+    .select("*")
+    .eq("post_id", postId)
+    .order("created_at", {
+      ascending: false
+    });
 
 
   if (error) {
 
-    console.error(
-      "Comment loading error:",
-      error
-    );
+    console.error(error);
 
-
-    list.innerHTML =
-      "<p>Unable to load comments.</p>";
+    list.innerHTML = `
+      <p>Unable to load comments.</p>
+    `;
 
     return;
   }
 
 
-  if (
-    !data ||
-    data.length === 0
-  ) {
+  if (!data || !data.length) {
 
-    list.innerHTML =
-      "<p>No comments yet. Be the first!</p>";
+    list.innerHTML = `
+      <p style="opacity:.65;">
+        No comments yet. Be the first to comment.
+      </p>
+    `;
 
     return;
   }
 
 
-  list.innerHTML = "";
+  list.innerHTML = data.map(comment => `
+
+    <div class="comment">
+
+      <strong>
+        ${escapeHTML(comment.name || "Anonymous")}
+      </strong>
+
+      <p>
+        ${escapeHTML(comment.comment || "")}
+      </p>
+
+    </div>
+
+  `).join("");
+}
 
 
-  data.forEach(
-    comment => {
+// =====================================================
+// CLOSE COMMENTS
+// =====================================================
 
-      const item =
-        document.createElement(
-          "div"
-        );
+function closeComments(postId) {
 
+  const panel =
+    document.getElementById(`comments-${postId}`);
 
-      item.className =
-        "comment";
-
-
-      item.innerHTML = `
-
-        <strong>
-          ${escapeHTML(comment.name)}
-        </strong>
-
-        <p>
-          ${escapeHTML(comment.comment)}
-        </p>
-
-      `;
-
-
-      list.appendChild(
-        item
-      );
-
-    }
-  );
-
+  if (panel) {
+    panel.classList.remove("active");
+  }
 }
 
 
@@ -713,142 +479,97 @@ async function loadComments(
 // SUBMIT COMMENT
 // =====================================================
 
-async function submitComment(
-  postId,
-  form
-) {
+async function submitComment(event, postId) {
+
+  event.preventDefault();
+
+  const nameInput =
+    document.getElementById(`comment-name-${postId}`);
+
+  const commentInput =
+    document.getElementById(`comment-text-${postId}`);
+
 
   const name =
-    form.name.value.trim();
-
+    nameInput.value.trim();
 
   const comment =
-    form.comment.value.trim();
+    commentInput.value.trim();
 
 
-  if (
-    !name ||
-    !comment
-  ) {
-
+  if (!name || !comment) {
     return;
-
   }
 
 
-  const submitButton =
-    form.querySelector(
-      "button"
-    );
+  const button =
+    event.submitter;
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Posting...";
+  }
 
 
-  submitButton.disabled =
-    true;
-
-
-  submitButton.textContent =
-    "Posting...";
-
-
-  const { error } =
-    await supabaseClient
-      .from("art_class_comments")
-      .insert({
-        post_id: postId,
-        name: name,
-        comment: comment
-      });
+  const { error } = await supabaseClient
+    .from("art_class_comments")
+    .insert({
+      post_id: postId,
+      name: name,
+      comment: comment
+    });
 
 
   if (error) {
 
-    console.error(
-      "Comment submission error:",
-      error
-    );
-
+    console.error(error);
 
     alert(
-      "Unable to post your comment. Please try again."
+      "We couldn't post your comment. Please try again."
     );
 
-
-    submitButton.disabled =
-      false;
-
-
-    submitButton.textContent =
-      "Post comment";
-
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Post Comment";
+    }
 
     return;
-
   }
 
 
-  form.reset();
+  nameInput.value = "";
+  commentInput.value = "";
+
+  if (button) {
+    button.disabled = false;
+    button.textContent = "Post Comment";
+  }
 
 
-  submitButton.disabled =
-    false;
+  await openComments(postId);
 
-
-  submitButton.textContent =
-    "Post comment";
-
-
-  await loadComments(
-    postId
-  );
-
+  await loadArtClassPosts();
 }
 
 
 // =====================================================
-// SECURITY HELPER
+// HTML SAFETY
 // =====================================================
 
-function escapeHTML(
-  value
-) {
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
+function escapeHTML(value) {
 
   return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
 
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
+function escapeAttribute(value) {
 
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
+  return escapeHTML(value);
 }
 
 
@@ -858,9 +579,5 @@ function escapeHTML(
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => {
-
-    loadArtClassPosts();
-
-  }
+  loadArtClassPosts
 );
