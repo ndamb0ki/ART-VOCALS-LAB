@@ -996,378 +996,364 @@ h4,
 
 
 /* =====================================================
-   PHONE — BENTO
+   MOBILE BENTO — CLEAN TEXT OVERLAY
    ===================================================== */
 
 @media (max-width: 768px) {
 
-  .page-hero {
-    padding:
-      105px 18px 35px;
-  }
-
-
-  .page-hero h1 {
-    font-size: 2.5rem;
-  }
-
-
-  .page-hero p {
-    font-size: .95rem;
-  }
-
-
-  .art-community-section {
-
-    padding:
-      20px 8px 70px;
-
-  }
-
-
-  .art-community-intro {
-
-    margin-bottom: 22px;
-
-  }
-
-
-  .art-community-intro h2 {
-
-    font-size: 2rem;
-
-  }
-
-
-  .art-community-intro p {
-
-    font-size: .85rem;
-
-  }
-
-
-  /* ================================================
-     TWO-COLUMN MOBILE BENTO
-     ================================================ */
-
   .community-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-rows: 190px !important;
+    gap: 10px !important;
+    padding: 0 10px !important;
+  }
 
-    width: 100%;
+  .community-card {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+    border-radius: 16px !important;
+  }
 
-    display: grid !important;
+  /* Bento sizes */
+  .community-card.large {
+    grid-column: span 2 !important;
+    grid-row: span 2 !important;
+  }
 
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr)) !important;
+  .community-card.wide {
+    grid-column: span 2 !important;
+    grid-row: span 1 !important;
+  }
 
-    grid-auto-rows:
-      180px !important;
+  .community-card.tall {
+    grid-column: span 1 !important;
+    grid-row: span 2 !important;
+  }
 
-    grid-auto-flow:
-      dense !important;
+  .community-card:not(.large):not(.wide):not(.tall) {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+
+
+  /* ---------------------------------------------
+     IMAGE
+     --------------------------------------------- */
+
+  .community-card > img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+
+  /* ---------------------------------------------
+     DARK GRADIENT
+     Keeps white text readable
+     --------------------------------------------- */
+
+  .community-card .card-gradient {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+
+    background:
+      linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.90) 0%,
+        rgba(0, 0, 0, 0.60) 32%,
+        rgba(0, 0, 0, 0.12) 65%,
+        rgba(0, 0, 0, 0) 100%
+      ) !important;
+  }
+
+
+  /* ---------------------------------------------
+     CONTENT
+     --------------------------------------------- */
+
+  .community-card .card-content {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+
+    z-index: 2 !important;
+
+    padding: 12px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+
+    min-width: 0 !important;
+  }
+
+
+  /* Category */
+
+  .community-card .card-category {
+    display: inline-block !important;
+
+    width: fit-content !important;
+    max-width: 100% !important;
+
+    margin-bottom: 4px !important;
+
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+
+    background: rgba(255,255,255,0.18) !important;
+    backdrop-filter: blur(5px) !important;
+
+    padding: 4px 7px !important;
+    border-radius: 20px !important;
+  }
+
+
+  /* Title */
+
+  .community-card h3 {
+    margin: 0 !important;
+
+    font-size: 15px !important;
+    line-height: 1.15 !important;
+    font-weight: 700 !important;
+
+    color: #fff !important;
+
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+
+    overflow: hidden !important;
+
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
+
+
+  /* Description */
+
+  .community-card p {
+    margin: 5px 0 0 !important;
+
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+
+    color: rgba(255,255,255,0.88) !important;
+
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+
+    overflow: hidden !important;
+  }
+
+
+  /* ---------------------------------------------
+     ACTIONS
+     --------------------------------------------- */
+
+  .community-card .card-actions {
+    display: flex !important;
+    align-items: center !important;
 
     gap: 7px !important;
 
+    margin-top: 7px !important;
+
+    min-width: 0 !important;
+  }
+
+  .community-card .card-action {
+    min-height: 28px !important;
+
+    padding: 5px 8px !important;
+
+    border-radius: 20px !important;
+
+    font-size: 10px !important;
+
+    white-space: nowrap !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: rgba(0,0,0,0.45) !important;
+    color: #fff !important;
+
+    border: 1px solid rgba(255,255,255,0.20) !important;
+
+    backdrop-filter: blur(6px) !important;
   }
 
 
-  /* ================================================
-     LARGE MOBILE CARD
-     ================================================ */
+  /* ---------------------------------------------
+     NORMAL SMALL CARDS
+     Less text = cleaner appearance
+     --------------------------------------------- */
 
-  .community-card.large {
+  .community-card:not(.large):not(.tall):not(.wide) .card-content {
+    padding: 9px !important;
+  }
 
-    grid-column:
-      span 2 !important;
+  .community-card:not(.large):not(.tall):not(.wide) h3 {
+    font-size: 13px !important;
+    -webkit-line-clamp: 2 !important;
+  }
 
-    grid-row:
-      span 2 !important;
+  .community-card:not(.large):not(.tall):not(.wide) p {
+    display: none !important;
+  }
 
-    width: 100% !important;
+  .community-card:not(.large):not(.tall):not(.wide) .card-category {
+    font-size: 8px !important;
+  }
 
-    height: 367px !important;
-
-    min-height: 367px !important;
-
+  .community-card:not(.large):not(.tall):not(.wide) .card-actions {
+    margin-top: 5px !important;
   }
 
 
-  /* ================================================
-     WIDE MOBILE CARD
-     ================================================ */
+  /* ---------------------------------------------
+     WIDE CARDS
+     --------------------------------------------- */
 
-  .community-card.wide {
+  .community-card.wide .card-content {
+    padding: 11px !important;
+  }
 
-    grid-column:
-      span 2 !important;
-
-    grid-row:
-      span 1 !important;
-
-    width: 100% !important;
-
-    height: 180px !important;
-
-    min-height: 180px !important;
-
+  .community-card.wide p {
+    -webkit-line-clamp: 1 !important;
   }
 
 
-  /* ================================================
-     TALL MOBILE CARD
-     ================================================ */
+  /* ---------------------------------------------
+     TALL CARDS
+     --------------------------------------------- */
 
-  .community-card.tall {
+  .community-card.tall .card-content {
+    padding: 10px !important;
+  }
 
-    grid-column:
-      span 1 !important;
-
-    grid-row:
-      span 2 !important;
-
-    width: 100% !important;
-
-    height: 367px !important;
-
-    min-height: 367px !important;
-
+  .community-card.tall p {
+    -webkit-line-clamp: 2 !important;
   }
 
 
-  /* ================================================
-     NORMAL MOBILE CARD
-     ================================================ */
+  /* ---------------------------------------------
+     LARGE FEATURE CARD
+     --------------------------------------------- */
 
-  .community-card:not(.large):not(.wide):not(.tall) {
-
-    grid-column:
-      span 1 !important;
-
-    grid-row:
-      span 1 !important;
-
-    width: 100% !important;
-
-    height: 180px !important;
-
-    min-height: 180px !important;
-
+  .community-card.large .card-content {
+    padding: 15px !important;
   }
 
-
-  /* ================================================
-     MOBILE IMAGE
-     ================================================ */
-
-  .community-card > img {
-
-    position: absolute !important;
-
-    inset: 0 !important;
-
-    width: 100% !important;
-
-    height: 100% !important;
-
-    object-fit: cover !important;
-
+  .community-card.large h3 {
+    font-size: 20px !important;
+    line-height: 1.1 !important;
   }
 
-
-  /* ================================================
-     MOBILE TEXT
-     ================================================ */
-
-  .card-content {
-
-    padding: 13px;
-
+  .community-card.large p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    -webkit-line-clamp: 2 !important;
   }
 
-
-  .card-category {
-
-    font-size: .55rem;
-
-    padding: 4px 8px;
-
-    margin-bottom: 5px;
-
+  .community-card.large .card-category {
+    font-size: 9px !important;
   }
-
-
-  .community-card h3 {
-
-    font-size: 1.05rem;
-
-    margin-bottom: 5px;
-
-  }
-
-
-  .community-card p {
-
-    font-size: .68rem;
-
-    line-height: 1.35;
-
-    margin-bottom: 8px;
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 2;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
-
-  }
-
-
-  .card-action {
-
-    padding: 6px 8px;
-
-    font-size: .65rem;
-
-  }
-
-
-  .heart {
-
-    font-size: 1rem;
-
-  }
-
-
-  .comment-button {
-
-    font-size: .62rem;
-
-  }
-
 }
 
 
 /* =====================================================
-   SMALL PHONE
+   VERY SMALL PHONES
    ===================================================== */
 
 @media (max-width: 480px) {
 
   .community-grid {
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr)) !important;
-
-    grid-auto-rows:
-      165px !important;
-
-    gap: 6px !important;
-
+    grid-auto-rows: 165px !important;
+    gap: 8px !important;
+    padding: 0 8px !important;
   }
-
-
-  .community-card.large {
-
-    height: 336px !important;
-
-    min-height: 336px !important;
-
-  }
-
-
-  .community-card.wide {
-
-    height: 165px !important;
-
-    min-height: 165px !important;
-
-  }
-
-
-  .community-card.tall {
-
-    height: 336px !important;
-
-    min-height: 336px !important;
-
-  }
-
-
-  .community-card:not(.large):not(.wide):not(.tall) {
-
-    height: 165px !important;
-
-    min-height: 165px !important;
-
-  }
-
 
   .community-card {
-
-    border-radius: 14px;
-
+    border-radius: 13px !important;
   }
 
+  .community-card .card-content {
+    padding: 9px !important;
+  }
+
+  .community-card h3 {
+    font-size: 13px !important;
+  }
+
+  .community-card p {
+    font-size: 9px !important;
+  }
+
+  .community-card.large h3 {
+    font-size: 18px !important;
+  }
+
+  .community-card.large .card-content {
+    padding: 12px !important;
+  }
+
+  .community-card .card-action {
+    min-height: 25px !important;
+    padding: 4px 7px !important;
+    font-size: 9px !important;
+  }
 }
 
 
 /* =====================================================
-   VERY SMALL PHONE
+   EXTRA SMALL PHONES
    ===================================================== */
 
 @media (max-width: 360px) {
 
   .community-grid {
-
-    grid-auto-rows:
-      145px !important;
-
+    grid-auto-rows: 145px !important;
   }
 
-
-  .community-card.large,
-  .community-card.tall {
-
-    height: 296px !important;
-
-    min-height: 296px !important;
-
+  .community-card.large h3 {
+    font-size: 16px !important;
   }
-
-
-  .community-card.wide,
-  .community-card:not(.large):not(.wide):not(.tall) {
-
-    height: 145px !important;
-
-    min-height: 145px !important;
-
-  }
-
-
-  .card-content {
-
-    padding: 9px;
-
-  }
-
 
   .community-card h3 {
-
-    font-size: .9rem;
-
+    font-size: 12px !important;
   }
-
 
   .community-card p {
-
-    font-size: .6rem;
-
+    display: none !important;
   }
 
-}
+  .community-card .card-actions {
+    gap: 4px !important;
+  }
 
+  .community-card .card-action {
+    font-size: 8px !important;
+    padding: 4px 6px !important;
+  }
+}
 
 /* =====================================================
    REDUCED MOTION
