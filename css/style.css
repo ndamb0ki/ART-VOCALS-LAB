@@ -167,3 +167,29 @@
     min-height: 60px;
   }
 }
+/* =====================================================
+   RESTORE NORMAL BROWSER CURSOR
+   ===================================================== */
+
+html,
+body,
+* {
+  cursor: auto !important;
+}
+
+a,
+button,
+.nav-toggle,
+.card-action,
+input,
+textarea,
+select,
+label {
+  cursor: pointer !important;
+}
+
+input,
+textarea,
+select {
+  cursor: text !important;
+}
