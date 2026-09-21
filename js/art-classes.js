@@ -36,11 +36,14 @@ function getVisitorId() {
 
 async function loadArtClassPosts() {
 
+  if (!communityGrid) return;
+
   communityGrid.innerHTML = `
     <div class="feed-loading">
       Loading the Art Lab...
     </div>
   `;
+
 
   const { data, error } =
     await supabaseClient
@@ -51,12 +54,14 @@ async function loadArtClassPosts() {
         ascending: false
       });
 
+
   if (error) {
 
     console.error(
       "Error loading art class posts:",
       error
     );
+
 
     communityGrid.innerHTML = `
       <div class="feed-empty">
@@ -67,6 +72,7 @@ async function loadArtClassPosts() {
 
     return;
   }
+
 
   if (!data || data.length === 0) {
 
@@ -80,18 +86,84 @@ async function loadArtClassPosts() {
     return;
   }
 
+
   communityGrid.innerHTML = "";
+
 
   data.forEach((post, index) => {
 
     const card =
       createPostCard(post, index);
 
+
     communityGrid.appendChild(card);
+
 
     loadComments(post.id);
 
   });
+
+}
+
+
+// =====================================================
+// BENTO PATTERN
+// =====================================================
+//
+// Pattern:
+//
+// 0 = LARGE
+// 1 = NORMAL
+// 2 = TALL
+// 3 = NORMAL
+// 4 = WIDE
+// 5 = NORMAL
+// 6 = LARGE
+// 7 = NORMAL
+// 8 = TALL
+// 9 = WIDE
+//
+// This repeats as more posts are added.
+// =====================================================
+
+function getBentoClass(index) {
+
+  const pattern =
+    index % 10;
+
+
+  if (
+    pattern === 0 ||
+    pattern === 6
+  ) {
+
+    return "large";
+
+  }
+
+
+  if (
+    pattern === 2 ||
+    pattern === 8
+  ) {
+
+    return "tall";
+
+  }
+
+
+  if (
+    pattern === 4 ||
+    pattern === 9
+  ) {
+
+    return "wide";
+
+  }
+
+
+  return "";
+
 }
 
 
@@ -99,48 +171,82 @@ async function loadArtClassPosts() {
 // CREATE POST CARD
 // =====================================================
 
-function createPostCard(post, index) {
+function createPostCard(
+  post,
+  index
+) {
 
   const card =
     document.createElement("article");
 
-  card.className =
-    "community-card";
 
-  // Give selected posts larger Bento cards
-  if (index === 0) {
-    card.classList.add("large");
-  }
-  else if (index === 1 || index === 4) {
-    card.classList.add("wide");
-  }
-  else if (index === 2) {
-    card.classList.add("tall");
-  }
+  const bentoClass =
+    getBentoClass(index);
+
+
+  card.className =
+    `community-card ${bentoClass}`;
+
+
+  const image =
+    escapeHTML(
+      post.image_url || ""
+    );
+
+
+  const title =
+    escapeHTML(
+      post.title || "Art Lab"
+    );
+
+
+  const description =
+    escapeHTML(
+      post.description || ""
+    );
+
+
+  const category =
+    escapeHTML(
+      post.category || "Art Class"
+    );
+
 
   card.innerHTML = `
 
+    <!-- IMAGE -->
+
     <img
-      src="${escapeHTML(post.image_url || "")}"
-      alt="${escapeHTML(post.title)}"
+      src="${image}"
+      alt="${title}"
       loading="lazy"
+      class="community-image"
     >
 
+
+    <!-- DARK OVERLAY -->
+
     <div class="card-gradient"></div>
+
+
+    <!-- CARD CONTENT -->
 
     <div class="card-content">
 
       <span class="card-category">
-        ${escapeHTML(post.category || "Art Class")}
+        ${category}
       </span>
 
+
       <h3>
-        ${escapeHTML(post.title)}
+        ${title}
       </h3>
 
+
       <p>
-        ${escapeHTML(post.description || "")}
+        ${description}
       </p>
+
 
       <div class="card-actions">
 
@@ -148,24 +254,36 @@ function createPostCard(post, index) {
           class="card-action like-button"
           data-post-id="${post.id}"
           aria-label="Like this post"
+          type="button"
         >
-          <span class="heart">♡</span>
+
+          <span class="heart">
+            ♡
+          </span>
+
           <span class="like-count">
             ${post.likes_count || 0}
           </span>
+
         </button>
+
 
         <button
           class="card-action comment-button"
           data-post-id="${post.id}"
+          type="button"
         >
+
           💬 Comments
+
         </button>
 
       </div>
 
     </div>
 
+
+    <!-- COMMENTS -->
 
     <div
       class="comments-panel"
@@ -174,11 +292,16 @@ function createPostCard(post, index) {
 
       <div class="comments-header">
 
-        <h4>Comments</h4>
+        <h4>
+          Comments
+        </h4>
+
 
         <button
           class="close-comments"
           data-post-id="${post.id}"
+          type="button"
+          aria-label="Close comments"
         >
           ×
         </button>
@@ -190,7 +313,11 @@ function createPostCard(post, index) {
         class="comment-list"
         id="comment-list-${post.id}"
       >
-        <p>Loading comments...</p>
+
+        <p>
+          Loading comments...
+        </p>
+
       </div>
 
 
@@ -207,6 +334,7 @@ function createPostCard(post, index) {
           required
         >
 
+
         <textarea
           name="comment"
           placeholder="Write a comment..."
@@ -214,7 +342,10 @@ function createPostCard(post, index) {
           required
         ></textarea>
 
-        <button type="submit">
+
+        <button
+          type="submit"
+        >
           Post comment
         </button>
 
@@ -225,21 +356,38 @@ function createPostCard(post, index) {
   `;
 
 
+  // ===================================================
   // LIKE
+  // ===================================================
 
   const likeButton =
-    card.querySelector(".like-button");
+    card.querySelector(
+      ".like-button"
+    );
+
 
   likeButton.addEventListener(
     "click",
-    () => likePost(post.id, likeButton)
+    () => {
+
+      likePost(
+        post.id,
+        likeButton
+      );
+
+    }
   );
 
 
-  // COMMENTS OPEN
+  // ===================================================
+  // OPEN COMMENTS
+  // ===================================================
 
   const commentButton =
-    card.querySelector(".comment-button");
+    card.querySelector(
+      ".comment-button"
+    );
+
 
   commentButton.addEventListener(
     "click",
@@ -250,16 +398,28 @@ function createPostCard(post, index) {
           `comments-${post.id}`
         );
 
-      panel.classList.add("active");
+
+      if (panel) {
+
+        panel.classList.add(
+          "active"
+        );
+
+      }
 
     }
   );
 
 
-  // COMMENTS CLOSE
+  // ===================================================
+  // CLOSE COMMENTS
+  // ===================================================
 
   const closeButton =
-    card.querySelector(".close-comments");
+    card.querySelector(
+      ".close-comments"
+    );
+
 
   closeButton.addEventListener(
     "click",
@@ -270,22 +430,35 @@ function createPostCard(post, index) {
           `comments-${post.id}`
         );
 
-      panel.classList.remove("active");
+
+      if (panel) {
+
+        panel.classList.remove(
+          "active"
+        );
+
+      }
 
     }
   );
 
 
+  // ===================================================
   // COMMENT FORM
+  // ===================================================
 
   const form =
-    card.querySelector(".comment-form");
+    card.querySelector(
+      ".comment-form"
+    );
+
 
   form.addEventListener(
     "submit",
     event => {
 
       event.preventDefault();
+
 
       submitComment(
         post.id,
@@ -297,6 +470,7 @@ function createPostCard(post, index) {
 
 
   return card;
+
 }
 
 
@@ -312,22 +486,29 @@ async function likePost(
   const visitorId =
     getVisitorId();
 
+
   const heart =
-    button.querySelector(".heart");
+    button.querySelector(
+      ".heart"
+    );
+
 
   const count =
-    button.querySelector(".like-count");
+    button.querySelector(
+      ".like-count"
+    );
 
 
   const {
     data: existingLike,
     error: checkError
-  } = await supabaseClient
-    .from("art_class_likes")
-    .select("id")
-    .eq("post_id", postId)
-    .eq("visitor_id", visitorId)
-    .maybeSingle();
+  } =
+    await supabaseClient
+      .from("art_class_likes")
+      .select("id")
+      .eq("post_id", postId)
+      .eq("visitor_id", visitorId)
+      .maybeSingle();
 
 
   if (checkError) {
@@ -346,11 +527,17 @@ async function likePost(
     await supabaseClient
       .from("art_class_likes")
       .delete()
-      .eq("id", existingLike.id);
+      .eq(
+        "id",
+        existingLike.id
+      );
 
-    heart.textContent = "♡";
+
+    heart.textContent =
+      "♡";
 
   }
+
   else {
 
     const { error } =
@@ -360,6 +547,7 @@ async function likePost(
           post_id: postId,
           visitor_id: visitorId
         });
+
 
     if (error) {
 
@@ -371,36 +559,50 @@ async function likePost(
       return;
     }
 
-    heart.textContent = "♥";
+
+    heart.textContent =
+      "♥";
 
   }
 
 
-  // Get updated count
+  // ===================================================
+  // GET UPDATED LIKE COUNT
+  // ===================================================
 
   const {
     count: newCount
-  } = await supabaseClient
-    .from("art_class_likes")
-    .select("*", {
-      count: "exact",
-      head: true
-    })
-    .eq("post_id", postId);
+  } =
+    await supabaseClient
+      .from("art_class_likes")
+      .select("*", {
+        count: "exact",
+        head: true
+      })
+      .eq(
+        "post_id",
+        postId
+      );
 
 
   count.textContent =
     newCount || 0;
 
 
-  // Update post counter
+  // ===================================================
+  // SAVE COUNT
+  // ===================================================
 
   await supabaseClient
     .from("art_class_posts")
     .update({
-      likes_count: newCount || 0
+      likes_count:
+        newCount || 0
     })
-    .eq("id", postId);
+    .eq(
+      "id",
+      postId
+    );
 
 }
 
@@ -409,12 +611,15 @@ async function likePost(
 // LOAD COMMENTS
 // =====================================================
 
-async function loadComments(postId) {
+async function loadComments(
+  postId
+) {
 
   const list =
     document.getElementById(
       `comment-list-${postId}`
     );
+
 
   if (!list) return;
 
@@ -422,13 +627,20 @@ async function loadComments(postId) {
   const {
     data,
     error
-  } = await supabaseClient
-    .from("art_class_comments")
-    .select("*")
-    .eq("post_id", postId)
-    .order("created_at", {
-      ascending: true
-    });
+  } =
+    await supabaseClient
+      .from("art_class_comments")
+      .select("*")
+      .eq(
+        "post_id",
+        postId
+      )
+      .order(
+        "created_at",
+        {
+          ascending: true
+        }
+      );
 
 
   if (error) {
@@ -438,6 +650,7 @@ async function loadComments(postId) {
       error
     );
 
+
     list.innerHTML =
       "<p>Unable to load comments.</p>";
 
@@ -445,7 +658,10 @@ async function loadComments(postId) {
   }
 
 
-  if (!data || data.length === 0) {
+  if (
+    !data ||
+    data.length === 0
+  ) {
 
     list.innerHTML =
       "<p>No comments yet. Be the first!</p>";
@@ -456,27 +672,39 @@ async function loadComments(postId) {
 
   list.innerHTML = "";
 
-  data.forEach(comment => {
 
-    const item =
-      document.createElement("div");
+  data.forEach(
+    comment => {
 
-    item.className =
-      "comment";
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.innerHTML = `
-      <strong>
-        ${escapeHTML(comment.name)}
-      </strong>
 
-      <p>
-        ${escapeHTML(comment.comment)}
-      </p>
-    `;
+      item.className =
+        "comment";
 
-    list.appendChild(item);
 
-  });
+      item.innerHTML = `
+
+        <strong>
+          ${escapeHTML(comment.name)}
+        </strong>
+
+        <p>
+          ${escapeHTML(comment.comment)}
+        </p>
+
+      `;
+
+
+      list.appendChild(
+        item
+      );
+
+    }
+  );
 
 }
 
@@ -493,19 +721,30 @@ async function submitComment(
   const name =
     form.name.value.trim();
 
+
   const comment =
     form.comment.value.trim();
 
 
-  if (!name || !comment) {
+  if (
+    !name ||
+    !comment
+  ) {
+
     return;
+
   }
 
 
   const submitButton =
-    form.querySelector("button");
+    form.querySelector(
+      "button"
+    );
 
-  submitButton.disabled = true;
+
+  submitButton.disabled =
+    true;
+
 
   submitButton.textContent =
     "Posting...";
@@ -528,28 +767,39 @@ async function submitComment(
       error
     );
 
+
     alert(
       "Unable to post your comment. Please try again."
     );
 
-    submitButton.disabled = false;
+
+    submitButton.disabled =
+      false;
+
 
     submitButton.textContent =
       "Post comment";
 
+
     return;
+
   }
 
 
   form.reset();
 
-  submitButton.disabled = false;
+
+  submitButton.disabled =
+    false;
+
 
   submitButton.textContent =
     "Post comment";
 
 
-  await loadComments(postId);
+  await loadComments(
+    postId
+  );
 
 }
 
@@ -558,21 +808,46 @@ async function submitComment(
 // SECURITY HELPER
 // =====================================================
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
-  if (value === null ||
-      value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
 
     return "";
 
   }
 
+
   return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
@@ -583,5 +858,9 @@ function escapeHTML(value) {
 
 document.addEventListener(
   "DOMContentLoaded",
-  loadArtClassPosts
+  () => {
+
+    loadArtClassPosts();
+
+  }
 );
