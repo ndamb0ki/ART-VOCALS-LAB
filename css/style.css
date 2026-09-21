@@ -1,26 +1,71 @@
-/* RESET */
+/* =====================================================
+   NDAMBUKI ART LAB — MAIN STYLESHEET
+   ===================================================== */
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #000080;
-  color: white;
+html {
+  scroll-behavior: smooth;
 }
 
-/* NAVBAR */
+body {
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI',
+    Roboto, Arial, sans-serif;
+  background: #000080;
+  color: white;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+
+/* =====================================================
+   TYPOGRAPHY
+   ===================================================== */
+
+h1,
+h2,
+h3,
+h4,
+.slide-title {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+
 .navbar {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
+
   padding: 15px 40px;
+
   background: #6ec1ff;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   z-index: 1000;
 }
 
@@ -32,7 +77,10 @@ body {
 
 .nav-links {
   list-style: none;
+
   display: flex;
+  align-items: center;
+
   gap: 20px;
 }
 
@@ -40,756 +88,111 @@ body {
   text-decoration: none;
   color: #000080;
   font-weight: 500;
+
+  transition: opacity 0.25s ease;
 }
 
-/* HERO */
+.nav-links a:hover {
+  opacity: 0.65;
+}
+
+
+/* =====================================================
+   HERO
+   ===================================================== */
+
 .hero {
-  height: 100vh;
-  background-image: url("../images/hero-artclass.jpg"); /* YOU ADD IMAGE */
-  background-size: cover;
-  background-position: center;
   position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+
   display: flex;
   align-items: center;
-  padding: 0 60px;
+  justify-content: center;
+
+  background:
+    url('../images/hero-artclass.jpg')
+    center / cover no-repeat;
+
+  color: white;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 128, 0.75);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.65)
+    );
+
+  z-index: 1;
 }
 
-.hero-content {
+.hero-content,
+.hero-text {
   position: relative;
-  max-width: 700px;
+
+  z-index: 2;
+
+  max-width: 900px;
+
+  text-align: center;
+
+  padding: 20px;
+
   animation: fadeUp 1.2s ease forwards;
 }
 
-.hero h1 {
-  font-size: 3rem;
-  line-height: 1.2;
-  margin-bottom: 20px;
+.hero h1,
+.hero-text h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+
+  line-height: 1.05;
+
+  margin-bottom: 18px;
+
+  color: #ff69b4;
+
+  text-shadow:
+    0 5px 25px rgba(0, 0, 0, 0.5);
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  opacity: 0.9;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+
+  margin-bottom: 12px;
+
+  color: white;
+
+  opacity: 0.95;
+
+  animation: fadeUp 1.2s ease forwards 0.3s;
 }
 
 .hero-intro {
   font-size: 1rem;
-  margin-bottom: 30px;
+
+  margin-bottom: 28px;
+
   opacity: 0.85;
 }
 
-/* BUTTONS */
-.hero-buttons {
-  display: flex;
-  gap: 15px;
-}
 
-.btn {
-  padding: 12px 22px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.primary {
-  background: white;
-  color: #000080;
-}
-
-.secondary {
-  border: 2px solid white;
-  color: white;
-}
-
-/* CONTACT */
-.contact {
-  padding: 80px 40px;
-  text-align: center;
-  background: #000;
-  color: #fff;
-}
-
-.contact-links a {
-  margin: 0 10px;
-  color: #fff;
-  text-decoration: none;
-}
-
-.contact-links a:hover {
-  color: #fff;
-}
-
-/* ANIMATION */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* BENTO / IMAGE GRID */
-.bento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 60px 20px;
-}
-
-.bento-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  width: 300px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.bento-card img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s;
-}
-
-.bento-card .bento-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 1rem;
-  text-align: center;
-  transition: background 0.3s;
-}
-
-.bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-}
-
-.bento-card:hover .bento-text {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-/* Trips page hero */
-.page-hero {
-  padding: 120px 40px 60px 40px;
-  text-align: center;
-}
-
-.page-hero h1 {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  font-family: 'Patrick Hand SC', cursive;
-}
-
-.page-hero p {
-  font-size: 1.2rem;
-  color: #ccc;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.artclass-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(255, 255, 200, 0.5); /* soft yellow glow for kids */
-}
-.gallery-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-}
-
-.bento-card .btn.small {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  border-radius: 20px;
-  text-decoration: none;
-}
-
-.bento-card .btn.small.primary {
-  background: white;
-  color: #000080;
-}
-
-.bento-card .btn.small.secondary {
-  border: 2px solid white;
-  color: white;
-}
-/* HOME BENTO */
-.home-bento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-  padding: 60px 20px;
-}
-
-.home-bento .bento-card {
-  position: relative;
-  width: 320px;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.home-bento .bento-card img {
-  width: 100%;
-  display: block;
-  transition: transform 0.3s;
-}
-
-.home-bento .bento-card .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  text-align: center;
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 1.2rem;
-  color: white;
-  background: rgba(0,0,0,0.5);
-  transition: background 0.3s;
-}
-
-/* Glow & background darken on hover */
-.home-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255,255,255,0.6);
-}
-
-.home-bento .bento-card:hover .bento-text {
-  background: rgba(0,0,0,0.7);
-}
-/* FOOTER */
-.site-footer {
-  background-color: #000080; /* Navy blue */
-  color: white;
-  padding: 50px 20px;
-  text-align: center;
-  font-family: 'Patrick Hand SC', cursive;
-}
-
-.site-footer h3 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-}
-
-.site-footer p {
-  font-size: 1rem;
-  max-width: 700px;
-  margin: 10px auto;
-}
-
-.footer-links {
-  margin: 20px 0;
-}
-
-.footer-links a {
-  color: white;
-  text-decoration: none;
-  margin: 0 12px;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.footer-links a:hover {
-  color: #FFD700; /* gold glow on hover */
-}
-
-.footer-copy {
-  margin-top: 20px;
-  font-size: 0.9rem;
-  color: #ccc;
-}
-/* HERO SECTION ANIMATION */
-.hero {
-  position: relative;
-  height: 90vh;
-  background: url('../images/hero-artclass.jpg') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  overflow: hidden;
-}
-
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5); /* dark overlay for cinematic feel */
-  z-index: 1;
-}
-
-.hero-text {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(40px);
-  animation: fadeUp 1s ease forwards 0.5s;
-}
-
-.hero-text h1 {
-  font-size: 3rem;
-  font-family: 'Patrick Hand SC', cursive;
-  margin-bottom: 15px;
-}
-
-.hero-text p {
-  font-size: 1.2rem;
-  margin-bottom: 25px;
-}
-
-/* Call to action buttons */
-.hero-buttons a {
-  margin: 0 10px;
-  padding: 12px 25px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  font-family: 'Patrick Hand SC', cursive;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.hero-buttons a.primary {
-  background: white;
-  color: #000080;
-}
-
-.hero-buttons a.secondary {
-  border: 2px solid white;
-  color: white;
-}
-
-.hero-buttons a:hover {
-  transform: scale(1.05);
-  background: #FFD700; /* subtle gold hover for CTA */
-}
-
-/* Fade-up keyframes */
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.bento-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.bento-card img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.3s;
-}
-
-.bento-card .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  text-align: center;
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 1.1rem;
-  color: white;
-  background: rgba(0,0,0,0.4);
-  transition: background 0.3s;
-}
-
-/* Glow and darken effect on hover */
-.bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 35px rgba(255, 255, 255, 0.6);
-}
-
-.bento-card:hover .bento-text {
-  background: rgba(0,0,0,0.7);
-}
-
-/* Optional: darken everything else */
-.home-bento:hover .bento-card:not(:hover) {
-  filter: brightness(0.6);
-  transition: filter 0.3s;
-}
-/* NAVBAR RESPONSIVENESS */
-@media (max-width: 768px) {
-  .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-    margin-top: 15px;
-  }
-
-  .nav-links li {
-    margin: 0;
-  }
-
-  .navbar {
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 20px;
-  }
-
-  .logo {
-    margin-bottom: 10px;
-  }
-}
-/* HERO TEXT FOR SMALL SCREENS */
-@media (max-width: 768px) {
-  .hero-text h1 {
-    font-size: 2rem; /* smaller text */
-  }
-
-  .hero-text p {
-    font-size: 1rem;
-  }
-
-  .hero-buttons a {
-    padding: 10px 18px;
-    font-size: 0.9rem;
-    margin: 8px 0;
-    display: inline-block;
-  }
-}
-
-/* VERY SMALL SCREENS */
-@media (max-width: 480px) {
-  .hero-text h1 {
-    font-size: 1.6rem;
-  }
-
-  .hero-text p {
-    font-size: 0.9rem;
-  }
-}
-/* BENTO CARDS RESPONSIVE */
-@media (max-width: 768px) {
-  .bento {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .bento-card {
-    width: 90%; /* almost full width */
-    max-width: 350px;
-    margin-bottom: 20px;
-  }
-}
-/* FOOTER RESPONSIVE */
-@media (max-width: 768px) {
-  .footer-content {
-    padding: 30px 15px;
-  }
-
-  .footer-links {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-  }
-}
-.bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.7); /* stronger glow */
-}
-/* Gallery Bento */
-.gallery-bento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  padding: 60px 20px;
-}
-
-/* Bento Card */
-.gallery-bento .bento-card {
-  position: relative;
-  width: 300px;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
-}
-
-.gallery-bento .bento-card img {
-  width: 100%;
-  display: block;
-  transition: transform 0.3s;
-}
-
-/* Text Overlay */
-.gallery-bento .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-family: 'Patrick Hand SC', cursive;
-  transition: background 0.3s;
-}
-
-.gallery-bento .bento-text h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.2rem;
-}
-
-.gallery-bento .bento-text p {
-  font-size: 0.95rem;
-  margin: 0 0 10px 0;
-}
-
-/* Buttons inside text overlay */
-.btn-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn.small {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  text-decoration: none;
-  font-weight: bold;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.btn.small.primary {
-  background: white;
-  color: #000080;
-}
-
-.btn.small.secondary {
-  border: 2px solid white;
-  color: white;
-}
-
-.btn.small:hover {
-  transform: scale(1.05);
-  background: #FFD700; /* subtle gold on hover */
-  color: #000080;
-}
-
-/* Hover effects on card */
-.gallery-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
-}
-
-/* Optional: dim other cards on hover */
-.gallery-bento:hover .bento-card:not(:hover) {
-  filter: brightness(0.6);
-}
-/* TRIPS BENTO */
-.trips-bento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  padding: 60px 20px;
-}
-
-/* Bento Card */
-.trips-bento .bento-card {
-  position: relative;
-  width: 300px;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
-}
-
-.trips-bento .bento-card img {
-  width: 100%;
-  display: block;
-  transition: transform 0.3s;
-}
-
-.trips-bento .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 15px;
-  text-align: center;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-family: 'Patrick Hand SC', cursive;
-  transition: background 0.3s;
-}
-
-.trips-bento .bento-text h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.2rem;
-}
-
-.trips-bento .bento-text p {
-  font-size: 0.95rem;
-}
-
-/* Hover effect */
-.trips-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
-}
-
-.trips-bento:hover .bento-card:not(:hover) {
-  filter: brightness(0.6);
-}
-.hero h1 {
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 3rem;
-  text-align: center;
-  color: #ff6a00; /* This is a bright pink */
-  line-height: 1.2;
-  margin-bottom: 15px;
-}
-/* Fade-up animation for hero text */
-@keyframes fadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Apply animation to main hero heading */
-.hero h1 {
-  font-family: 'Patrick Hand SC', cursive;
-  font-size: 3rem;
-  text-align: center;
-  color: #ff69b4; /* Pink text */
-  line-height: 1.2;
-  margin-bottom: 15px;
-  animation: fadeUp 1.5s ease-out forwards; /* 1.5s fade-up effect */
-}
-
-/* Optional: Animate subheading slightly delayed */
-.hero-subtitle {
-  color: white;
-  font-size: 1.3rem;
-  margin-bottom: 10px;
-  animation: fadeUp 1.5s ease-out forwards;
-  animation-delay: 0.5s;
-}
-.hero-buttons {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 1.5s ease-out forwards;
-  animation-delay: 1s;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-/* Fade-up animation for bento cards */
-.bento-card {
-  opacity: 0; /* start invisible */
-  transform: translateY(30px); /* start slightly below */
-  transition: transform 0.3s, opacity 0.3s;
-}
-
-/* Class to activate animation */
-.bento-card.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Bento card hover glow */
-.home-bento .bento-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
-}
-
-/* Glow effect on hover */
-.home-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(255, 105, 180, 0.7); /* pink glow */
-}
-
-/* Dim other cards when hovering one */
-.home-bento:hover .bento-card:not(:hover) {
-  filter: brightness(0.6);
-}
-
-/* Bento card images fill the card */
-.home-bento .bento-card img {
-  width: 100%;
-  display: block;
-  transition: transform 0.3s;
-}
-
-/* Bento card text overlay */
-.home-bento .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-family: 'Patrick Hand SC', cursive;
-  transition: background 0.3s;
-}
-/* -----------------------
-   New: Typography + Hero Slider
-   ----------------------- */
-/* Fonts */
-body {
-  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-}
-h1, h2, h3, .slide-title {
-  font-family: 'Playfair Display', serif;
-}
-
-/* Hero slider base */
-.hero {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.6));
-  z-index: 1;
-}
+/* =====================================================
+   HERO SLIDER
+   ===================================================== */
 
 .hero-slider {
   position: relative;
+
   width: 100%;
   height: 100%;
 }
@@ -797,162 +200,1213 @@ h1, h2, h3, .slide-title {
 .hero-slider .slide {
   position: absolute;
   inset: 0;
+
   background-size: cover;
   background-position: center;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
+
   transform: scale(1.03);
-  transition: opacity 0.9s cubic-bezier(.2,.9,.2,1), transform 0.9s ease;
+
+  transition:
+    opacity 0.9s cubic-bezier(.2,.9,.2,1),
+    transform 0.9s ease;
 }
 
 .hero-slider .slide.show {
   opacity: 1;
+
   transform: scale(1);
+
   z-index: 2;
 }
 
 .slide-inner {
   position: relative;
+
   z-index: 3;
+
   text-align: center;
+
   color: white;
+
   padding: 20px;
+
   max-width: 1000px;
 }
 
 .slide-title {
   font-size: clamp(2rem, 6vw, 4rem);
+
   line-height: 1.02;
+
   margin-bottom: 12px;
+
   color: white;
-  text-shadow: 0 6px 20px rgba(0,0,0,0.6);
+
+  text-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.6);
 }
 
 .slide-desc {
   font-size: clamp(1rem, 2.2vw, 1.35rem);
+
   margin-bottom: 22px;
+
   color: rgba(255,255,255,0.95);
 }
 
 .slider-arrow {
   position: absolute;
+
   top: 50%;
+
   transform: translateY(-50%);
+
   width: 56px;
   height: 56px;
+
   border-radius: 50%;
+
   background: rgba(0,0,0,0.35);
+
   color: white;
+
   border: none;
+
   font-size: 28px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
+
   z-index: 4;
-  transition: background 0.2s, transform 0.15s;
+
+  transition:
+    background 0.2s,
+    transform 0.15s;
 }
 
-.slider-arrow:hover { background: rgba(0,0,0,0.55); transform: scale(1.05); }
-.slider-arrow.prev { left: 22px; }
-.slider-arrow.next { right: 22px; }
+.slider-arrow:hover {
+  background: rgba(0,0,0,0.55);
+
+  transform:
+    translateY(-50%)
+    scale(1.05);
+}
+
+.slider-arrow.prev {
+  left: 22px;
+}
+
+.slider-arrow.next {
+  right: 22px;
+}
 
 .slider-dots {
   position: absolute;
+
   left: 50%;
   bottom: 28px;
+
   transform: translateX(-50%);
+
   display: flex;
+
   gap: 10px;
+
   z-index: 5;
 }
 
 .slider-dots button {
   width: 12px;
   height: 12px;
+
   border-radius: 50%;
+
   border: none;
+
   background: rgba(255,255,255,0.45);
+
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
+
+  transition:
+    background 0.2s,
+    transform 0.15s;
 }
 
-.slider-dots button.active { background: #FFD700; transform: scale(1.15); }
+.slider-dots button.active {
+  background: #FFD700;
 
-/* CTA button tweaks inside slider */
-.hero-buttons .btn.primary { background: #FFD700; color: #111; }
-.hero-buttons .btn.secondary { border-color: rgba(255,255,255,0.9); }
-
-/* Small screens adjustments */
-@media (max-width: 768px) {
-  .slider-arrow { width: 44px; height: 44px; font-size: 22px; }
-  .slide-title { font-size: clamp(1.4rem, 7.5vw, 2.4rem); }
+  transform: scale(1.15);
 }
 
-/* Focus styles for accessibility */
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+.btn {
+  display: inline-block;
+
+  padding: 12px 22px;
+
+  border-radius: 30px;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: white;
+
+  color: #000080;
+}
+
+.secondary {
+  border: 2px solid white;
+
+  color: white;
+}
+
+.hero-buttons {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 15px;
+
+  opacity: 0;
+
+  transform: translateY(20px);
+
+  animation:
+    fadeUp 1.2s ease forwards 0.7s;
+}
+
+.hero-buttons .btn.primary {
+  background: #FFD700;
+
+  color: #111;
+}
+
+.hero-buttons .btn.secondary {
+  border-color: rgba(255,255,255,0.9);
+}
+
+
+/* =====================================================
+   PAGE HERO
+   ===================================================== */
+
+.page-hero {
+  padding:
+    120px 30px 55px;
+
+  text-align: center;
+}
+
+.page-hero h1 {
+  font-size:
+    clamp(2.4rem, 6vw, 4rem);
+
+  margin-bottom: 15px;
+
+  color: white;
+}
+
+.page-hero p {
+  font-size: 1.1rem;
+
+  color: #ccc;
+
+  line-height: 1.7;
+
+  max-width: 800px;
+
+  margin: 0 auto;
+}
+
+
+/* =====================================================
+   OLD BENTO SUPPORT
+   ===================================================== */
+
+/*
+   These styles keep your existing Home,
+   Gallery and Trips Bento sections working.
+*/
+
+.bento,
+.home-bento,
+.gallery-bento,
+.trips-bento {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 25px;
+
+  padding:
+    60px 20px;
+}
+
+.bento-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
+}
+
+.bento-card img {
+  width: 100%;
+
+  display: block;
+
+  transition:
+    transform 0.4s ease;
+}
+
+.bento-card:hover {
+  transform: scale(1.03);
+
+  box-shadow:
+    0 0 35px
+    rgba(255,255,255,0.5);
+}
+
+.bento-card:hover img {
+  transform: scale(1.04);
+}
+
+.bento-card .bento-text {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  padding: 15px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,0.75)
+    );
+
+  color: white;
+
+  font-family:
+    'Patrick Hand SC',
+    cursive;
+}
+
+
+/* Home */
+
+.home-bento .bento-card {
+  width: 320px;
+}
+
+
+/* Gallery */
+
+.gallery-bento .bento-card {
+  width: 300px;
+}
+
+
+/* Trips */
+
+.trips-bento .bento-card {
+  width: 300px;
+}
+
+
+/* =====================================================
+   ART LAB COMMUNITY
+   ===================================================== */
+
+.art-community-section {
+  width: 100%;
+
+  padding:
+    30px 3vw 100px;
+}
+
+.art-community-intro {
+  max-width: 850px;
+
+  margin:
+    0 auto 45px;
+
+  text-align: center;
+}
+
+.art-community-intro h2 {
+  font-size:
+    clamp(2rem, 5vw, 4rem);
+
+  margin-bottom: 15px;
+}
+
+.art-community-intro p {
+  font-size: 1.05rem;
+
+  line-height: 1.7;
+
+  color: rgba(255,255,255,0.75);
+}
+
+
+/* =====================================================
+   LARGE BENTO GRID
+   ===================================================== */
+
+.community-grid {
+  width: 100%;
+
+  max-width: 1600px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  grid-auto-rows:
+    280px;
+
+  grid-auto-flow: dense;
+
+  gap: 18px;
+}
+
+
+/* =====================================================
+   COMMUNITY CARDS
+   ===================================================== */
+
+.community-card {
+  position: relative;
+
+  min-height: 280px;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  background: #111;
+
+  color: white;
+
+  isolation: isolate;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.community-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 20px 50px
+    rgba(0,0,0,0.3);
+}
+
+
+/* Dynamic Bento sizes */
+
+.community-card.large {
+  grid-column: span 2;
+
+  grid-row: span 2;
+}
+
+.community-card.wide {
+  grid-column: span 2;
+}
+
+.community-card.tall {
+  grid-row: span 2;
+}
+
+
+/* =====================================================
+   COMMUNITY IMAGES
+   ===================================================== */
+
+.community-card > img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  z-index: -2;
+
+  transition:
+    transform 0.7s ease;
+}
+
+.community-card:hover > img {
+  transform: scale(1.06);
+}
+
+
+/* =====================================================
+   IMAGE OVERLAY
+   ===================================================== */
+
+.card-gradient {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.92) 0%,
+      rgba(0,0,0,0.55) 35%,
+      rgba(0,0,0,0.05) 75%
+    );
+
+  z-index: -1;
+}
+
+
+/* =====================================================
+   COMMUNITY CONTENT
+   ===================================================== */
+
+.card-content {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  padding: 28px;
+
+  z-index: 2;
+}
+
+.card-category {
+  display: inline-block;
+
+  padding:
+    6px 12px;
+
+  margin-bottom: 10px;
+
+  border-radius: 50px;
+
+  background:
+    rgba(255,255,255,0.16);
+
+  backdrop-filter:
+    blur(10px);
+
+  font-size: 0.72rem;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.community-card h3 {
+  margin:
+    0 0 8px;
+
+  font-size:
+    clamp(1.3rem, 2.4vw, 2.3rem);
+
+  line-height: 1.1;
+}
+
+.community-card p {
+  margin:
+    0 0 18px;
+
+  max-width: 700px;
+
+  font-size: 0.95rem;
+
+  line-height: 1.5;
+
+  color:
+    rgba(255,255,255,0.88);
+}
+
+
+/* =====================================================
+   LIKE + COMMENT ACTIONS
+   ===================================================== */
+
+.card-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.card-action {
+  border: none;
+
+  padding:
+    9px 14px;
+
+  border-radius: 50px;
+
+  background:
+    rgba(255,255,255,0.14);
+
+  backdrop-filter:
+    blur(10px);
+
+  color: white;
+
+  cursor: pointer;
+
+  font: inherit;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.card-action:hover {
+  background:
+    rgba(255,255,255,0.25);
+
+  transform: scale(1.04);
+}
+
+.like-button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.heart {
+  font-size: 1.3rem;
+
+  line-height: 1;
+}
+
+.comment-button {
+  font-size: 0.85rem;
+}
+
+
+/* =====================================================
+   COMMENTS
+   ===================================================== */
+
+.comments-panel {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 10;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 25px;
+
+  background:
+    rgba(12,12,12,0.97);
+
+  backdrop-filter:
+    blur(20px);
+
+  transform:
+    translateY(100%);
+
+  transition:
+    transform 0.35s ease;
+}
+
+.comments-panel.active {
+  transform:
+    translateY(0);
+}
+
+.comments-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.comments-header h4 {
+  margin: 0;
+
+  font-size: 1.2rem;
+}
+
+.close-comments {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,0.12);
+
+  color: white;
+
+  font-size: 1.4rem;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   COMMENT LIST
+   ===================================================== */
+
+.comment-list {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding-right: 5px;
+}
+
+.comment {
+  padding:
+    12px 0;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,0.1);
+}
+
+.comment strong {
+  display: block;
+
+  margin-bottom: 4px;
+}
+
+.comment p {
+  margin: 0;
+
+  font-size: 0.9rem;
+
+  color:
+    rgba(255,255,255,0.8);
+}
+
+
+/* =====================================================
+   COMMENT FORM
+   ===================================================== */
+
+.comment-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 15px;
+}
+
+.comment-form input,
+.comment-form textarea {
+  width: 100%;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.15);
+
+  border-radius: 12px;
+
+  padding:
+    11px 13px;
+
+  background:
+    rgba(255,255,255,0.08);
+
+  color: white;
+
+  font: inherit;
+
+  outline: none;
+}
+
+.comment-form textarea {
+  min-height: 70px;
+
+  resize: vertical;
+}
+
+.comment-form input:focus,
+.comment-form textarea:focus {
+  border-color:
+    rgba(255,255,255,0.4);
+}
+
+.comment-form button {
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 11px;
+
+  background: white;
+
+  color: #111;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.comment-form button:hover {
+  transform:
+    translateY(-2px);
+}
+
+
+/* =====================================================
+   FEED LOADING / EMPTY
+   ===================================================== */
+
+.feed-loading,
+.feed-empty {
+  grid-column:
+    1 / -1;
+
+  min-height: 300px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 40px;
+}
+
+.feed-empty h3 {
+  font-size: 1.7rem;
+
+  margin-bottom: 8px;
+}
+
+
+/* =====================================================
+   CONTACT
+   ===================================================== */
+
+.contact {
+  padding:
+    80px 40px;
+
+  text-align: center;
+
+  background: #000;
+
+  color: white;
+}
+
+.contact-links {
+  margin-top: 20px;
+}
+
+.contact-links a {
+  margin:
+    0 10px;
+
+  color: white;
+
+  text-decoration: none;
+}
+
+.contact-links a:hover {
+  color: #FFD700;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.site-footer {
+  background-color: #000080;
+
+  color: white;
+
+  padding:
+    50px 20px;
+
+  text-align: center;
+
+  font-family:
+    'Patrick Hand SC',
+    cursive;
+}
+
+.site-footer h3 {
+  font-size: 2rem;
+
+  margin-bottom: 15px;
+}
+
+.site-footer p {
+  font-size: 1rem;
+
+  max-width: 700px;
+
+  margin:
+    10px auto;
+
+  line-height: 1.6;
+}
+
+.footer-links {
+  margin:
+    20px 0;
+}
+
+.footer-links a {
+  color: white;
+
+  text-decoration: none;
+
+  margin:
+    0 12px;
+
+  font-weight: bold;
+
+  transition:
+    color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #FFD700;
+}
+
+.footer-copy {
+  margin-top: 20px;
+
+  font-size: 0.9rem;
+
+  color: #ccc;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* =====================================================
+   ACCESSIBILITY
+   ===================================================== */
+
 .slider-arrow:focus,
 .slider-dots button:focus,
-.hero-slider:focus {
-  outline: 3px solid rgba(255,215,0,0.9);
-  outline-offset: 4px;
+.card-action:focus,
+.close-comments:focus,
+.comment-form button:focus {
+  outline:
+    3px solid
+    rgba(255,215,0,0.9);
+
+  outline-offset: 3px;
 }
 
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  .hero-slider .slide,
-  .hero-slider .slide.show,
-  .hero-slider .slide-inner,
-  .hero-buttons .btn,
-  .bento-card {
-    transition: none !important;
-    animation: none !important;
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+  .community-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    grid-auto-rows:
+      250px;
+
+    gap: 14px;
   }
+
+  .community-card {
+    min-height: 250px;
+  }
+
+  .community-card.large {
+    grid-column: span 2;
+
+    grid-row: span 2;
+  }
+
+  .community-card.wide {
+    grid-column: span 2;
+  }
+
+  .community-card.tall {
+    grid-row: span 2;
+  }
+
 }
 
-/* Art Classes Bento */
-.art-classes-bento {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  padding: 50px 20px;
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .navbar {
+    flex-direction: column;
+
+    align-items: center;
+
+    padding:
+      15px 20px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+
+    gap: 12px;
+
+    text-align: center;
+  }
+
+  .hero {
+    height: 90vh;
+
+    padding:
+      0 20px;
+  }
+
+  .hero-text h1 {
+    font-size:
+      clamp(2rem, 10vw, 3rem);
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .hero-buttons a {
+    width: 100%;
+
+    max-width: 260px;
+
+    text-align: center;
+  }
+
+  .page-hero {
+    padding:
+      110px 20px 40px;
+  }
+
+  .page-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .page-hero p {
+    font-size: 1rem;
+  }
+
+  .art-community-section {
+    padding:
+      25px 12px 70px;
+  }
+
+  .community-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    grid-auto-rows:
+      220px;
+
+    gap: 10px;
+  }
+
+  .community-card {
+    min-height: 220px;
+
+    border-radius: 20px;
+  }
+
+  .card-content {
+    padding: 18px;
+  }
+
+  .community-card h3 {
+    font-size: 1.35rem;
+  }
+
+  .community-card p {
+    font-size: 0.82rem;
+  }
+
+  .card-action {
+    padding:
+      8px 11px;
+  }
+
 }
 
-.art-classes-bento .bento-card {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: transform 0.3s, opacity 0.3s, filter 0.3s;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
+
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 520px) {
+
+  .community-grid {
+    grid-template-columns: 1fr;
+
+    grid-auto-rows:
+      360px;
+  }
+
+  .community-card,
+  .community-card.large,
+  .community-card.wide,
+  .community-card.tall {
+    grid-column: span 1;
+
+    grid-row: span 1;
+
+    min-height: 360px;
+
+    border-radius: 20px;
+  }
+
+  .community-card h3 {
+    font-size: 1.6rem;
+  }
+
+  .community-card p {
+    font-size: 0.9rem;
+  }
+
+  .art-community-intro h2 {
+    font-size: 2.2rem;
+  }
+
+  .footer-links {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    align-items: center;
+  }
+
 }
 
-/* Show after JS adds .show */
-.art-classes-bento .bento-card.show {
-  opacity: 1;
-  transform: translateY(0);
-}
 
-/* Hover glow effect */
-.art-classes-bento .bento-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 35px rgba(255, 105, 180, 0.7);
-}
+/* =====================================================
+   REDUCED MOTION
+   ===================================================== */
 
-.art-classes-bento:hover .bento-card:not(:hover) {
-  filter: brightness(0.6);
-}
+@media (prefers-reduced-motion: reduce) {
 
-/* Bento text overlay */
-.art-classes-bento .bento-text {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 12px;
-  text-align: center;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  font-family: 'Patrick Hand SC', cursive;
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+
 }
