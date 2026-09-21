@@ -60,6 +60,9 @@ console.log("ABOUT TO LOAD ARTWORKS");
 await loadAdminArtworks();
 
 console.log("ARTWORKS FINISHED LOADING");
+    await loadArtClassCMS();
+
+console.log("ART CLASS CMS FINISHED LOADING");
 
   } catch (error) {
     console.error(error);
