@@ -2,19 +2,6 @@
 // NDAMBUKI ART LAB — ART CLASS COMMUNITY
 // =====================================================
 
-const SUPABASE_URL =
-  "https://hvvdtmrlzzykyhgoswsf.supabase.co";
-
-// IMPORTANT:
-// Replace this with your existing Supabase ANON/PUBLIC key.
-// Do NOT use your service_role key here.
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
 const communityGrid =
   document.getElementById("communityGrid");
 
