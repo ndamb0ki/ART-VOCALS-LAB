@@ -3004,3 +3004,1513 @@ async function deleteCommission(commissionId) {
 
   }
 }
+// ====================================
+// ART CLASS CMS
+// ====================================
+
+let artClassPosts = [];
+let artClassComments = [];
+
+
+// ------------------------------------
+// Load Art Class CMS
+// ------------------------------------
+
+async function loadArtClassCMS() {
+
+  let section =
+    document.getElementById("artClassCMS");
+
+  if (!section) {
+
+    section = document.createElement("section");
+
+    section.id = "artClassCMS";
+
+    section.style.cssText = `
+      margin-top:40px;
+      padding:25px;
+      background:white;
+      border-radius:12px;
+      box-shadow:0 2px 15px rgba(0,0,0,.06);
+    `;
+
+    const container =
+      document.querySelector(".container");
+
+    if (container) {
+      container.appendChild(section);
+    }
+  }
+
+  section.innerHTML = `
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+      margin-bottom:25px;
+    ">
+
+      <div>
+        <h2 style="
+          margin:0;
+          color:#071a33;
+        ">
+          Art Class CMS
+        </h2>
+
+        <p style="
+          margin:7px 0 0;
+          color:#777;
+        ">
+          Manage Art Class posts, student work,
+          likes and community comments.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onclick="loadArtClassCMS()"
+        style="
+          background:#071a33;
+          color:white;
+          border:0;
+          padding:10px 16px;
+          border-radius:7px;
+          cursor:pointer;
+        "
+      >
+        Refresh
+      </button>
+
+    </div>
+
+
+    <!-- CREATE POST -->
+
+    <div style="
+      background:#f8f8f8;
+      padding:22px;
+      border-radius:10px;
+      margin-bottom:30px;
+    ">
+
+      <h3 style="
+        margin-top:0;
+        color:#071a33;
+      ">
+        Create Art Class Post
+      </h3>
+
+      <form id="artClassPostForm">
+
+        <div style="
+          display:grid;
+          grid-template-columns:
+            repeat(auto-fit,minmax(220px,1fr));
+          gap:15px;
+        ">
+
+          <div>
+            <label>
+              <strong>Title</strong>
+            </label>
+
+            <input
+              type="text"
+              id="artClassTitle"
+              required
+              placeholder="e.g. Young Artists at Work"
+              style="
+                width:100%;
+                box-sizing:border-box;
+                padding:11px;
+                margin-top:6px;
+                border:1px solid #ddd;
+                border-radius:7px;
+              "
+            >
+          </div>
+
+
+          <div>
+            <label>
+              <strong>Category</strong>
+            </label>
+
+            <select
+              id="artClassCategory"
+              style="
+                width:100%;
+                box-sizing:border-box;
+                padding:11px;
+                margin-top:6px;
+                border:1px solid #ddd;
+                border-radius:7px;
+                background:white;
+              "
+            >
+              <option value="Art Class">
+                Art Class
+              </option>
+
+              <option value="Students">
+                Students
+              </option>
+
+              <option value="Drawing">
+                Drawing
+              </option>
+
+              <option value="Painting">
+                Painting
+              </option>
+
+              <option value="Art Lab">
+                Art Lab
+              </option>
+
+              <option value="Craft">
+                Craft
+              </option>
+
+              <option value="Exhibition">
+                Exhibition
+              </option>
+
+              <option value="Community">
+                Community
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+
+        <div style="margin-top:15px;">
+
+          <label>
+            <strong>Description</strong>
+          </label>
+
+          <textarea
+            id="artClassDescription"
+            rows="4"
+            placeholder="Tell the story behind this post..."
+            style="
+              width:100%;
+              box-sizing:border-box;
+              padding:11px;
+              margin-top:6px;
+              border:1px solid #ddd;
+              border-radius:7px;
+              resize:vertical;
+            "
+          ></textarea>
+
+        </div>
+
+
+        <div style="margin-top:15px;">
+
+          <label>
+            <strong>Image</strong>
+          </label>
+
+          <input
+            type="file"
+            id="artClassImage"
+            accept="image/*"
+            required
+            style="
+              display:block;
+              margin-top:8px;
+            "
+          >
+
+          <img
+            id="artClassImagePreview"
+            src=""
+            alt="Preview"
+            style="
+              display:none;
+              margin-top:12px;
+              width:180px;
+              height:130px;
+              object-fit:cover;
+              border-radius:8px;
+            "
+          >
+
+        </div>
+
+
+        <div style="
+          display:flex;
+          flex-wrap:wrap;
+          gap:20px;
+          margin-top:18px;
+        ">
+
+          <label style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+          ">
+
+            <input
+              type="checkbox"
+              id="artClassFeatured"
+            >
+
+            Featured post
+
+          </label>
+
+
+          <label style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+          ">
+
+            <input
+              type="checkbox"
+              id="artClassPublished"
+              checked
+            >
+
+            Publish immediately
+
+          </label>
+
+        </div>
+
+
+        <button
+          type="submit"
+          id="publishArtClassBtn"
+          style="
+            margin-top:20px;
+            background:#071a33;
+            color:white;
+            border:0;
+            padding:12px 20px;
+            border-radius:7px;
+            cursor:pointer;
+          "
+        >
+          Publish Art Class Post
+        </button>
+
+
+        <div
+          id="artClassFormMessage"
+          style="
+            display:none;
+            margin-top:15px;
+            padding:12px;
+            border-radius:7px;
+          "
+        ></div>
+
+      </form>
+
+    </div>
+
+
+    <!-- POSTS -->
+
+    <div>
+
+      <h3 style="
+        color:#071a33;
+        margin-bottom:15px;
+      ">
+        Art Class Posts
+      </h3>
+
+      <div
+        id="artClassPostsLoading"
+        style="
+          padding:20px;
+          text-align:center;
+          color:#777;
+        "
+      >
+        Loading Art Class posts...
+      </div>
+
+      <div
+        id="artClassPostsGrid"
+        style="
+          display:grid;
+          grid-template-columns:
+            repeat(auto-fit,minmax(280px,1fr));
+          gap:20px;
+        "
+      ></div>
+
+    </div>
+
+  `;
+
+
+  // ------------------------------------
+  // Image preview
+  // ------------------------------------
+
+  const imageInput =
+    document.getElementById(
+      "artClassImage"
+    );
+
+  const imagePreview =
+    document.getElementById(
+      "artClassImagePreview"
+    );
+
+  if (imageInput && imagePreview) {
+
+    imageInput.addEventListener(
+      "change",
+      () => {
+
+        const file =
+          imageInput.files?.[0];
+
+        if (!file) {
+
+          imagePreview.src = "";
+          imagePreview.style.display =
+            "none";
+
+          return;
+        }
+
+        imagePreview.src =
+          URL.createObjectURL(file);
+
+        imagePreview.style.display =
+          "block";
+      }
+    );
+
+  }
+
+
+  // ------------------------------------
+  // Form submission
+  // ------------------------------------
+
+  const form =
+    document.getElementById(
+      "artClassPostForm"
+    );
+
+  if (form) {
+
+    form.addEventListener(
+      "submit",
+      handleArtClassPostSubmit
+    );
+
+  }
+
+
+  await fetchArtClassPosts();
+}
+
+
+// ------------------------------------
+// Submit Art Class post
+// ------------------------------------
+
+async function handleArtClassPostSubmit(event) {
+
+  event.preventDefault();
+
+  const title =
+    document
+      .getElementById("artClassTitle")
+      ?.value
+      .trim();
+
+  const description =
+    document
+      .getElementById("artClassDescription")
+      ?.value
+      .trim();
+
+  const category =
+    document
+      .getElementById("artClassCategory")
+      ?.value || "Art Class";
+
+  const imageInput =
+    document.getElementById(
+      "artClassImage"
+    );
+
+  const featured =
+    document
+      .getElementById("artClassFeatured")
+      ?.checked || false;
+
+  const published =
+    document
+      .getElementById("artClassPublished")
+      ?.checked || false;
+
+  const button =
+    document.getElementById(
+      "publishArtClassBtn"
+    );
+
+  if (!title) {
+
+    showArtClassMessage(
+      "Please enter a title.",
+      "error"
+    );
+
+    return;
+  }
+
+  const file =
+    imageInput?.files?.[0];
+
+  if (!file) {
+
+    showArtClassMessage(
+      "Please select an image.",
+      "error"
+    );
+
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+
+    showArtClassMessage(
+      "Please select a valid image.",
+      "error"
+    );
+
+    return;
+  }
+
+  if (button) {
+
+    button.disabled = true;
+    button.textContent =
+      "Uploading...";
+
+  }
+
+  try {
+
+    const safeName =
+      file.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9._-]/g, "");
+
+    const filePath =
+      `posts/${crypto.randomUUID()}-${safeName}`;
+
+
+    // --------------------------------
+    // Upload image
+    // --------------------------------
+
+    const {
+      error: uploadError
+    } =
+      await supabaseClient
+        .storage
+        .from("art-class")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl:"3600",
+            upsert:false
+          }
+        );
+
+    if (uploadError) {
+
+      console.error(
+        "Art Class image upload error:",
+        uploadError
+      );
+
+      throw new Error(
+        "Image upload failed: " +
+        uploadError.message
+      );
+
+    }
+
+
+    // --------------------------------
+    // Get public URL
+    // --------------------------------
+
+    const {
+      data: publicURLData
+    } =
+      supabaseClient
+        .storage
+        .from("art-class")
+        .getPublicUrl(filePath);
+
+    const imageURL =
+      publicURLData?.publicUrl;
+
+    if (!imageURL) {
+
+      throw new Error(
+        "Could not create the image URL."
+      );
+
+    }
+
+
+    // --------------------------------
+    // Insert post
+    // --------------------------------
+
+    if (button) {
+      button.textContent =
+        "Publishing...";
+    }
+
+    const {
+      data: post,
+      error: postError
+    } =
+      await supabaseClient
+        .from("art_class_posts")
+        .insert([
+          {
+            title:title,
+            description:
+              description || null,
+            image_url:imageURL,
+            category:category,
+            featured:featured,
+            published:published,
+            likes_count:0
+          }
+        ])
+        .select()
+        .single();
+
+
+    if (postError) {
+
+      console.error(
+        "Art Class post database error:",
+        postError
+      );
+
+
+      // Remove uploaded image
+      await supabaseClient
+        .storage
+        .from("art-class")
+        .remove([filePath]);
+
+
+      throw new Error(
+        "Post could not be created: " +
+        postError.message
+      );
+
+    }
+
+
+    console.log(
+      "Art Class post created:",
+      post
+    );
+
+
+    showArtClassMessage(
+      "Art Class post published successfully!",
+      "success"
+    );
+
+
+    formResetArtClass();
+
+
+    await fetchArtClassPosts();
+
+  } catch (error) {
+
+    console.error(
+      "Art Class publishing error:",
+      error
+    );
+
+    showArtClassMessage(
+      error.message ||
+      "Something went wrong.",
+      "error"
+    );
+
+  } finally {
+
+    if (button) {
+
+      button.disabled = false;
+
+      button.textContent =
+        "Publish Art Class Post";
+
+    }
+
+  }
+
+}
+
+
+// ------------------------------------
+// Fetch Art Class posts
+// ------------------------------------
+
+async function fetchArtClassPosts() {
+
+  const loading =
+    document.getElementById(
+      "artClassPostsLoading"
+    );
+
+  const grid =
+    document.getElementById(
+      "artClassPostsGrid"
+    );
+
+  if (!grid) return;
+
+  if (loading) {
+    loading.style.display = "block";
+  }
+
+  grid.innerHTML = "";
+
+
+  const {
+    data: posts,
+    error
+  } =
+    await supabaseClient
+      .from("art_class_posts")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if (loading) {
+    loading.style.display = "none";
+  }
+
+
+  if (error) {
+
+    console.error(
+      "Art Class posts loading error:",
+      error
+    );
+
+    grid.innerHTML = `
+      <div style="
+        padding:20px;
+        background:#fff3f3;
+        color:#b00020;
+        border-radius:8px;
+      ">
+        Could not load Art Class posts:
+        ${escapeHTML(error.message)}
+      </div>
+    `;
+
+    return;
+  }
+
+
+  artClassPosts =
+    posts || [];
+
+
+  // --------------------------------
+  // Load comments
+  // --------------------------------
+
+  const {
+    data: comments,
+    error: commentsError
+  } =
+    await supabaseClient
+      .from("art_class_comments")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if (commentsError) {
+
+    console.warn(
+      "Comments loading error:",
+      commentsError
+    );
+
+    artClassComments = [];
+
+  } else {
+
+    artClassComments =
+      comments || [];
+
+  }
+
+
+  renderArtClassPosts();
+
+}
+
+
+// ------------------------------------
+// Render posts
+// ------------------------------------
+
+function renderArtClassPosts() {
+
+  const grid =
+    document.getElementById(
+      "artClassPostsGrid"
+    );
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+
+  if (artClassPosts.length === 0) {
+
+    grid.innerHTML = `
+      <div style="
+        padding:25px;
+        background:#f8f8f8;
+        border-radius:8px;
+        color:#777;
+      ">
+        No Art Class posts yet.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  artClassPosts.forEach(post => {
+
+    const card =
+      document.createElement("article");
+
+
+    const comments =
+      artClassComments.filter(
+        comment =>
+          comment.post_id === post.id
+      );
+
+
+    const image =
+      post.image_url || "";
+
+    const title =
+      post.title || "Untitled";
+
+    const category =
+      post.category || "Art Class";
+
+    const description =
+      post.description || "";
+
+    const likes =
+      Number(post.likes_count || 0);
+
+
+    card.style.cssText = `
+      border:1px solid #e5e5e5;
+      border-radius:12px;
+      overflow:hidden;
+      background:white;
+      box-shadow:0 2px 10px rgba(0,0,0,.05);
+    `;
+
+
+    card.innerHTML = `
+
+      <div style="
+        height:240px;
+        background:#f3f3f3;
+        overflow:hidden;
+      ">
+
+        ${
+          image
+            ? `
+              <img
+                src="${escapeHTML(image)}"
+                alt="${escapeHTML(title)}"
+                style="
+                  width:100%;
+                  height:100%;
+                  object-fit:cover;
+                "
+              >
+            `
+            : `
+              <div style="
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#999;
+              ">
+                No image
+              </div>
+            `
+        }
+
+      </div>
+
+
+      <div style="
+        padding:18px;
+      ">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          gap:10px;
+          align-items:center;
+          margin-bottom:10px;
+        ">
+
+          <span style="
+            background:#071a33;
+            color:white;
+            padding:5px 9px;
+            border-radius:20px;
+            font-size:11px;
+          ">
+            ${escapeHTML(category)}
+          </span>
+
+
+          ${
+            post.featured
+              ? `
+                <span style="
+                  background:#f1c40f;
+                  color:#071a33;
+                  padding:5px 9px;
+                  border-radius:20px;
+                  font-size:11px;
+                  font-weight:bold;
+                ">
+                  FEATURED
+                </span>
+              `
+              : ""
+          }
+
+        </div>
+
+
+        <h3 style="
+          margin:0 0 8px;
+          color:#071a33;
+        ">
+          ${escapeHTML(title)}
+        </h3>
+
+
+        <p style="
+          color:#666;
+          line-height:1.5;
+          margin:0 0 15px;
+        ">
+          ${escapeHTML(description)}
+        </p>
+
+
+        <div style="
+          display:flex;
+          gap:15px;
+          color:#666;
+          font-size:14px;
+          margin-bottom:15px;
+        ">
+
+          <span>
+            ♥ ${likes}
+            ${likes === 1 ? "like" : "likes"}
+          </span>
+
+          <span>
+            💬 ${comments.length}
+            ${comments.length === 1
+              ? "comment"
+              : "comments"}
+          </span>
+
+        </div>
+
+
+        <div style="
+          display:flex;
+          flex-wrap:wrap;
+          gap:8px;
+        ">
+
+          <button
+            type="button"
+            class="view-btn"
+            onclick="toggleArtClassPublished(
+              '${post.id}',
+              ${Boolean(post.published)}
+            )"
+          >
+            ${
+              post.published
+                ? "Unpublish"
+                : "Publish"
+            }
+          </button>
+
+
+          <button
+            type="button"
+            class="view-btn"
+            onclick="toggleArtClassFeatured(
+              '${post.id}',
+              ${Boolean(post.featured)}
+            )"
+          >
+            ${
+              post.featured
+                ? "Unfeature"
+                : "Feature"
+            }
+          </button>
+
+
+          <button
+            type="button"
+            class="view-btn"
+            onclick="viewArtClassComments(
+              '${post.id}'
+            )"
+          >
+            Comments
+          </button>
+
+
+          <button
+            type="button"
+            onclick="deleteArtClassPost(
+              '${post.id}'
+            )"
+            style="
+              background:#b00020;
+              color:white;
+              border:0;
+              padding:8px 12px;
+              border-radius:6px;
+              cursor:pointer;
+            "
+          >
+            Delete
+          </button>
+
+        </div>
+
+
+        <div style="
+          margin-top:12px;
+          font-size:12px;
+          color:#999;
+        ">
+
+          ${
+            post.published
+              ? "● Published"
+              : "○ Draft"
+          }
+
+          ${
+            post.created_at
+              ? `
+                · ${escapeHTML(
+                    new Date(
+                      post.created_at
+                    ).toLocaleDateString()
+                  )}
+              `
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+
+// ------------------------------------
+// Toggle published
+// ------------------------------------
+
+async function toggleArtClassPublished(
+  postId,
+  currentPublished
+) {
+
+  const newValue =
+    !Boolean(currentPublished);
+
+
+  const { error } =
+    await supabaseClient
+      .from("art_class_posts")
+      .update({
+        published:newValue
+      })
+      .eq("id", postId);
+
+
+  if (error) {
+
+    console.error(
+      "Publish status error:",
+      error
+    );
+
+    alert(
+      "Could not update publication status:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await fetchArtClassPosts();
+
+}
+
+
+// ------------------------------------
+// Toggle featured
+// ------------------------------------
+
+async function toggleArtClassFeatured(
+  postId,
+  currentFeatured
+) {
+
+  const newValue =
+    !Boolean(currentFeatured);
+
+
+  const { error } =
+    await supabaseClient
+      .from("art_class_posts")
+      .update({
+        featured:newValue
+      })
+      .eq("id", postId);
+
+
+  if (error) {
+
+    console.error(
+      "Featured status error:",
+      error
+    );
+
+    alert(
+      "Could not update featured status:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await fetchArtClassPosts();
+
+}
+
+
+// ------------------------------------
+// View comments
+// ------------------------------------
+
+async function viewArtClassComments(postId) {
+
+  const post =
+    artClassPosts.find(
+      item => item.id === postId
+    );
+
+  if (!post) return;
+
+
+  const {
+    data: comments,
+    error
+  } =
+    await supabaseClient
+      .from("art_class_comments")
+      .select("*")
+      .eq("post_id", postId)
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if (error) {
+
+    alert(
+      "Could not load comments:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  const commentList =
+    comments || [];
+
+
+  if (commentList.length === 0) {
+
+    alert(
+      `"${post.title}" has no comments yet.`
+    );
+
+    return;
+  }
+
+
+  const commentText =
+    commentList
+      .map(
+        (comment, index) =>
+          `${index + 1}. ${comment.name || "Anonymous"}\n` +
+          `${comment.comment || ""}\n` +
+          `${
+            comment.created_at
+              ? new Date(
+                  comment.created_at
+                ).toLocaleString()
+              : ""
+          }`
+      )
+      .join("\n\n");
+
+
+  alert(
+    `COMMENTS — ${post.title}\n\n` +
+    commentText
+  );
+
+}
+
+
+// ------------------------------------
+// Delete Art Class post
+// ------------------------------------
+
+async function deleteArtClassPost(postId) {
+
+  const post =
+    artClassPosts.find(
+      item => item.id === postId
+    );
+
+  if (!post) return;
+
+
+  const confirmed =
+    confirm(
+      "DELETE ART CLASS POST?\n\n" +
+      `Title: ${post.title || "Untitled"}\n\n` +
+      "This will permanently delete the post.\n" +
+      "Its likes and comments will also be deleted.\n\n" +
+      "This cannot be undone."
+    );
+
+
+  if (!confirmed) return;
+
+
+  try {
+
+    // Delete comments
+
+    const {
+      error: commentsError
+    } =
+      await supabaseClient
+        .from("art_class_comments")
+        .delete()
+        .eq("post_id", postId);
+
+
+    if (commentsError) {
+
+      throw new Error(
+        "Could not delete comments:\n\n" +
+        commentsError.message
+      );
+
+    }
+
+
+    // Delete likes
+
+    const {
+      error: likesError
+    } =
+      await supabaseClient
+        .from("art_class_likes")
+        .delete()
+        .eq("post_id", postId);
+
+
+    if (likesError) {
+
+      throw new Error(
+        "Could not delete likes:\n\n" +
+        likesError.message
+      );
+
+    }
+
+
+    // Delete post
+
+    const {
+      error: postError
+    } =
+      await supabaseClient
+        .from("art_class_posts")
+        .delete()
+        .eq("id", postId);
+
+
+    if (postError) {
+
+      throw new Error(
+        "Could not delete post:\n\n" +
+        postError.message
+      );
+
+    }
+
+
+    // Delete storage image
+
+    if (post.image_url) {
+
+      try {
+
+        const marker =
+          "/storage/v1/object/public/art-class/";
+
+        const markerIndex =
+          post.image_url.indexOf(marker);
+
+
+        if (markerIndex !== -1) {
+
+          const filePath =
+            decodeURIComponent(
+              post.image_url.substring(
+                markerIndex + marker.length
+              )
+            );
+
+
+          if (filePath) {
+
+            await supabaseClient
+              .storage
+              .from("art-class")
+              .remove([
+                filePath
+              ]);
+
+          }
+
+        }
+
+      } catch (storageError) {
+
+        console.warn(
+          "Could not remove Art Class image:",
+          storageError
+        );
+
+      }
+
+    }
+
+
+    alert(
+      "Art Class post deleted successfully."
+    );
+
+
+    await fetchArtClassPosts();
+
+
+  } catch (error) {
+
+    console.error(
+      "Delete Art Class post error:",
+      error
+    );
+
+    alert(
+      "Could not delete Art Class post:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ------------------------------------
+// Reset form
+// ------------------------------------
+
+function formResetArtClass() {
+
+  const form =
+    document.getElementById(
+      "artClassPostForm"
+    );
+
+  if (form) {
+    form.reset();
+  }
+
+
+  const published =
+    document.getElementById(
+      "artClassPublished"
+    );
+
+  if (published) {
+    published.checked = true;
+  }
+
+
+  const preview =
+    document.getElementById(
+      "artClassImagePreview"
+    );
+
+  if (preview) {
+
+    preview.src = "";
+    preview.style.display =
+      "none";
+
+  }
+
+}
+
+
+// ------------------------------------
+// Form message
+// ------------------------------------
+
+function showArtClassMessage(
+  message,
+  type
+) {
+
+  const box =
+    document.getElementById(
+      "artClassFormMessage"
+    );
+
+  if (!box) {
+
+    alert(message);
+    return;
+
+  }
+
+
+  box.textContent =
+    message;
+
+  box.style.display =
+    "block";
+
+
+  if (type === "success") {
+
+    box.style.background =
+      "#eaf7ee";
+
+    box.style.color =
+      "#176b35";
+
+  } else {
+
+    box.style.background =
+      "#fff0f0";
+
+    box.style.color =
+      "#b00020";
+
+  }
+
+}
