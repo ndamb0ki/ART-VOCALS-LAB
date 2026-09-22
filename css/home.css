@@ -2372,3 +2372,88 @@ html {
     display: none !important;
   }
 }
+/* =========================================================
+   HERO 3D ARTWORK
+   ========================================================= */
+
+#hero-3d-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hero-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+.hero-inner {
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+@media (max-width: 768px) {
+
+  .hero-canvas {
+    opacity: 0.72;
+  }
+
+}
+/* =========================================================
+   NDAMBUKI ART LAB — HERO VISUAL POSITIONING
+   ========================================================= */
+
+.hero-canvas {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+}
+
+#hero-3d-canvas {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.hero-inner {
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+/* Keep the artwork mainly on the right */
+@media (min-width: 1100px) {
+
+    .hero-heading {
+        width: 62% !important;
+    }
+
+    .hero-description {
+        max-width: 340px !important;
+    }
+}
+
+/* Medium desktop */
+@media (min-width: 769px) and (max-width: 1099px) {
+
+    .hero-heading {
+        width: 72% !important;
+    }
+}
+
+/* Phone */
+@media (max-width: 768px) {
+
+    .hero-canvas {
+        opacity: 0.55;
+    }
+
+    .hero-heading {
+        position: relative;
+        z-index: 10;
+    }
+}
