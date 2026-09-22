@@ -1967,11 +1967,29 @@ html {
 
   overflow: hidden;
 
-  background: #e9e6de !important;
+background: #8f4b55 !important;
 
   isolation: isolate;
 }
+/* Subtle painted-paper grain */
+.hero-landing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 
+  pointer-events: none;
+
+  opacity: 0.18;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.32'/%3E%3C/svg%3E");
+
+  background-repeat: repeat;
+  background-size: 180px 180px;
+
+  mix-blend-mode: soft-light;
+}
 
 /* Hide old hero information while redesigning */
 
@@ -2025,7 +2043,7 @@ html {
   font-family: "Gochi Hand", cursive;
   font-weight: 400;
 
-  color: #d6b62a;
+color: #fff;
 
   line-height: 0.95;
   letter-spacing: 0;
@@ -2138,7 +2156,7 @@ html {
   text-transform: uppercase;
   white-space: nowrap;
 
-  color: #d6b62a;
+color: #fff;
 }
 /* =========================================================
    I NEVER DISAPPOINT
@@ -2152,28 +2170,19 @@ html {
 
   transform: translateX(-50%);
 
- color: #d6b62a;
+  color: #fff;
 
-  font-family:
-    "Space Grotesk",
-    sans-serif;
+  font-family: "Space Grotesk", Arial, sans-serif;
 
-  font-size: clamp(
-    0.7rem,
-    0.8vw,
-    0.9rem
-  );
-
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
   font-weight: 600;
 
-  letter-spacing: 0.18em;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
 
   text-transform: uppercase;
-
   white-space: nowrap;
 }
-
-
 /* =========================================================
    MOBILE
    ========================================================= */
