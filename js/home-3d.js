@@ -273,21 +273,20 @@ tube.rotation.set(
 
     }
 
-    else {
 
-      tubeGroup.position.set(
-        2.15,
-        0,
-        0
-      );
+else {
 
-      tubeGroup.scale.setScalar(
-        1
-      );
+  tubeGroup.position.set(
+    0,
+    0,
+    0
+  );
 
-    }
+  tubeGroup.scale.setScalar(
+    0.82
+  );
 
-  }
+}
 
 
   window.addEventListener(
@@ -298,11 +297,14 @@ tube.rotation.set(
   resize();
 
 
-  // ---------------------------------------------------
-  // RENDER
-  // ---------------------------------------------------
+// =====================================================
+// HERO ANIMATION
+// Gentle floating only — no spinning
+// =====================================================
 
 const clock = new THREE.Clock();
+
+const baseY = 0;
 
 function animate() {
 
@@ -311,20 +313,14 @@ function animate() {
   const time = clock.getElapsedTime();
 
 
-  // -----------------------------------------
-  // SLOW ROTATION
-  // -----------------------------------------
-
-  tubeGroup.rotation.y =
-    time * 0.22;
+  // Gentle vertical floating
+  tubeGroup.position.y =
+    baseY + Math.sin(time * 0.9) * 0.10;
 
 
-  // -----------------------------------------
-  // GENTLE FLOATING
-  // -----------------------------------------
-
-  tubeGroup.position.y +=
-    Math.sin(time * 1.2) * 0.0008;
+  // Very subtle natural tilt
+  tubeGroup.rotation.z =
+    Math.sin(time * 0.55) * 0.025;
 
 
   renderer.render(
@@ -334,6 +330,4 @@ function animate() {
 
 }
 
-  animate();
-
-}
+animate();
