@@ -16,11 +16,21 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  --lab-black: #111111;
+  --lab-paper: #e9e5dc;
+  --lab-white: #f5f3ed;
+  --lab-accent: #ff5c35;
+  --lab-muted: #77736b;
+}
+
 body {
-  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI',
-    Roboto, Arial, sans-serif;
-  background: #000080;
-  color: #fff;
+  font-family: var(--font-body);
+  background: var(--lab-paper);
+  color: var(--lab-black);
   overflow-x: hidden;
 }
 
@@ -80,9 +90,8 @@ h2,
 h3,
 h4,
 .slide-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
 }
-
 
 /* =====================================================
    NAVIGATION
@@ -1373,6 +1382,899 @@ h4,
 
     scroll-behavior: auto !important;
 
+  }
+
+}
+/* =====================================================
+   NDAMBUKI ART LAB — NEW LANDING EXPERIENCE
+   ===================================================== */
+
+.hero-landing {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 72% 42%,
+      rgba(255,255,255,.65),
+      transparent 32%
+    ),
+    var(--lab-paper);
+
+  color: var(--lab-black);
+
+  display: flex;
+  align-items: stretch;
+}
+
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  z-index: 1000;
+
+  mix-blend-mode: normal;
+
+  pointer-events: none;
+}
+
+.site-nav {
+  width: 100%;
+}
+
+.nav-inner {
+  width: 100%;
+
+  padding:
+    22px
+    clamp(20px, 4vw, 55px);
+
+  display: flex;
+  align-items: center;
+
+  gap: 30px;
+
+  pointer-events: auto;
+}
+
+.brand {
+  font-family: var(--font-display);
+
+  font-size: clamp(.8rem, 1.2vw, 1rem);
+
+  font-weight: 700;
+
+  letter-spacing: -.03em;
+
+  color: var(--lab-black);
+
+  text-decoration: none;
+
+  white-space: nowrap;
+}
+
+.nav-links {
+  margin-left: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: clamp(16px, 2.5vw, 40px);
+
+  list-style: none;
+}
+
+.nav-links a {
+  position: relative;
+
+  color: var(--lab-black);
+
+  font-family: var(--font-body);
+
+  font-size: .78rem;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+}
+
+.nav-links a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -5px;
+
+  width: 0;
+  height: 1px;
+
+  background: currentColor;
+
+  transition: width .3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-cta {
+  border: 1px solid var(--lab-black);
+
+  background: transparent;
+
+  color: var(--lab-black);
+
+  padding: 9px 17px;
+
+  border-radius: 0;
+
+  font-family: var(--font-body);
+
+  font-size: .72rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+  transition:
+    background .25s ease,
+    color .25s ease;
+}
+
+.nav-cta:hover {
+  background: var(--lab-black);
+  color: var(--lab-paper);
+}
+
+
+/* =====================================================
+   HERO CONTENT
+   ===================================================== */
+
+.hero-landing .hero-inner {
+  position: relative;
+
+  z-index: 5;
+
+  width: 100%;
+
+  min-height: 100svh;
+
+  padding:
+    clamp(130px, 16vh, 180px)
+    clamp(22px, 5vw, 75px)
+    70px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  pointer-events: none;
+}
+
+.hero-landing .hero-inner > * {
+  pointer-events: auto;
+}
+
+
+/* =====================================================
+   EYEBROW
+   ===================================================== */
+
+.hero-landing .eyebrow {
+  margin-bottom: 25px;
+
+  font-family: var(--font-body);
+
+  font-size: .72rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .18em;
+
+  color: var(--lab-muted);
+}
+
+
+/* =====================================================
+   MAIN TYPOGRAPHY
+   ===================================================== */
+
+.hero-heading {
+  width: min(850px, 75vw);
+
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    4rem,
+    8.5vw,
+    9.5rem
+  );
+
+  font-weight: 600;
+
+  line-height: .86;
+
+  letter-spacing: -.075em;
+
+  color: var(--lab-black);
+
+  text-wrap: balance;
+
+  position: relative;
+
+  z-index: 6;
+}
+
+
+/* =====================================================
+   DESCRIPTION
+   ===================================================== */
+
+.hero-lead {
+  width: min(430px, 70vw);
+
+  margin-top: 35px;
+
+  font-family: var(--font-body);
+
+  font-size: clamp(
+    .9rem,
+    1.15vw,
+    1.1rem
+  );
+
+  line-height: 1.55;
+
+  color: #55524c;
+}
+
+
+/* =====================================================
+   BUTTON AREA
+   ===================================================== */
+
+.hero-ctas {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 38px;
+}
+
+.hero-cta-group {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.hero-landing .btn {
+  border-radius: 0;
+
+  padding:
+    13px 20px;
+
+  font-family: var(--font-body);
+
+  font-size: .75rem;
+
+  font-weight: 700;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+
+  transition:
+    transform .25s ease,
+    background .25s ease,
+    color .25s ease;
+}
+
+.hero-landing .btn.primary {
+  background: var(--lab-black);
+
+  color: var(--lab-paper);
+}
+
+.hero-landing .btn.primary:hover {
+  transform: translateY(-3px);
+
+  background: var(--lab-accent);
+}
+
+.hero-landing .btn.ghost {
+  border: 1px solid #aaa59b;
+
+  background: transparent;
+
+  color: var(--lab-black);
+}
+
+.hero-landing .btn.ghost:hover {
+  transform: translateY(-3px);
+
+  background: var(--lab-black);
+
+  color: var(--lab-paper);
+}
+
+
+/* =====================================================
+   3D CANVAS
+   ===================================================== */
+
+.hero-visual {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+
+/*
+   This becomes the visual stage for the
+   Three.js artwork.
+*/
+
+#hero-3d-canvas {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 3;
+
+  pointer-events: none;
+}
+
+
+/* Existing video becomes secondary */
+
+.hero-video {
+  position: absolute;
+
+  right: -5%;
+  top: 50%;
+
+  width: 55vw;
+
+  max-width: 800px;
+
+  height: 75vh;
+
+  transform: translateY(-50%);
+
+  object-fit: cover;
+
+  opacity: .16;
+
+  mix-blend-mode: multiply;
+
+  filter:
+    grayscale(100%)
+    contrast(.85);
+
+  border-radius: 0;
+
+  z-index: 1;
+}
+
+
+/* =====================================================
+   DECORATIVE FLOWER
+   ===================================================== */
+
+.hero-flower {
+  position: absolute;
+
+  width: clamp(
+    90px,
+    12vw,
+    190px
+  );
+
+  right: 7%;
+
+  bottom: 9%;
+
+  opacity: .75;
+
+  z-index: 4;
+
+  animation:
+    heroFlowerSpin
+    20s
+    linear
+    infinite;
+}
+
+@keyframes heroFlowerSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =====================================================
+   REMOVE OLD VISUAL GRADIENT
+   ===================================================== */
+
+.visual-gradient {
+  display: none;
+}
+
+
+/* =====================================================
+   CTA 3D OBJECT
+   ===================================================== */
+
+.cta-character {
+  display: none;
+}
+
+
+/* =====================================================
+   EXPLORE SECTION
+   ===================================================== */
+
+.works {
+  position: relative;
+
+  background: var(--lab-black);
+
+  color: var(--lab-white);
+
+  padding:
+    clamp(80px, 12vw, 160px)
+    clamp(20px, 5vw, 75px);
+}
+
+.works-inner {
+  max-width: 1600px;
+
+  margin: auto;
+}
+
+.section-title {
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    3rem,
+    7vw,
+    8rem
+  );
+
+  line-height: .9;
+
+  letter-spacing: -.07em;
+
+  margin-bottom: 15px;
+}
+
+.section-sub {
+  max-width: 500px;
+
+  color: #aaa;
+
+  margin-bottom: 60px;
+}
+
+
+/* =====================================================
+   LANDING CARDS
+   ===================================================== */
+
+.works .cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+}
+
+.works .card {
+  position: relative;
+
+  min-height: 520px;
+
+  overflow: hidden;
+
+  background: #1c1c1c;
+
+  color: white;
+
+  text-decoration: none;
+}
+
+.works .card figure {
+  position: absolute;
+
+  inset: 0;
+
+  margin: 0;
+}
+
+.works .card figure::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.9),
+      rgba(0,0,0,0)
+    );
+}
+
+.works .card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.works .card:hover img {
+  transform: scale(1.05);
+}
+
+.works .card-body {
+  position: absolute;
+
+  left: 25px;
+  right: 25px;
+  bottom: 25px;
+
+  z-index: 2;
+}
+
+.works .card-body h3 {
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    1.8rem,
+    3vw,
+    3rem
+  );
+
+  line-height: .95;
+
+  margin-bottom: 8px;
+}
+
+.works .card-body p {
+  color: rgba(255,255,255,.7);
+
+  font-size: .9rem;
+}
+
+
+/* =====================================================
+   CONTACT
+   ===================================================== */
+
+.contact {
+  padding:
+    clamp(90px, 13vw, 180px)
+    20px;
+
+  background: var(--lab-paper);
+
+  color: var(--lab-black);
+
+  text-align: center;
+}
+
+.contact h2 {
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    4rem,
+    10vw,
+    10rem
+  );
+
+  line-height: .85;
+
+  letter-spacing: -.08em;
+
+  margin-bottom: 30px;
+}
+
+.contact p {
+  max-width: 500px;
+
+  margin: auto;
+
+  color: #666;
+}
+
+.contact-links {
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 35px;
+}
+
+.contact-links a {
+  margin: 0;
+
+  padding: 11px 18px;
+
+  border: 1px solid #bbb;
+
+  color: var(--lab-black);
+
+  text-decoration: none;
+
+  font-size: .75rem;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+  transition:
+    background .25s ease,
+    color .25s ease;
+}
+
+.contact-links a:hover {
+  background: var(--lab-black);
+
+  color: var(--lab-paper);
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.site-footer {
+  background: var(--lab-black);
+
+  color: var(--lab-white);
+
+  padding:
+    70px 25px;
+
+  text-align: center;
+
+  font-family: var(--font-body);
+}
+
+.site-footer h3 {
+  font-family: var(--font-display);
+
+  font-size: clamp(
+    2rem,
+    4vw,
+    4rem
+  );
+
+  letter-spacing: -.05em;
+}
+
+.site-footer p {
+  color: #999;
+}
+
+
+/* =====================================================
+   LANDING MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+  .nav-inner {
+    padding: 17px 18px;
+  }
+
+  .brand {
+    font-size: .72rem;
+  }
+
+  .nav-links,
+  .nav-cta {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: flex;
+
+    margin-left: auto;
+
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid var(--lab-black);
+
+    background: transparent;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .nav-toggle .bar {
+    width: 17px;
+    height: 1px;
+
+    background: var(--lab-black);
+  }
+
+  .hero-landing {
+    min-height: 100svh;
+  }
+
+  .hero-landing .hero-inner {
+    padding:
+      120px
+      20px
+      45px;
+
+    justify-content: flex-end;
+  }
+
+  .hero-landing .eyebrow {
+    margin-bottom: 15px;
+
+    font-size: .62rem;
+  }
+
+  .hero-heading {
+    width: 100%;
+
+    font-size:
+      clamp(
+        3.2rem,
+        16vw,
+        6rem
+      );
+
+    line-height: .86;
+
+    letter-spacing: -.075em;
+  }
+
+  .hero-lead {
+    width: 90%;
+
+    margin-top: 22px;
+
+    font-size: .88rem;
+  }
+
+  .hero-ctas {
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+  }
+
+  .hero-landing .btn {
+    padding: 11px 14px;
+
+    font-size: .66rem;
+  }
+
+  .hero-video {
+    right: -25%;
+
+    top: 38%;
+
+    width: 105vw;
+
+    height: 55vh;
+
+    opacity: .11;
+  }
+
+  .hero-flower {
+    width: 75px;
+
+    right: 6%;
+
+    top: 25%;
+  }
+
+  .works {
+    padding:
+      80px
+      14px;
+  }
+
+  .works .cards {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .works .card {
+    min-height: 430px;
+  }
+
+  .contact h2 {
+    font-size: 17vw;
+  }
+}
+
+
+/* =====================================================
+   SMALL PHONES
+   ===================================================== */
+
+@media (max-width: 420px) {
+
+  .hero-heading {
+    font-size: 17vw;
+  }
+
+  .hero-lead {
+    font-size: .82rem;
+  }
+
+  .hero-ctas {
+    width: 100%;
+  }
+
+  .hero-landing .btn {
+    flex: 1;
+    text-align: center;
   }
 
 }
