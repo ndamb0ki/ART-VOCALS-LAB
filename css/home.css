@@ -2,7 +2,19 @@
    NDAMBUKI ART LAB — HOMEPAGE
    New editorial / canvas landing experience
    ========================================================= */
+/* =========================================================
+   NDAMBUKI ART LAB — DISPLAY FONT
+   ========================================================= */
 
+@font-face {
+  font-family: "Bouncy Scriber";
+  src: url("../fonts/bouncy-scriber.otf") format("opentype");
+
+  font-weight: normal;
+  font-style: normal;
+
+  font-display: swap;
+}
 
 /* =========================================================
    01 — HOMEPAGE VARIABLES
@@ -2015,11 +2027,10 @@ html {
 
   color: #111;
 
-  font-family:
-    "Arial Black",
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+font-family:
+  "Bouncy Scriber",
+  Impact,
+  sans-serif;
 
   font-weight: 900;
 
@@ -2137,11 +2148,10 @@ html {
 
   color: #111;
 
-  font-family:
-    "Arial Black",
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+font-family:
+  "Bouncy Scriber",
+  Impact,
+  sans-serif;
 
   font-size: clamp(
     6rem,
