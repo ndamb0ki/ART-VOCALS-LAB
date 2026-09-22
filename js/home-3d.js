@@ -164,8 +164,8 @@ if (!canvas) {
 
       // Normalize unknown GLB scale
 
-      const normalizedScale =
-        3.6 / maxDimension;
+const normalizedScale =
+  2.15 / maxDimension;
 
       tube.scale.setScalar(
         normalizedScale
@@ -176,12 +176,12 @@ if (!canvas) {
       // Starting orientation
       // -----------------------------------------------
 
-      tube.rotation.z =
-        THREE.MathUtils.degToRad(-12);
-
-      tube.rotation.y =
-        THREE.MathUtils.degToRad(-15);
-
+// Tube hangs vertically with opening/nozzle downward
+tube.rotation.set(
+  THREE.MathUtils.degToRad(0),
+  THREE.MathUtils.degToRad(180),
+  THREE.MathUtils.degToRad(0)
+);
 
       console.log(
         "🎨 Ndambuki paint tube loaded."
@@ -302,18 +302,37 @@ if (!canvas) {
   // RENDER
   // ---------------------------------------------------
 
-  function animate() {
+const clock = new THREE.Clock();
 
-    requestAnimationFrame(
-      animate
-    );
+function animate() {
 
-    renderer.render(
-      scene,
-      camera
-    );
+  requestAnimationFrame(animate);
 
-  }
+  const time = clock.getElapsedTime();
+
+
+  // -----------------------------------------
+  // SLOW ROTATION
+  // -----------------------------------------
+
+  tubeGroup.rotation.y =
+    time * 0.22;
+
+
+  // -----------------------------------------
+  // GENTLE FLOATING
+  // -----------------------------------------
+
+  tubeGroup.position.y +=
+    Math.sin(time * 1.2) * 0.0008;
+
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+}
 
   animate();
 
