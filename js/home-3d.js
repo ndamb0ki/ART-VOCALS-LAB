@@ -495,79 +495,75 @@ targetY = mouseY * 0.08;
   /* -------------------------------------------------------
      RESPONSIVE POSITION
      ------------------------------------------------------- */
+function resize() {
 
-  function resize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-    const width =
-      window.innerWidth;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
 
-    const height =
-      window.innerHeight;
+  renderer.setSize(
+    width,
+    height
+  );
 
-    camera.aspect =
-      width / height;
+  renderer.setPixelRatio(
+    Math.min(
+      window.devicePixelRatio,
+      2
+    )
+  );
 
-    camera.updateProjectionMatrix();
+  if (width < 769) {
 
-    renderer.setSize(
-      width,
-      height
+    artwork.scale.set(
+      0.58,
+      0.58,
+      0.58
     );
 
-    renderer.setPixelRatio(
-      Math.min(
-        window.devicePixelRatio,
-        2
-      )
+    artwork.position.set(
+      1.45,
+      -0.45,
+      0
     );
 
-if (width < 769) {
+  } else if (width < 1200) {
 
-  artwork.scale.set(
-    0.58,
-    0.58,
-    0.58
-  );
+    artwork.scale.set(
+      0.82,
+      0.82,
+      0.82
+    );
 
-  artwork.position.set(
-    1.45,
-    -0.45,
-    0
-  );
+    artwork.position.set(
+      1.85,
+      0,
+      0
+    );
 
-} else if (width < 1200) {
+  } else {
 
-  artwork.scale.set(
-    0.82,
-    0.82,
-    0.82
-  );
+    artwork.scale.set(
+      1.08,
+      1.08,
+      1.08
+    );
 
-  artwork.position.set(
-    1.85,
-    0.0,
-    0
-  );
-
-} else {
-
-  artwork.scale.set(
-    1.08,
-    1.08,
-    1.08
-  );
-
-  artwork.position.set(
-    2.15,
-    0.05,
-    0
-  );
+    artwork.position.set(
+      2.15,
+      0.05,
+      0
+    );
+  }
 }
-  window.addEventListener(
-    "resize",
-    resize
-  );
 
-  resize();
+window.addEventListener(
+  "resize",
+  resize
+);
+
+resize();
 
 })();
