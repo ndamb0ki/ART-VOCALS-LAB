@@ -156,88 +156,48 @@
      PAINT MARKS
      ------------------------------------------------------- */
 
-  function createPaintMark(
+function createPaintMark(
+  width,
+  height,
+  depth,
+  material,
+  x,
+  y,
+  rotation
+) {
+
+  const geometry =
+    new THREE.SphereGeometry(
+      1,
+      32,
+      18
+    );
+
+  const mark =
+    new THREE.Mesh(
+      geometry,
+      material
+    );
+
+  mark.scale.set(
     width,
     height,
-    depth,
-    material,
+    depth
+  );
+
+  mark.position.set(
     x,
     y,
-    rotation
-  ) {
-
-    const geometry =
-      new THREE.SphereGeometry(
-        1,
-        32,
-        18
-      );
-
-    geometry.scale.set(
-      width,
-      height,
-      depth
-    );
-
-    const mark =
-      new THREE.Mesh(
-        geometry,
-        material
-      );
-
-    mark.position.set(
-      x,
-      y,
-      0.18
-    );
-
-    mark.rotation.z = rotation;
-
-    artwork.add(mark);
-
-    return mark;
-  }
-
-
-  createPaintMark(
-    1.15,
-    0.25,
-    0.10,
-    terracottaMaterial,
-    -0.15,
-    1.15,
-    -0.3
+    0.18
   );
 
-  createPaintMark(
-    0.82,
-    0.22,
-    0.11,
-    darkMaterial,
-    0.48,
-    0.35,
-    0.55
-  );
+  mark.rotation.z =
+    rotation;
 
-  createPaintMark(
-    1.20,
-    0.18,
-    0.09,
-    ochreMaterial,
-    -0.35,
-    -0.75,
-    0.22
-  );
+  artwork.add(mark);
 
-  createPaintMark(
-    0.65,
-    0.16,
-    0.08,
-    darkMaterial,
-    0.45,
-    -1.35,
-    -0.65
-  );
+  return mark;
+}
 
 
   /* -------------------------------------------------------
