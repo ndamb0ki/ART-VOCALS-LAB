@@ -222,89 +222,62 @@ tube.rotation.set(
   // ---------------------------------------------------
   // RESIZE / POSITION
   // ---------------------------------------------------
+function resize() {
 
-  function resize() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-    const width =
-      window.innerWidth;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
 
-    const height =
-      window.innerHeight;
-
-
-    camera.aspect =
-      width / height;
-
-    camera.updateProjectionMatrix();
-
-
-    renderer.setSize(
-      width,
-      height,
-      false
-    );
-
-
-    if (width <= 768) {
-
-      tubeGroup.position.set(
-        1.15,
-        -0.15,
-        0
-      );
-
-      tubeGroup.scale.setScalar(
-        0.65
-      );
-
-    }
-
-    else if (width <= 1100) {
-
-      tubeGroup.position.set(
-        1.8,
-        0,
-        0
-      );
-
-      tubeGroup.scale.setScalar(
-        0.82
-      );
-
-    }
-
-
-else {
-
-  tubeGroup.position.set(
-    0,
-    0,
-    0
+  renderer.setSize(
+    width,
+    height,
+    false
   );
 
-  tubeGroup.scale.setScalar(
-    0.82
+  renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 2)
   );
+
+
+  // DESKTOP
+  if (width > 1100) {
+
+    tubeGroup.position.x = 0;
+    tubeGroup.position.y = 0;
+    tubeGroup.position.z = 0;
+
+    tubeGroup.scale.setScalar(0.72);
+  }
+
+  // TABLET
+  else if (width > 768) {
+
+    tubeGroup.position.x = 0;
+    tubeGroup.position.y = 0;
+    tubeGroup.position.z = 0;
+
+    tubeGroup.scale.setScalar(0.62);
+  }
+
+  // MOBILE
+  else {
+
+    tubeGroup.position.x = 0;
+    tubeGroup.position.y = 0.15;
+    tubeGroup.position.z = 0;
+
+    tubeGroup.scale.setScalar(0.48);
+  }
 
 }
 
-
-  window.addEventListener(
-    "resize",
-    resize
-  );
-
-  resize();
-
-
 // =====================================================
-// HERO ANIMATION
-// Gentle floating only — no spinning
+// FLOATING ANIMATION
 // =====================================================
 
 const clock = new THREE.Clock();
-
-const baseY = 0;
 
 function animate() {
 
@@ -313,14 +286,14 @@ function animate() {
   const time = clock.getElapsedTime();
 
 
-  // Gentle vertical floating
+  // FLOAT ONLY
   tubeGroup.position.y =
-    baseY + Math.sin(time * 0.9) * 0.10;
+    Math.sin(time * 0.8) * 0.08;
 
 
-  // Very subtle natural tilt
+  // VERY SMALL NATURAL SWAY
   tubeGroup.rotation.z =
-    Math.sin(time * 0.55) * 0.025;
+    Math.sin(time * 0.45) * 0.018;
 
 
   renderer.render(
