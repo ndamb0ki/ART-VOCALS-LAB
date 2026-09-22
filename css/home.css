@@ -1941,584 +1941,79 @@ html {
 
 }
 /* =========================================================
-   DESKTOP HEADER / HERO FIX
-   Keep the navigation above the hero without covering
-   the main "VOCAL ENOUGH?" statement.
+   NDAMBUKI ART LAB — NEW HERO COMPOSITION
    ========================================================= */
 
-@media (min-width: 769px) {
+.hero-landing {
+  position: relative !important;
+  width: 100%;
+  height: 100svh;
+  min-height: 700px;
 
-  .site-header {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding-top: 0 !important;
-  }
+  padding: 0 !important;
+  margin: 0;
 
-  .site-nav {
-    padding-top: 0 !important;
-  }
+  overflow: hidden;
 
-  .hero-landing {
-    min-height: 100vh;
-    padding-top: 120px !important;
-    box-sizing: border-box;
-  }
+  background: #e9e6de !important;
 
-  .hero-inner {
-    padding-top: 20px !important;
-  }
-
-  .hero-heading {
-    margin-top: 20px !important;
-  }
-}
-/* =========================================================
-   NDAMBUKI ART LAB — DESKTOP HERO COMPOSITION FIX
-   ========================================================= */
-
-@media (min-width: 769px) {
-
-  /* Remove the old theme's top spacing */
-  body {
-    padding-top: 0 !important;
-  }
-
-  /* Header sits over the hero */
-  .site-header {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: auto !important;
-    padding: 0 !important;
-    z-index: 1000 !important;
-  }
-
-  .site-nav {
-    height: auto !important;
-    padding: 0 !important;
-  }
-
-  /* Give the hero the entire browser viewport */
-  .hero-landing {
-    position: relative !important;
-    width: 100% !important;
-    min-height: 100svh !important;
-    height: 100svh !important;
-    max-height: none !important;
-
-    padding: 105px 5vw 35px !important;
-
-    display: flex !important;
-    align-items: stretch !important;
-    box-sizing: border-box !important;
-
-    overflow: hidden !important;
-  }
-
-  /* Hero content fills the available space */
-  .hero-inner {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    box-sizing: border-box !important;
-  }
-
-  /* Small information at the top */
-  .hero-meta {
-    flex: 0 0 auto !important;
-    margin: 0 0 1.5vh !important;
-  }
-
-  /* Main statement */
-  .hero-heading {
-    flex: 1 1 auto !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    font-size: clamp(3.8rem, 7.3vw, 7.8rem) !important;
-    line-height: 0.82 !important;
-    letter-spacing: -0.055em !important;
-
-    max-width: 85vw !important;
-  }
-
-  .hero-line {
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* Bottom content */
-  .hero-bottom {
-    flex: 0 0 auto !important;
-
-    display: grid !important;
-    grid-template-columns: minmax(220px, 1fr) minmax(300px, 0.8fr) !important;
-    align-items: end !important;
-
-    gap: 40px !important;
-
-    margin-top: 2vh !important;
-  }
-
-  .hero-description {
-    margin: 0 !important;
-  }
-
-  .hero-actions {
-    margin: 0 !important;
-  }
-
-  /* Scroll indicator */
-  .hero-scroll {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Keep decorative elements behind the typography */
-  .hero-canvas,
-  .hero-media,
-  .hero-flower {
-    z-index: 0 !important;
-  }
-
-  .hero-inner {
-    z-index: 5 !important;
-  }
-
-  /* Prevent the video/flower from interfering with readability */
-  .hero-media {
-    pointer-events: none !important;
-  }
-
-  .hero-flower {
-    pointer-events: none !important;
-  }
+  isolation: isolate;
 }
 
 
-/* =========================================================
-   SHORT DESKTOP SCREENS
-   e.g. 1366x768 laptops
-   ========================================================= */
+/* Hide old hero information while redesigning */
 
-@media (min-width: 769px) and (max-height: 850px) {
-
-  .hero-landing {
-    padding-top: 90px !important;
-    padding-bottom: 25px !important;
-  }
-
-  .hero-heading {
-    font-size: clamp(3.4rem, 6.5vw, 6.5rem) !important;
-    line-height: 0.78 !important;
-  }
-
-  .hero-meta {
-    margin-bottom: 0.8vh !important;
-  }
-
-  .hero-bottom {
-    margin-top: 1vh !important;
-  }
-
-  .hero-description p {
-    font-size: 0.85rem !important;
-  }
-
-  .hero-scroll {
-    display: none !important;
-  }
-}
-/* =========================================================
-   FINAL DESKTOP HERO — NORMAL BROWSER VIEW
-   ========================================================= */
-
-@media (min-width: 769px) {
-
-  /* The navigation gets its own safe area */
-  .site-header {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 80px !important;
-    z-index: 100 !important;
-    pointer-events: none;
-  }
-
-  .site-header * {
-    pointer-events: auto;
-  }
-
-  /* Hero starts underneath the navigation */
-  .hero-landing {
-    min-height: 100vh !important;
-    height: auto !important;
-    max-height: none !important;
-
-    padding: 105px 5vw 70px !important;
-
-    box-sizing: border-box !important;
-
-    display: block !important;
-
-    overflow: hidden !important;
-  }
-
-  .hero-inner {
-    width: 100% !important;
-    min-height: calc(100vh - 175px) !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    box-sizing: border-box !important;
-  }
-
-
-  /* -----------------------------------------
-     TOP META
-     ----------------------------------------- */
-
-  .hero-meta {
-    flex: none !important;
-
-    display: flex !important;
-    justify-content: space-between !important;
-
-    margin: 0 0 2vh !important;
-
-    position: relative !important;
-    z-index: 10 !important;
-  }
-
-
-  /* -----------------------------------------
-     MAIN STATEMENT
-     ----------------------------------------- */
-
-  .hero-heading {
-    flex: none !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    font-size: clamp(3.3rem, 6.7vw, 7rem) !important;
-    line-height: 0.82 !important;
-
-    letter-spacing: -0.055em !important;
-
-    position: relative !important;
-    z-index: 10 !important;
-  }
-
-  .hero-line {
-    display: block !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    height: auto !important;
-  }
-
-
-  /* -----------------------------------------
-     BOTTOM AREA
-     ----------------------------------------- */
-
-  .hero-bottom {
-    margin-top: 5vh !important;
-
-    display: grid !important;
-
-    grid-template-columns: 1fr 1fr !important;
-
-    gap: 50px !important;
-
-    align-items: end !important;
-
-    position: relative !important;
-    z-index: 10 !important;
-  }
-
-
-  /* -----------------------------------------
-     ACTION BUTTONS
-     ----------------------------------------- */
-
-  .hero-actions {
-    display: flex !important;
-    flex-direction: column !important;
-
-    width: 100% !important;
-  }
-
-
-  /* -----------------------------------------
-     SCROLL INDICATOR
-     ----------------------------------------- */
-
-  .hero-scroll {
-    position: relative !important;
-
-    left: auto !important;
-    bottom: auto !important;
-
-    margin-top: 35px !important;
-  }
-
-
-  /* -----------------------------------------
-     VISUAL LAYERS
-     ----------------------------------------- */
-
-  .hero-media,
-  .hero-canvas,
-  .hero-flower {
-    z-index: 1 !important;
-  }
-
-  .hero-inner {
-    z-index: 10 !important;
-  }
+.hero-meta,
+.hero-bottom,
+.hero-scroll {
+  display: none !important;
 }
 
 
-/* =========================================================
-   LAPTOP HEIGHTS
-   ========================================================= */
+.hero-inner {
+  position: static !important;
 
-@media (min-width: 769px) and (max-height: 850px) {
-
-  .hero-landing {
-    padding-top: 92px !important;
-    padding-bottom: 50px !important;
-  }
-
-  .hero-inner {
-    min-height: auto !important;
-  }
-
-  .hero-meta {
-    margin-bottom: 1vh !important;
-  }
-
-  .hero-heading {
-    font-size: clamp(3rem, 6vw, 6.2rem) !important;
-    line-height: 0.79 !important;
-  }
-
-  .hero-bottom {
-    margin-top: 3vh !important;
-  }
-
-  .hero-scroll {
-    margin-top: 20px !important;
-  }
-}
-
-
-/* =========================================================
-   VERY SHORT LAPTOP SCREENS
-   ========================================================= */
-
-@media (min-width: 769px) and (max-height: 720px) {
-
-  .hero-landing {
-    padding-top: 82px !important;
-    padding-bottom: 35px !important;
-  }
-
-  .hero-heading {
-    font-size: clamp(2.7rem, 5.5vw, 5.5rem) !important;
-    line-height: 0.77 !important;
-  }
-
-  .hero-bottom {
-    margin-top: 2vh !important;
-  }
-
-  .hero-description p {
-    font-size: 0.8rem !important;
-  }
-
-  .hero-scroll {
-    display: none !important;
-  }
-}
-/* =========================================================
-   HERO 3D ARTWORK
-   ========================================================= */
-
-#hero-3d-canvas {
   width: 100%;
   height: 100%;
-  display: block;
-}
 
-.hero-canvas {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 2 !important;
-  pointer-events: none !important;
-}
+  padding: 0 !important;
+  margin: 0 !important;
 
-.hero-inner {
-  position: relative !important;
-  z-index: 5 !important;
-}
-
-@media (max-width: 768px) {
-
-  .hero-canvas {
-    opacity: 0.72;
-  }
-
-}
-/* =========================================================
-   NDAMBUKI ART LAB — HERO VISUAL POSITIONING
-   ========================================================= */
-
-.hero-canvas {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    pointer-events: none !important;
-    z-index: 2 !important;
-}
-
-#hero-3d-canvas {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-}
-
-.hero-inner {
-  position: relative !important;
   z-index: auto !important;
 }
 
-/* Keep the artwork mainly on the right */
-@media (min-width: 1100px) {
 
-    .hero-heading {
-        width: 62% !important;
-    }
-
-    .hero-description {
-        max-width: 340px !important;
-    }
-}
-
-/* Medium desktop */
-@media (min-width: 769px) and (max-width: 1099px) {
-
-    .hero-heading {
-        width: 72% !important;
-    }
-}
-
-/* Phone */
-@media (max-width: 768px) {
-
-    .hero-canvas {
-        opacity: 0.55;
-    }
-
-    .hero-heading {
-        position: relative;
-        z-index: 10;
-    }
-}
-/* TEMPORARY THREE.JS VISIBILITY TEST */
-
-.hero-canvas {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  z-index: 50 !important;
-  pointer-events: none !important;
-}
-
-#hero-3d-canvas {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-/* =====================================================
-   STEP 2 — CENTRAL HERO TYPOGRAPHY
-===================================================== */
-
-.hero-landing {
-  position: relative;
-  overflow: hidden;
-}
-
-
-/* =====================================================
+/* =========================================================
    BACK TYPOGRAPHY
-   Sits BEHIND the 3D paint tube
-===================================================== */
+   VOCAL ENOUGH? + LET ME JUST
+   ========================================================= */
 
 .hero-type-back {
   position: absolute;
-
   inset: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 1;
+  z-index: 10;
 
   pointer-events: none;
 }
 
 
 .hero-main-title {
-  position: relative;
+  position: absolute;
 
-  width: 100%;
+  left: 50%;
+  top: 46%;
+
+  transform: translate(-50%, -50%);
+
+  width: 96vw;
 
   margin: 0;
   padding: 0;
 
   text-align: center;
+
+  color: #111;
 
   font-family:
     "Arial Black",
@@ -2528,53 +2023,56 @@ html {
 
   font-weight: 900;
 
-  font-size: clamp(
-    5rem,
-    10.5vw,
-    11rem
-  );
-
   line-height: 0.72;
-
-  letter-spacing: -0.075em;
+  letter-spacing: -0.09em;
 
   text-transform: uppercase;
-
-  color: #111;
-
-  transform: translateY(-4%);
 }
 
 
-.hero-word {
-  display: block;
+/* VOCAL ENOUGH? — SAME LINE ON DESKTOP */
+
+.hero-vocal,
+.hero-enough {
+  display: inline;
+
+  font-size: clamp(
+    6rem,
+    12.5vw,
+    13rem
+  );
+
   white-space: nowrap;
 }
 
 
-/* Individual lines */
-
-.hero-vocal {
-  transform: translateX(-2%);
+.hero-vocal::after {
+  content: " ";
 }
 
-.hero-enough {
-  transform: translateX(1%);
-}
+
+/* LET ME JUST */
 
 .hero-letme {
-  margin-top: 0.08em;
+  display: block;
 
-  font-size: 0.66em;
+  margin-top: 0.05em;
 
-  letter-spacing: -0.065em;
+  font-size: clamp(
+    4rem,
+    7.5vw,
+    8rem
+  );
+
+  letter-spacing: -0.075em;
+
+  white-space: nowrap;
 }
 
 
-/* =====================================================
-   THREE.JS PAINT TUBE
-   Sits BETWEEN typography layers
-===================================================== */
+/* =========================================================
+   3D PAINT TUBE — MIDDLE
+   ========================================================= */
 
 .hero-canvas {
   position: absolute !important;
@@ -2584,49 +2082,60 @@ html {
   width: 100% !important;
   height: 100% !important;
 
-  z-index: 3 !important;
+  z-index: 20 !important;
+
+  opacity: 1 !important;
+  visibility: visible !important;
 
   pointer-events: none !important;
 }
 
 
 #hero-3d-canvas {
+  position: absolute;
+
+  inset: 0;
+
+  display: block !important;
+
   width: 100% !important;
   height: 100% !important;
 
-  display: block !important;
+  pointer-events: none !important;
 }
 
 
-/* =====================================================
+/* =========================================================
    FRONT TYPOGRAPHY
-===================================================== */
+   PAINT IT! sits IN FRONT of tube
+   ========================================================= */
 
 .hero-type-front {
   position: absolute;
 
   inset: 0;
 
-  z-index: 5;
+  z-index: 30;
 
   pointer-events: none;
 }
 
 
-/* PAINT IT sits ABOVE the tube */
-
 .hero-paint-it {
   position: absolute;
 
   left: 50%;
-  top: 72%;
+  top: 69%;
 
-  transform:
-    translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 
-  width: 100%;
+  width: 96vw;
+
+  margin: 0;
 
   text-align: center;
+
+  color: #111;
 
   font-family:
     "Arial Black",
@@ -2635,35 +2144,35 @@ html {
     sans-serif;
 
   font-size: clamp(
-    5rem,
-    11vw,
-    12rem
+    6rem,
+    13vw,
+    14rem
   );
 
   font-weight: 900;
 
-  line-height: 0.75;
-
-  letter-spacing: -0.08em;
+  line-height: 0.72;
+  letter-spacing: -0.09em;
 
   text-transform: uppercase;
-
-  color: #111;
 
   white-space: nowrap;
 }
 
 
-/* Small statement below heading */
+/* =========================================================
+   I NEVER DISAPPOINT
+   ========================================================= */
 
 .hero-promise {
   position: absolute;
 
   left: 50%;
-  top: 87%;
+  top: 84%;
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
+
+  color: #111;
 
   font-family:
     "Space Grotesk",
@@ -2671,59 +2180,65 @@ html {
 
   font-size: clamp(
     0.7rem,
-    0.85vw,
+    0.8vw,
     0.9rem
   );
 
   font-weight: 600;
 
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
 
   text-transform: uppercase;
-
-  color: #111;
 
   white-space: nowrap;
 }
 
 
-/* =====================================================
-   KEEP EXISTING HERO CONTENT ABOVE EVERYTHING
-===================================================== */
-
-.hero-meta,
-.hero-bottom,
-.hero-scroll {
-  position: relative;
-
-  z-index: 10;
-}
-
-
-/* =====================================================
+/* =========================================================
    MOBILE
-===================================================== */
+   ========================================================= */
 
 @media (max-width: 768px) {
 
+  .hero-landing {
+    min-height: 100svh;
+  }
+
+
   .hero-main-title {
+    top: 39%;
+
+    width: 94vw;
+
+    line-height: 0.76;
+  }
+
+
+  .hero-vocal,
+  .hero-enough {
+    display: block;
+
     font-size: clamp(
-      3.8rem,
-      19vw,
-      7rem
+      4rem,
+      20vw,
+      6.8rem
     );
+  }
 
-    line-height: 0.78;
 
-    letter-spacing: -0.07em;
-
-    transform:
-      translateY(-12%);
+  .hero-vocal::after {
+    content: "";
   }
 
 
   .hero-letme {
-    font-size: 0.58em;
+    margin-top: 0.08em;
+
+    font-size: clamp(
+      2.6rem,
+      12vw,
+      4.2rem
+    );
   }
 
 
@@ -2731,17 +2246,17 @@ html {
     top: 67%;
 
     font-size: clamp(
-      4rem,
-      20vw,
+      4.2rem,
+      21vw,
       7rem
     );
   }
 
 
   .hero-promise {
-    top: 78%;
+    top: 79%;
 
-    font-size: 0.62rem;
+    font-size: 0.58rem;
 
     letter-spacing: 0.12em;
   }
