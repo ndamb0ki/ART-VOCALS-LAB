@@ -521,36 +521,48 @@ function createPaintMark(
       )
     );
 
-    if (width < 769) {
+if (width < 769) {
 
-      artwork.scale.set(
-        0.62,
-        0.62,
-        0.62
-      );
+  artwork.scale.set(
+    0.58,
+    0.58,
+    0.58
+  );
 
-      artwork.position.set(
-        1.25,
-        -0.25,
-        0
-      );
+  artwork.position.set(
+    1.45,
+    -0.45,
+    0
+  );
 
-    } else {
+} else if (width < 1200) {
 
-      artwork.scale.set(
-        1,
-        1,
-        1
-      );
+  artwork.scale.set(
+    0.82,
+    0.82,
+    0.82
+  );
 
-      artwork.position.set(
-        1.8,
-        0.05,
-        0
-      );
-    }
-  }
+  artwork.position.set(
+    1.85,
+    0.0,
+    0
+  );
 
+} else {
+
+  artwork.scale.set(
+    1.08,
+    1.08,
+    1.08
+  );
+
+  artwork.position.set(
+    2.15,
+    0.05,
+    0
+  );
+}
   window.addEventListener(
     "resize",
     resize
