@@ -2421,8 +2421,8 @@ html {
 }
 
 .hero-inner {
-    position: relative !important;
-    z-index: 5 !important;
+  position: relative !important;
+  z-index: auto !important;
 }
 
 /* Keep the artwork mainly on the right */
@@ -2479,4 +2479,271 @@ html {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+}
+/* =====================================================
+   STEP 2 — CENTRAL HERO TYPOGRAPHY
+===================================================== */
+
+.hero-landing {
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   BACK TYPOGRAPHY
+   Sits BEHIND the 3D paint tube
+===================================================== */
+
+.hero-type-back {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1;
+
+  pointer-events: none;
+}
+
+
+.hero-main-title {
+  position: relative;
+
+  width: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  text-align: center;
+
+  font-family:
+    "Arial Black",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-weight: 900;
+
+  font-size: clamp(
+    5rem,
+    10.5vw,
+    11rem
+  );
+
+  line-height: 0.72;
+
+  letter-spacing: -0.075em;
+
+  text-transform: uppercase;
+
+  color: #111;
+
+  transform: translateY(-4%);
+}
+
+
+.hero-word {
+  display: block;
+  white-space: nowrap;
+}
+
+
+/* Individual lines */
+
+.hero-vocal {
+  transform: translateX(-2%);
+}
+
+.hero-enough {
+  transform: translateX(1%);
+}
+
+.hero-letme {
+  margin-top: 0.08em;
+
+  font-size: 0.66em;
+
+  letter-spacing: -0.065em;
+}
+
+
+/* =====================================================
+   THREE.JS PAINT TUBE
+   Sits BETWEEN typography layers
+===================================================== */
+
+.hero-canvas {
+  position: absolute !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  z-index: 3 !important;
+
+  pointer-events: none !important;
+}
+
+
+#hero-3d-canvas {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block !important;
+}
+
+
+/* =====================================================
+   FRONT TYPOGRAPHY
+===================================================== */
+
+.hero-type-front {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 5;
+
+  pointer-events: none;
+}
+
+
+/* PAINT IT sits ABOVE the tube */
+
+.hero-paint-it {
+  position: absolute;
+
+  left: 50%;
+  top: 72%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 100%;
+
+  text-align: center;
+
+  font-family:
+    "Arial Black",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  font-size: clamp(
+    5rem,
+    11vw,
+    12rem
+  );
+
+  font-weight: 900;
+
+  line-height: 0.75;
+
+  letter-spacing: -0.08em;
+
+  text-transform: uppercase;
+
+  color: #111;
+
+  white-space: nowrap;
+}
+
+
+/* Small statement below heading */
+
+.hero-promise {
+  position: absolute;
+
+  left: 50%;
+  top: 87%;
+
+  transform:
+    translateX(-50%);
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: clamp(
+    0.7rem,
+    0.85vw,
+    0.9rem
+  );
+
+  font-weight: 600;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+
+  color: #111;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   KEEP EXISTING HERO CONTENT ABOVE EVERYTHING
+===================================================== */
+
+.hero-meta,
+.hero-bottom,
+.hero-scroll {
+  position: relative;
+
+  z-index: 10;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .hero-main-title {
+    font-size: clamp(
+      3.8rem,
+      19vw,
+      7rem
+    );
+
+    line-height: 0.78;
+
+    letter-spacing: -0.07em;
+
+    transform:
+      translateY(-12%);
+  }
+
+
+  .hero-letme {
+    font-size: 0.58em;
+  }
+
+
+  .hero-paint-it {
+    top: 67%;
+
+    font-size: clamp(
+      4rem,
+      20vw,
+      7rem
+    );
+  }
+
+
+  .hero-promise {
+    top: 78%;
+
+    font-size: 0.62rem;
+
+    letter-spacing: 0.12em;
+  }
+
 }
