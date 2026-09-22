@@ -1,174 +1,754 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="images/icons8-homer-simpson-40.apng.png">
-<title>Ndambuki Art Lab | Stephen Ndambuki | Kenyan Artist</title>
-  <meta name="description" content="Ndambuki Art Lab is the creative studio of Kenyan artist Stephen Ndambuki, creating original paintings, commissions and community art in Mathare, Nairobi, Kenya.">
 
-  <!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Ndambuki Art Lab | Stephen Ndambuki | Kenyan Artist</title>
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <meta
+    name="description"
+    content="Ndambuki Art Lab is the creative studio of Kenyan artist Stephen Ndambuki, creating original paintings, commissions, community art and creative exploration in Nairobi, Kenya."
+  >
+
+  <meta
+    name="theme-color"
+    content="#e9e5dc"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="images/icons8-homer-simpson-40.apng.png"
+  >
+
+  <link
+    rel="canonical"
+    href="https://ndambukiart.top/"
+  >
+
+  <!-- =====================================================
+       GOOGLE FONTS
+       ===================================================== -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- =====================================================
+       THREE.JS
+       Kept ready for the interactive hero.
+       ===================================================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/OBJLoader.js"></script>
 
-  <!-- Base CSS -->
+
+  <!-- =====================================================
+       STYLES
+       ===================================================== -->
+
   <link rel="stylesheet" href="css/style.css">
-  <!-- Theme (Blinkpath-inspired) -->
+
   <link rel="stylesheet" href="css/theme.css">
-  <link rel="canonical" href="https://ndambukiart.top/">
+
+  <!-- Homepage-specific design -->
+  <link rel="stylesheet" href="css/home.css">
+
 </head>
+
+
 <body>
 
-  <!-- NAVIGATION BAR -->
+  <!-- =====================================================
+       NAVIGATION
+       ===================================================== -->
+
   <header class="site-header">
+
     <nav class="site-nav">
+
       <div class="nav-inner">
-        <a class="brand" href="index.html">NDAMBUKI ART LAB</a>
-        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+
+        <a
+          class="brand"
+          href="index.html"
+          aria-label="Ndambuki Art Lab home"
+        >
+          NDAMBUKI ART LAB
+        </a>
+
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+        >
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
         </button>
+
+
         <ul class="nav-links">
-          <li><a href="html/shop.html">Shop</a></li>
-          <li><a href="html/art-classes.html">Classes</a></li>
-          <li><a href="html/art-trips.html">Trips</a></li>
-          <li><a href="#contact">Contact</a></li>
+
+          <li>
+            <a href="html/shop.html">
+              Shop
+            </a>
+          </li>
+
+          <li>
+            <a href="html/art-classes.html">
+              Classes
+            </a>
+          </li>
+
+          <li>
+            <a href="html/art-trips.html">
+              Trips
+            </a>
+          </li>
+
+          <li>
+            <a href="#contact">
+              Contact
+            </a>
+          </li>
+
         </ul>
-        <button class="nav-cta">Support</button>
-        <div class="menu-overlay" role="presentation"></div>
+
+
+        <button
+          class="nav-cta"
+          type="button"
+        >
+          Support
+        </button>
+
+
+        <div
+          class="menu-overlay"
+          role="presentation"
+        ></div>
+
       </div>
+
     </nav>
+
   </header>
 
-  <!-- HERO (cinematic) -->
-  <main>
-    <section class="hero-landing">
-        <div class="hero-inner">
-        <div class="eyebrow">Ndambuki Art Lab</div>
-<h1 class="hero-heading">
-  Stephen Ndambuki — Kenyan Artist & Painter
-</h1>
-<p class="hero-lead">
-  Welcome to Ndambuki Art Lab — a creative studio for original paintings,
-  commissions, community art and creative exploration in Nairobi, Kenya.
-</p>
 
-        <div class="hero-ctas">
-          <div class="hero-cta-group">
-            <a class="btn primary large" href="html/shop.html">View Gallery</a>
-            <div id="cta-3d-viewer" class="cta-character" aria-label="3D character preview"></div>
-          </div>
-          <a class="btn ghost large" href="html/art-classes.html">Join A Class</a>
-        </div>
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main>
+
+
+    <!-- ===================================================
+         HERO / LANDING CANVAS
+         =================================================== -->
+
+    <section
+      class="hero-landing"
+      id="home"
+    >
+
+      <!-- Background canvas -->
+      <div
+        class="hero-canvas"
+        aria-hidden="true"
+      >
+
+        <canvas
+          id="hero-3d-canvas"
+        ></canvas>
+
       </div>
 
-<div class="hero-visual" aria-hidden="true">
 
-  <!-- THREE.JS ART CANVAS -->
-  <canvas id="hero-3d-canvas"></canvas>
+      <!-- Subtle artwork/video layer -->
 
-  <!-- Existing artwork video -->
-  <video
-    id="heroVideo"
-    class="hero-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    poster="images/hero-artclass.jpg">
+      <div
+        class="hero-media"
+        aria-hidden="true"
+      >
 
-    <source
-      src="images/hero.mp4"
-      type="video/mp4">
+        <video
+          id="heroVideo"
+          class="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="images/hero-artclass.jpg"
+        >
 
-  </video>
+          <source
+            src="images/hero.mp4"
+            type="video/mp4"
+          >
 
-  <!-- Decorative artwork -->
-  <img
-    src="images/hero-flower.PNG"
-    alt=""
-    class="hero-flower"
-    loading="lazy">
+        </video>
 
-</div>
+      </div>
+
+
+      <!-- Decorative flower -->
+
+      <img
+        src="images/hero-flower.PNG"
+        alt=""
+        class="hero-flower"
+        aria-hidden="true"
+        loading="eager"
+      >
+
+
+      <!-- Hero content -->
+
+      <div class="hero-inner">
+
+
+        <div class="hero-meta">
+
+          <span>
+            NDAMBUKI ART LAB
+          </span>
+
+          <span>
+            NAIROBI · KENYA
+          </span>
+
+        </div>
+
+
+        <h1 class="hero-heading">
+
+          <span class="hero-line">
+            VOCAL
+          </span>
+
+          <span class="hero-line">
+            ENOUGH?
+          </span>
+
+          <span class="hero-line hero-line-outline">
+            LET ME JUST
+          </span>
+
+          <span class="hero-line">
+            PAINT IT.
+          </span>
+
+        </h1>
+
+
+        <div class="hero-bottom">
+
+
+          <div class="hero-description">
+
+            <p>
+              A creative laboratory for paintings,
+              commissions, community art and
+              exploration.
+            </p>
+
+            <span class="hero-location">
+              Stephen Ndambuki · Artist & Painter
+            </span>
+
+          </div>
+
+
+          <div class="hero-actions">
+
+            <a
+              href="html/shop.html"
+              class="hero-action hero-action-primary"
+            >
+
+              <span>
+                Explore the work
+              </span>
+
+              <span class="action-arrow">
+                ↗
+              </span>
+
+            </a>
+
+
+            <a
+              href="html/art-classes.html"
+              class="hero-action"
+            >
+
+              <span>
+                Join an art class
+              </span>
+
+              <span class="action-arrow">
+                ↗
+              </span>
+
+            </a>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="hero-scroll">
+
+          <span>
+            SCROLL TO EXPLORE
+          </span>
+
+          <span class="scroll-line"></span>
+
+        </div>
+
+      </div>
+
     </section>
 
-    <!-- Featured / Work grid (preserve your bento content) -->
-    <section class="works">
+
+
+    <!-- ===================================================
+         EXPLORE SECTION
+         =================================================== -->
+
+    <section
+      class="works"
+      id="explore"
+    >
+
       <div class="works-inner">
-        <h2 class="section-title">Explore</h2>
-        <p class="section-sub">Community classes, trips and original works.</p>
+
+
+        <div class="section-intro">
+
+          <span class="section-number">
+            01
+          </span>
+
+          <div>
+
+            <span class="section-label">
+              EXPLORE THE LAB
+            </span>
+
+            <h2 class="section-title">
+              Art is not<br>
+              one thing.
+            </h2>
+
+          </div>
+
+        </div>
+
 
         <div class="cards">
-          <a href="html/art-classes.html" class="card">
-            <figure><img src="images/artclass1.jpg" alt="Art Classes" loading="lazy"></figure>
+
+
+          <!-- ART CLASSES -->
+
+          <a
+            href="html/art-classes.html"
+            class="card card-classes"
+          >
+
+            <figure>
+
+              <img
+                src="images/artclass1.jpg"
+                alt="Children participating in an Ndambuki Art Lab art class"
+                loading="lazy"
+              >
+
+            </figure>
+
+
             <div class="card-body">
-              <h3>Art Classes</h3>
-              <p>Hands-on workshops for all ages.</p>
+
+              <span class="card-index">
+                01
+              </span>
+
+              <h3>
+                Art Classes
+              </h3>
+
+              <p>
+                Hands-on creative sessions where
+                young artists explore, experiment
+                and make.
+              </p>
+
+              <span class="card-link">
+                Explore classes ↗
+              </span>
+
             </div>
+
           </a>
 
-          <a href="html/shop.html" class="card">
-            <figure><img src="images/artwork1.jpg" alt="Gallery" loading="lazy"></figure>
+
+
+          <!-- SHOP -->
+
+          <a
+            href="html/shop.html"
+            class="card card-shop"
+          >
+
+            <figure>
+
+              <img
+                src="images/artwork1.jpg"
+                alt="Original artwork by Stephen Ndambuki"
+                loading="lazy"
+              >
+
+            </figure>
+
+
             <div class="card-body">
-              <h3>Gallery / Store</h3>
-              <p>Original artwork available to view and purchase.</p>
+
+              <span class="card-index">
+                02
+              </span>
+
+              <h3>
+                The Work
+              </h3>
+
+              <p>
+                Original paintings, commissions
+                and artworks created in the studio.
+              </p>
+
+              <span class="card-link">
+                Enter the gallery ↗
+              </span>
+
             </div>
+
           </a>
 
-          <a href="html/art-trips.html" class="card">
-            <figure><img src="images/trip1.jpg" alt="Art Trips" loading="lazy"></figure>
+
+
+          <!-- TRIPS -->
+
+          <a
+            href="html/art-trips.html"
+            class="card card-trips"
+          >
+
+            <figure>
+
+              <img
+                src="images/trip1.jpg"
+                alt="Ndambuki Art Lab art trip"
+                loading="lazy"
+              >
+
+            </figure>
+
+
             <div class="card-body">
-              <h3>Art Trips</h3>
-              <p>Field trips to inspiring places.</p>
+
+              <span class="card-index">
+                03
+              </span>
+
+              <h3>
+                Art Trips
+              </h3>
+
+              <p>
+                Leaving the studio to discover
+                places, people and new ways of seeing.
+              </p>
+
+              <span class="card-link">
+                See the trips ↗
+              </span>
+
             </div>
+
           </a>
+
+
         </div>
+
       </div>
+
     </section>
 
-    <!-- CONTACT (FOOTER PREVIEW) -->
-    <section id="contact" class="contact">
+
+
+    <!-- ===================================================
+         ARTIST STATEMENT
+         =================================================== -->
+
+    <section class="artist-statement">
+
+      <div class="statement-inner">
+
+
+        <span class="section-number">
+          02
+        </span>
+
+
+        <div class="statement-content">
+
+          <p class="statement-small">
+            NDAMBUKI ART LAB IS A STUDIO,
+            A CLASSROOM, A PLACE TO EXPLORE.
+          </p>
+
+
+          <h2>
+
+            I paint what I cannot
+            always say.
+
+          </h2>
+
+
+          <p class="statement-text">
+
+            Ndambuki Art Lab is the creative studio
+            of Stephen Ndambuki — a place where
+            painting, teaching, community and
+            experimentation meet.
+
+          </p>
+
+
+          <a
+            href="html/shop.html"
+            class="statement-link"
+          >
+            Discover the work
+            <span>↗</span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         CONTACT
+         =================================================== -->
+
+    <section
+      id="contact"
+      class="contact"
+    >
+
       <div class="contact-inner">
-        <h2>Get in Touch</h2>
-        <p>You can reach me directly for commissions, support, or collaborations.</p>
+
+
+        <div class="contact-top">
+
+          <span class="section-number">
+            03
+          </span>
+
+          <span class="section-label">
+            GET IN TOUCH
+          </span>
+
+        </div>
+
+
+        <h2>
+          Have something<br>
+          to paint?
+        </h2>
+
+
+        <p>
+          For commissions, collaborations,
+          support or anything art-related,
+          let's talk.
+        </p>
+
 
         <div class="contact-links">
-          <a href="mailto:sndambuki155@gmail.com" class="link">Email</a>
-          <a href="https://wa.me/254773754496" class="link">WhatsApp</a>
-          <a href="https://instagram.com/n.d.a.m.b.o_ke" class="link">Instagram</a>
+
+
+          <a
+            href="mailto:sndambuki155@gmail.com"
+            class="contact-link"
+          >
+
+            <span>
+              Email
+            </span>
+
+            <span>
+              ↗
+            </span>
+
+          </a>
+
+
+          <a
+            href="https://wa.me/254773754496"
+            class="contact-link"
+          >
+
+            <span>
+              WhatsApp
+            </span>
+
+            <span>
+              ↗
+            </span>
+
+          </a>
+
+
+          <a
+            href="https://instagram.com/n.d.a.m.b.o_ke"
+            class="contact-link"
+          >
+
+            <span>
+              Instagram
+            </span>
+
+            <span>
+              ↗
+            </span>
+
+          </a>
+
+
         </div>
+
       </div>
+
     </section>
+
   </main>
 
-  <!-- FOOTER -->
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
   <footer class="site-footer">
+
     <div class="footer-content">
-      <h3>Ndambuki Art Lab</h3>
-      <p>Explore, create, and support a community of creativity. Reach out to me for commissions, support, or collaborations.</p>
-      <p class="footer-copy">© 2026 Stephen Ndambuki | Ndambuki Art Lab</p>
+
+
+      <div class="footer-brand">
+
+        <h3>
+          NDAMBUKI<br>
+          ART LAB
+        </h3>
+
+      </div>
+
+
+      <div class="footer-description">
+
+        <p>
+          Explore. Create. Experiment.
+          Support a community of creativity.
+        </p>
+
+      </div>
+
+
+      <div class="footer-meta">
+
+        <span>
+          Nairobi, Kenya
+        </span>
+
+        <span>
+          © 2026 Stephen Ndambuki
+        </span>
+
+      </div>
+
+
     </div>
+
   </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
 
-<script>
-  console.log("Ndambuki Art Lab → Supabase connection loaded");
 
-  if (window.supabase && supabaseClient) {
-    console.log("✅ Supabase is connected to the website");
-  } else {
-    console.error("❌ Supabase connection failed");
-  }
-</script>
+  <!-- =====================================================
+       SUPABASE
+       ===================================================== -->
 
-<script src="js/main.js"></script>
-<script src="js/ui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="js/supabase.js"></script>
+
+
+  <script>
+
+    console.log(
+      "Ndambuki Art Lab → Supabase connection loaded"
+    );
+
+
+    if (
+      window.supabase &&
+      typeof supabaseClient !== "undefined" &&
+      supabaseClient
+    ) {
+
+      console.log(
+        "✅ Supabase is connected to the website"
+      );
+
+    } else {
+
+      console.error(
+        "❌ Supabase connection failed"
+      );
+
+    }
+
+  </script>
+
+
+  <!-- =====================================================
+       EXISTING WEBSITE JAVASCRIPT
+       ===================================================== -->
+
+  <script src="js/main.js"></script>
+
+  <script src="js/ui.js"></script>
+
+
 </body>
+
 </html>
