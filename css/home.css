@@ -1940,3 +1940,38 @@ html {
   }
 
 }
+/* =========================================================
+   DESKTOP HEADER / HERO FIX
+   Keep the navigation above the hero without covering
+   the main "VOCAL ENOUGH?" statement.
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+  .site-header {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding-top: 0 !important;
+  }
+
+  .site-nav {
+    padding-top: 0 !important;
+  }
+
+  .hero-landing {
+    min-height: 100vh;
+    padding-top: 120px !important;
+    box-sizing: border-box;
+  }
+
+  .hero-inner {
+    padding-top: 20px !important;
+  }
+
+  .hero-heading {
+    margin-top: 20px !important;
+  }
+}
