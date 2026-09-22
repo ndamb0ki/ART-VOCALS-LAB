@@ -2012,46 +2012,36 @@ html {
 
 .hero-main-title {
   position: absolute;
-
   left: 50%;
   top: 46%;
-
   transform: translate(-50%, -50%);
 
   width: 96vw;
-
   margin: 0;
   padding: 0;
 
   text-align: center;
 
-color: #d6b62a;
+  font-family: "Gochi Hand", cursive;
+  font-weight: 400;
 
-font-family:
-  "Bouncy Scriber",
-  Impact,
-  sans-serif;
+  color: #d6b62a;
 
-  font-weight: 900;
-
-  line-height: 0.72;
-  letter-spacing: -0.09em;
+  line-height: 0.95;
+  letter-spacing: 0;
 
   text-transform: uppercase;
 }
 
 
-/* VOCAL ENOUGH? — SAME LINE ON DESKTOP */
-
 .hero-vocal,
 .hero-enough {
   display: inline;
 
-  font-size: clamp(
-    6rem,
-    12.5vw,
-    13rem
-  );
+  font-size: clamp(6rem, 12.5vw, 13rem);
+
+  line-height: 0.95;
+  letter-spacing: 0;
 
   white-space: nowrap;
 }
@@ -2062,20 +2052,15 @@ font-family:
 }
 
 
-/* LET ME JUST */
-
 .hero-letme {
   display: block;
 
-  margin-top: 0.05em;
+  margin-top: 0.18em;
 
-  font-size: clamp(
-    4rem,
-    7.5vw,
-    8rem
-  );
+  font-size: clamp(3.8rem, 7vw, 7.5rem);
 
-  letter-spacing: -0.075em;
+  line-height: 1;
+  letter-spacing: 0.01em;
 
   white-space: nowrap;
 }
@@ -2134,42 +2119,27 @@ font-family:
 
 .hero-paint-it {
   position: absolute;
-
   left: 50%;
   top: 69%;
-
   transform: translate(-50%, -50%);
 
   width: 96vw;
-
   margin: 0;
 
   text-align: center;
 
-color: #d6b62a;
+  font-family: "Gochi Hand", cursive;
+  font-size: clamp(6rem, 13vw, 14rem);
+  font-weight: 400;
 
-font-family:
-  "Bouncy Scriber",
-  Impact,
-  sans-serif;
-
-  font-size: clamp(
-    6rem,
-    13vw,
-    14rem
-  );
-
-  font-weight: 900;
-
-  line-height: 0.72;
-  letter-spacing: -0.09em;
+  line-height: 0.95;
+  letter-spacing: 0;
 
   text-transform: uppercase;
-
   white-space: nowrap;
+
+  color: #d6b62a;
 }
-
-
 /* =========================================================
    I NEVER DISAPPOINT
    ========================================================= */
