@@ -451,8 +451,8 @@ function createPaintMark(
     const elapsed =
       clock.getElapsedTime();
 
-    targetX = mouseX * 0.22;
-    targetY = mouseY * 0.14;
+targetX = mouseX * 0.12;
+targetY = mouseY * 0.08;
 
     artwork.rotation.y +=
       (targetX -
