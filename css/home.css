@@ -2457,3 +2457,26 @@ html {
         z-index: 10;
     }
 }
+/* TEMPORARY THREE.JS VISIBILITY TEST */
+
+.hero-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 50 !important;
+  pointer-events: none !important;
+}
+
+#hero-3d-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
