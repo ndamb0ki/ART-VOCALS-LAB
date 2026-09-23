@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" href="../images/icons8-homer-simpson-40.apng.png">
+
+  <title>Admin Dashboard | Ndambuki Art Lab</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .admin-header {
+      background: #071a33;
+      color: white;
+      padding: 22px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .admin-header p {
+      margin: 5px 0 0;
+      opacity: 0.75;
+    }
+
+    .logout-btn {
+      border: 1px solid rgba(255,255,255,.4);
+      background: transparent;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255,255,255,.1);
+    }
+
+    .container {
+      width: min(1200px, 94%);
+      margin: 30px auto;
+    }
+
+    /* =========================
+       DASHBOARD STATS
+    ========================= */
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 22px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #777;
+      text-transform: uppercase;
+    }
+
+    .stat-card strong {
+      font-size: 30px;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .requests-section {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .section-header {
+      padding: 22px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-header h2 {
+      margin: 0;
+    }
+
+    .refresh-btn {
+      padding: 9px 16px;
+      border: 0;
+      border-radius: 6px;
+      background: #071a33;
+      color: white;
+      cursor: pointer;
+    }
+
+    .refresh-btn:hover {
+      opacity: .9;
+    }
+
+    /* =========================
+       TABLES
+    ========================= */
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background: #fafafa;
+      font-size: 13px;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background: #eee;
+    }
+
+    .status-new,
+    .status-pending {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .status-in-progress,
+    .status-processing {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-confirmed {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-completed,
+    .status-delivered {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-shipped {
+      background: #e2d9f3;
+      color: #563d7c;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .view-btn {
+      border: 0;
+      background: #071a33;
+      color: white;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .view-btn:hover {
+      opacity: .9;
+    }
+
+    /* =========================
+       STATES
+    ========================= */
+
+    .empty {
+      padding: 40px;
+      text-align: center;
+      color: #777;
+    }
+
+    .loading {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .error {
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #f8d7da;
+      color: #721c24;
+      border-radius: 8px;
+      display: none;
+    }
+
+    /* =========================
+       ORDER DETAILS
+    ========================= */
+
+    .order-items {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .order-total {
+      font-weight: bold;
+    }
+
+    /* =========================
+       SHOP / ARTWORK MANAGEMENT
+    ========================= */
+
+    .artwork-form {
+      padding: 25px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 14px;
+      background: white;
+    }
+
+    .form-group textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #071a33;
+    }
+
+    .image-upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .image-upload-box:hover {
+      border-color: #071a33;
+      background: #f5f7fa;
+    }
+
+    .image-upload-box input {
+      display: none;
+    }
+
+    .image-upload-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .image-upload-help {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .image-preview {
+      display: none;
+      margin-top: 15px;
+      max-width: 250px;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .checkbox-row input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .publish-btn {
+      margin-top: 25px;
+      padding: 13px 24px;
+      border: 0;
+      border-radius: 7px;
+      background: #071a33;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .publish-btn:hover {
+      opacity: .9;
+    }
+
+    .publish-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .form-message {
+      display: none;
+      margin-top: 18px;
+      padding: 13px 15px;
+      border-radius: 7px;
+      font-size: 14px;
+    }
+
+    .form-message.success {
+      display: block;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .form-message.error-message {
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .shop-note {
+      padding: 0 25px 25px;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .admin-header {
+        padding: 18px;
+      }
+
+      .admin-header h1 {
+        font-size: 19px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full-width {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-header {
+        display: block;
+      }
+
+      .logout-btn {
+        margin-top: 15px;
+      }
+
+      .section-header {
+        display: block;
+      }
+
+      .section-header h2 {
+        margin-bottom: 12px;
+      }
+
+      .artwork-form {
+        padding: 18px;
+      }
+
+      .shop-note {
+        padding: 0 18px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <header class="admin-header">
+
+    <div>
+      <h1>Ndambuki Art Lab</h1>
+      <p>Admin Dashboard</p>
+    </div>
+
+    <button id="logoutBtn" class="logout-btn">
+      Log Out
+    </button>
+
+  </header>
+
+
+  <main class="container" style="display:none;">
+
+    <!-- ERROR MESSAGE -->
+
+    <div id="errorMessage" class="error"></div>
+
+
+    <!-- =========================
+         COMMISSION STATS
+    ========================= -->
+
+    <section class="dashboard-stats">
+
+      <div class="stat-card">
+        <h3>Total Requests</h3>
+        <strong id="totalRequests">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>New</h3>
+        <strong id="newRequests">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>In Progress</h3>
+        <strong id="progressRequests">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <h3>Completed</h3>
+        <strong id="completedRequests">0</strong>
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         COMMISSION REQUESTS
+    ========================= -->
+
+    <section class="requests-section">
+
+      <div class="section-header">
+
+        <h2>Commission Requests</h2>
+
+        <button id="refreshBtn" class="refresh-btn">
+          Refresh
+        </button>
+
+      </div>
+
+
+      <div id="loading" class="loading">
+        Loading commission requests...
+      </div>
+
+
+      <div class="table-wrapper">
+
+        <table id="requestsTable" style="display:none;">
+
+          <thead>
+
+            <tr>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Artwork</th>
+              <th>Budget</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+
+          </thead>
+
+          <tbody id="requestsBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div id="emptyState" class="empty" style="display:none;">
+        No commission requests found.
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ORDERS
+    ========================= -->
+
+    <section class="requests-section">
+
+      <div class="section-header">
+
+        <h2>Artwork Orders</h2>
+
+        <button id="refreshOrdersBtn" class="refresh-btn">
+          Refresh Orders
+        </button>
+
+      </div>
+
+
+      <div id="ordersLoading" class="loading">
+        Loading orders...
+      </div>
+
+
+      <div class="table-wrapper">
+
+        <table id="ordersTable" style="display:none;">
+
+          <thead>
+
+            <tr>
+              <th>Date</th>
+              <th>Order</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Order Status</th>
+              <th></th>
+            </tr>
+
+          </thead>
+
+
+          <tbody id="ordersBody"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div id="ordersEmptyState" class="empty" style="display:none;">
+        No artwork orders found.
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         SHOP / ADD ARTWORK
+    ========================= -->
+
+    <section class="requests-section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>Shop Management</h2>
+        </div>
+
+      </div>
+
+
+      <div class="shop-note">
+        Add a new artwork to the Ndambuki Art Lab Shop. Upload the artwork image,
+        add its details, set the price and publish it. The artwork will be stored
+        in Supabase and can later appear automatically on the public Shop page.
+      </div>
+
+
+      <form id="artworkForm" class="artwork-form">
+
+        <div class="form-grid">
+
+
+          <!-- IMAGE -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Artwork Image *
+            </label>
+
+            <label
+              for="artworkImage"
+              class="image-upload-box"
+            >
+
+              <div class="image-upload-title">
+                Click to upload artwork image
+              </div>
+
+              <div class="image-upload-help">
+                JPG, PNG, WEBP or similar image
+              </div>
+
+              <input
+                type="file"
+                id="artworkImage"
+                accept="image/*"
+                required
+              >
+
+              <img
+                id="artworkImagePreview"
+                class="image-preview"
+                alt="Artwork preview"
+              >
+
+            </label>
+
+          </div>
+
+
+          <!-- TITLE -->
+
+          <div class="form-group full-width">
+
+            <label for="artworkTitle">
+              Artwork Title *
+            </label>
+
+            <input
+              type="text"
+              id="artworkTitle"
+              placeholder="Example: Dreams of Mathare"
+              required
+            >
+
+          </div>
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="form-group full-width">
+
+            <label for="artworkDescription">
+              Description
+            </label>
+
+            <textarea
+              id="artworkDescription"
+              placeholder="Tell the story behind this artwork..."
+            ></textarea>
+
+          </div>
+
+
+          <!-- PRICE -->
+
+          <div class="form-group">
+
+            <label for="artworkPrice">
+              Price *
+            </label>
+
+            <input
+              type="number"
+              id="artworkPrice"
+              min="0"
+              step="0.01"
+              placeholder="35000"
+              required
+            >
+
+          </div>
+
+
+          <!-- CURRENCY -->
+
+          <div class="form-group">
+
+            <label for="artworkCurrency">
+              Currency
+            </label>
+
+            <select id="artworkCurrency">
+
+              <option value="KES">
+                KES - Kenyan Shilling
+              </option>
+
+              <option value="USD">
+                USD - US Dollar
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- CATEGORY -->
+
+          <div class="form-group">
+
+            <label for="artworkCategory">
+              Category
+            </label>
+
+            <select id="artworkCategory">
+
+              <option value="Original Painting">
+                Original Painting
+              </option>
+
+              <option value="Custom Painting">
+                Custom Painting
+              </option>
+
+              <option value="Pencil Drawing">
+                Pencil Drawing
+              </option>
+
+              <option value="Print">
+                Print
+              </option>
+
+              <option value="Customized Object">
+                Customized Object
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- SIZE -->
+
+          <div class="form-group">
+
+            <label for="artworkSize">
+              Size
+            </label>
+
+            <input
+              type="text"
+              id="artworkSize"
+              placeholder="Example: 60cm × 90cm"
+            >
+
+          </div>
+
+
+          <!-- STATUS -->
+
+          <div class="form-group">
+
+            <label for="artworkStatus">
+              Status
+            </label>
+
+            <select id="artworkStatus">
+
+              <option value="available">
+                Available
+              </option>
+
+              <option value="sold">
+                Sold
+              </option>
+
+              <option value="reserved">
+                Reserved
+              </option>
+
+              <option value="draft">
+                Draft
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- FEATURED -->
+
+          <div class="form-group">
+
+            <label>
+              Featured Artwork
+            </label>
+
+            <div class="checkbox-row">
+
+              <input
+                type="checkbox"
+                id="artworkFeatured"
+              >
+
+              <span>
+                Show this artwork as featured
+              </span>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+          id="artworkFormMessage"
+          class="form-message"
+        ></div>
+
+
+        <!-- PUBLISH BUTTON -->
+
+        <button
+          type="submit"
+          id="publishArtworkBtn"
+          class="publish-btn"
+        >
+          Publish Artwork
+        </button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       ORDER DETAILS MODAL
+  ========================= -->
+
+  <div
+    id="orderModal"
+    style="
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.65);
+      z-index:9999;
+      padding:30px 15px;
+      overflow-y:auto;
+    "
+  >
+
+    <div
+      style="
+        max-width:700px;
+        margin:30px auto;
+        background:white;
+        border-radius:14px;
+        box-shadow:0 10px 40px rgba(0,0,0,.25);
+        overflow:hidden;
+      "
+    >
+
+      <!-- MODAL HEADER -->
+
+      <div
+        style="
+          background:#071a33;
+          color:white;
+          padding:20px 24px;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:15px;
+        "
+      >
+
+        <div>
+
+          <h2
+            id="orderModalTitle"
+            style="margin:0;"
+          >
+            Order Details
+          </h2>
+
+          <small
+            id="orderModalSubtitle"
+            style="opacity:.75;"
+          >
+            Artwork Order
+          </small>
+
+        </div>
+
+
+        <button
+          id="closeOrderModal"
+          style="
+            border:0;
+            background:rgba(255,255,255,.15);
+            color:white;
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            font-size:22px;
+            cursor:pointer;
+          "
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- MODAL CONTENT -->
+
+      <div
+        id="orderModalContent"
+        style="padding:25px;"
+      >
+      </div>
+
+
+      <!-- MODAL FOOTER -->
+
+      <div
+        style="
+          padding:18px 25px;
+          border-top:1px solid #eee;
+          text-align:right;
+        "
+      >
+
+        <button
+          id="closeOrderModalBottom"
+          class="view-btn"
+          style="
+            padding:10px 20px;
+          "
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       SUPABASE
+  ========================= -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- YOUR SUPABASE CONNECTION -->
+
+  <script src="../js/supabase.js"></script>
+
+  <!-- ADMIN JAVASCRIPT -->
+
+  <script src="../js/admin.js"></script>
+
+</body>
+</html>
