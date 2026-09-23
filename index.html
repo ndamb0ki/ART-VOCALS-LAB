@@ -67,84 +67,98 @@
 
 <body>
 
-  <!-- =====================================================
-       NAVIGATION
-       ===================================================== -->
+<!-- =====================================================
+     NDAMBUKI ART LAB — FLOATING HERO HEADER
+===================================================== -->
 
-  <header class="site-header">
+<header class="hero-header">
 
-    <nav class="site-nav">
+  <!-- LEFT SIDE -->
+  <div class="hero-header-left">
 
-      <div class="nav-inner">
+    <a href="index.html" class="hero-home-link">
+      HOME
+    </a>
 
-        <a
-          class="brand"
-          href="index.html"
-          aria-label="Ndambuki Art Lab home"
-        >
-          NDAMBUKI ART LAB
-        </a>
+    <div class="hero-socials">
 
+      <!-- Instagram -->
+      <a
+        href="https://instagram.com/n.d.a.m.b.o_ke"
+        target="_blank"
+        rel="noopener"
+        aria-label="Instagram"
+        class="hero-social-link"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle cx="17.5" cy="6.5" r="1"></circle>
+        </svg>
+      </a>
 
-        <button
-          class="nav-toggle"
-          type="button"
-          aria-label="Open menu"
-          aria-expanded="false"
-        >
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </button>
+    </div>
 
-
-        <ul class="nav-links">
-
-          <li>
-            <a href="html/shop.html">
-              Shop
-            </a>
-          </li>
-
-          <li>
-            <a href="html/art-classes.html">
-              Classes
-            </a>
-          </li>
-
-          <li>
-            <a href="html/art-trips.html">
-              Trips
-            </a>
-          </li>
-
-          <li>
-            <a href="#contact">
-              Contact
-            </a>
-          </li>
-
-        </ul>
+  </div>
 
 
-        <button
-          class="nav-cta"
-          type="button"
-        >
-          Support
-        </button>
+  <!-- CENTER LOGO + LINES -->
+  <div class="hero-header-center">
+
+    <span class="logo-line"></span>
+
+    <a href="index.html" class="hero-logo-link">
+      <img
+        src="images/ndambo-logo.png"
+        alt="Ndambo Arts"
+        class="hero-logo"
+      >
+    </a>
+
+    <span class="logo-line"></span>
+
+  </div>
 
 
-        <div
-          class="menu-overlay"
-          role="presentation"
-        ></div>
+  <!-- RIGHT SIDE -->
+  <div class="hero-header-right">
 
-      </div>
+    <a
+      href="html/shop.html"
+      class="order-art-button"
+    >
+      ORDER ART
+    </a>
 
-    </nav>
 
-  </header>
+    <!-- CART -->
+    <a
+      href="html/shop.html"
+      class="hero-icon-button"
+      aria-label="Shopping cart"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"></path>
+        <circle cx="10" cy="20" r="1"></circle>
+        <circle cx="18" cy="20" r="1"></circle>
+      </svg>
+    </a>
+
+
+    <!-- MENU -->
+    <button
+      class="hero-icon-button hero-menu-button"
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
+</header>
 
 
   <!-- =====================================================
