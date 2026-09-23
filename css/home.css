@@ -3234,3 +3234,469 @@ body.cart-open {
   }
 
 }
+/* =========================================================
+   NDAMBUKI ART LAB — FULL SCREEN MENU
+========================================================= */
+
+.home-menu-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 3000;
+
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100dvh;
+
+  padding: 28px 38px 24px;
+
+  background: #eee7dc;
+  color: #8f4b55;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transform: translateY(-100%);
+
+  transition:
+    transform 0.65s cubic-bezier(.76, 0, .24, 1),
+    opacity 0.4s ease,
+    visibility 0.65s;
+}
+
+
+/* OPEN */
+
+.home-menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   TOP LOGO
+========================================================= */
+
+.home-menu-top {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  flex-shrink: 0;
+}
+
+
+.home-menu-top-line {
+  width: clamp(60px, 8vw, 130px);
+  height: 1px;
+
+  background: rgba(143, 75, 85, 0.55);
+}
+
+
+.home-menu-logo {
+  width: clamp(90px, 9vw, 135px);
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.home-menu-close {
+  position: absolute;
+
+  top: 27px;
+  right: 38px;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid rgba(143,75,85,0.45);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  cursor: pointer !important;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.home-menu-close:hover {
+  background: #8f4b55;
+
+  transform: rotate(90deg);
+}
+
+
+.home-menu-close span {
+  position: absolute;
+
+  width: 18px;
+  height: 1.5px;
+
+  background: #8f4b55;
+
+  transition: background 0.25s ease;
+}
+
+
+.home-menu-close span:first-child {
+  transform: rotate(45deg);
+}
+
+
+.home-menu-close span:last-child {
+  transform: rotate(-45deg);
+}
+
+
+.home-menu-close:hover span {
+  background: #fff;
+}
+
+
+/* =========================================================
+   MENU CONTENT
+========================================================= */
+
+.home-menu-content {
+  flex: 1;
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 0;
+
+  padding: 35px 0 25px;
+}
+
+
+.home-menu-nav {
+  width: min(100%, 1050px);
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =========================================================
+   MENU LINKS
+========================================================= */
+
+.home-menu-link {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    55px
+    1fr
+    55px;
+
+  align-items: center;
+
+  min-height: 92px;
+
+  padding: 5px 10px;
+
+  border-bottom:
+    1px solid rgba(143,75,85,0.22);
+
+  color: #8f4b55;
+
+  text-decoration: none;
+
+  overflow: hidden;
+
+  cursor: pointer !important;
+}
+
+
+.home-menu-link:first-child {
+  border-top:
+    1px solid rgba(143,75,85,0.22);
+}
+
+
+/* NUMBER */
+
+.menu-number {
+  align-self: start;
+
+  padding-top: 19px;
+
+  font-family:
+    "Space Grotesk",
+    Arial,
+    sans-serif;
+
+  font-size: 0.65rem;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  opacity: 0.65;
+}
+
+
+/* LARGE HANDWRITTEN NAME */
+
+.menu-name {
+  font-family:
+    "Gochi Hand",
+    cursive;
+
+  font-size:
+    clamp(3.1rem, 6vw, 6.5rem);
+
+  font-weight: 400;
+
+  line-height: 0.85;
+
+  letter-spacing: -0.015em;
+
+  transition:
+    transform 0.4s cubic-bezier(.2,.8,.2,1);
+}
+
+
+/* ARROW */
+
+.menu-arrow {
+  justify-self: end;
+
+  font-family:
+    "Space Grotesk",
+    sans-serif;
+
+  font-size: 1.3rem;
+
+  transition:
+    transform 0.35s ease;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.home-menu-link:hover .menu-name {
+  transform: translateX(18px);
+}
+
+
+.home-menu-link:hover .menu-arrow {
+  transform:
+    translate(4px, -4px);
+}
+
+
+/* little maroon fill sweeping underneath */
+
+.home-menu-link::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background: #8f4b55;
+
+  transform: scaleY(0);
+
+  transform-origin: bottom;
+
+  transition:
+    transform 0.4s cubic-bezier(.76,0,.24,1);
+}
+
+
+.home-menu-link:hover::before {
+  transform: scaleY(1);
+}
+
+
+.home-menu-link:hover {
+  color: #fff;
+}
+
+
+/* =========================================================
+   BOTTOM INFORMATION
+========================================================= */
+
+.home-menu-bottom {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  flex-shrink: 0;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid rgba(143,75,85,0.25);
+
+  font-family:
+    "Space Grotesk",
+    Arial,
+    sans-serif;
+
+  font-size: 0.62rem;
+  font-weight: 600;
+
+  letter-spacing: 0.12em;
+}
+
+
+.home-menu-bottom a {
+  color: inherit;
+
+  text-decoration: none;
+
+  cursor: pointer !important;
+}
+
+
+/* =========================================================
+   MENU OPEN BODY
+========================================================= */
+
+body.menu-open {
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .home-menu-overlay {
+    padding:
+      20px
+      18px
+      max(20px, env(safe-area-inset-bottom));
+  }
+
+
+  .home-menu-top {
+    justify-content: flex-start;
+
+    gap: 9px;
+  }
+
+
+  .home-menu-top-line {
+    width: 25px;
+  }
+
+
+  .home-menu-logo {
+    width: 82px;
+  }
+
+
+  .home-menu-close {
+    top: 18px;
+    right: 18px;
+
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .home-menu-content {
+    padding:
+      40px
+      0
+      25px;
+  }
+
+
+  .home-menu-link {
+    grid-template-columns:
+      32px
+      1fr
+      30px;
+
+    min-height: 78px;
+
+    padding:
+      4px
+      3px;
+  }
+
+
+  .menu-number {
+    padding-top: 14px;
+
+    font-size: 0.55rem;
+  }
+
+
+  .menu-name {
+    font-size:
+      clamp(2.8rem, 13vw, 4.6rem);
+
+    line-height: 0.88;
+  }
+
+
+  .menu-arrow {
+    font-size: 1rem;
+  }
+
+
+  .home-menu-link:hover .menu-name {
+    transform: translateX(7px);
+  }
+
+
+  .home-menu-bottom {
+    align-items: flex-start;
+
+    font-size: 0.5rem;
+
+    letter-spacing: 0.07em;
+  }
+
+
+  .home-menu-bottom span:nth-child(2) {
+    display: none;
+  }
+
+}
