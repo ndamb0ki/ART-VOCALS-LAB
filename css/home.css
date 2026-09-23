@@ -2556,3 +2556,166 @@ color: #fff;
   }
 
 }
+/* =========================================================
+   ROTATING PERSONALITY RING
+========================================================= */
+
+.hero-word-ring {
+  position: absolute;
+
+  left: 4vw;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: clamp(125px, 11vw, 175px);
+  aspect-ratio: 1;
+
+  z-index: 40;
+
+  color: #fff;
+
+  pointer-events: none;
+}
+
+
+/* rotating part */
+
+.hero-word-ring svg {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  animation:
+    personalityRingRotate
+    18s
+    linear
+    infinite;
+}
+
+
+.hero-word-ring text {
+  fill: #fff;
+
+  font-family:
+    "Space Grotesk",
+    Arial,
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 2.2px;
+
+  text-transform: uppercase;
+}
+
+
+/* center star stays still */
+
+.ring-center {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+
+  border: 1px solid
+    rgba(255,255,255,.45);
+
+  border-radius: 50%;
+
+  color: #fff;
+
+  font-size: 19px;
+}
+
+
+/* rotation */
+
+@keyframes personalityRingRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .hero-word-ring {
+    left: 2vw;
+
+    width: 115px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .hero-word-ring {
+    left: 18px;
+
+    top: auto;
+    bottom: 70px;
+
+    transform: none;
+
+    width: 92px;
+  }
+
+
+  .hero-word-ring text {
+    font-size: 10px;
+
+    letter-spacing: 1.7px;
+  }
+
+
+  .ring-center {
+    width: 34px;
+    height: 34px;
+
+    font-size: 14px;
+  }
+
+}
+
+
+/* accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-word-ring svg {
+    animation: none;
+  }
+
+}
