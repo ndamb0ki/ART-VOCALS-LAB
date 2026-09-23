@@ -131,19 +131,26 @@
     </a>
 
 
-    <!-- CART -->
-    <a
-      href="html/shop.html"
-      class="hero-icon-button"
-      aria-label="Shopping cart"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"></path>
-        <circle cx="10" cy="20" r="1"></circle>
-        <circle cx="18" cy="20" r="1"></circle>
-      </svg>
-    </a>
+<!-- CART -->
+<button
+  class="hero-icon-button hero-cart-button"
+  id="homeCartToggle"
+  type="button"
+  aria-label="Open shopping cart"
+  aria-expanded="false"
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H7"></path>
+    <circle cx="10" cy="20" r="1"></circle>
+    <circle cx="18" cy="20" r="1"></circle>
+  </svg>
 
+  <span
+    class="home-cart-count"
+    id="homeCartCount"
+    aria-label="Items in cart"
+  >0</span>
+</button>
 
     <!-- MENU -->
     <button
@@ -730,7 +737,71 @@
 
   </footer>
 
+<!-- =====================================================
+     HOMEPAGE CART DRAWER
+===================================================== -->
 
+<div
+  class="home-cart-overlay"
+  id="homeCartOverlay"
+></div>
+
+<aside
+  class="home-cart-drawer"
+  id="homeCartDrawer"
+  aria-hidden="true"
+>
+
+  <div class="home-cart-header">
+
+    <div>
+      <span class="home-cart-eyebrow">
+        NDAMBUKI ART LAB
+      </span>
+
+      <h2>Your Cart</h2>
+    </div>
+
+    <button
+      class="home-cart-close"
+      id="homeCartClose"
+      type="button"
+      aria-label="Close cart"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <div
+    class="home-cart-items"
+    id="homeCartItems"
+  >
+    <p class="home-cart-empty">
+      Your cart is empty.
+    </p>
+  </div>
+
+
+  <div class="home-cart-footer">
+
+    <div class="home-cart-total-row">
+      <span>Items</span>
+      <strong id="homeCartQuantity">0</strong>
+    </div>
+
+    <a
+      href="html/shop.html"
+      class="home-cart-shop-button"
+    >
+      CONTINUE TO SHOP
+      <span>↗</span>
+    </a>
+
+  </div>
+
+</aside>
 
   <!-- =====================================================
        SUPABASE
@@ -775,6 +846,11 @@
 
 <script src="js/main.js"></script>
 <script src="js/ui.js"></script>
+
+<!-- Homepage cart -->
+<script src="js/home-cart.js"></script>
+
+<!-- Hero 3D -->
 <script type="module" src="js/home-3d.js"></script>
 
 
