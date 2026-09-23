@@ -2251,3 +2251,308 @@ color: #fff;
   }
 
 }
+/* =========================================================
+   FLOATING HERO HEADER
+========================================================= */
+
+.hero-header {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  z-index: 100;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  padding: 24px 38px;
+
+  color: #fff;
+
+  pointer-events: none;
+}
+
+
+/* allow header controls to work */
+
+.hero-header a,
+.hero-header button {
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.hero-header-left {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+
+  justify-self: start;
+}
+
+
+.hero-home-link {
+  color: #fff;
+
+  text-decoration: none;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  letter-spacing: 0.14em;
+}
+
+
+.hero-socials {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.hero-social-link {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  color: #fff;
+}
+
+
+.hero-social-link svg {
+  width: 17px;
+  height: 17px;
+
+  fill: none;
+
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+
+/* =========================================================
+   CENTER LOGO
+========================================================= */
+
+.hero-header-center {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  justify-self: center;
+}
+
+
+.logo-line {
+  display: block;
+
+  width: clamp(55px, 7vw, 120px);
+  height: 1px;
+
+  background: rgba(255,255,255,0.75);
+}
+
+
+.hero-logo-link {
+  display: block;
+
+  line-height: 0;
+}
+
+
+.hero-logo {
+  display: block;
+
+  width: clamp(110px, 10vw, 155px);
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+/* =========================================================
+   RIGHT CONTROLS
+========================================================= */
+
+.hero-header-right {
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  justify-self: end;
+}
+
+
+.order-art-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
+  padding: 0 20px;
+
+  border-radius: 999px;
+
+  background: #58734c;
+
+  color: #fff;
+
+  text-decoration: none;
+
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.order-art-button:hover {
+  transform: translateY(-2px);
+
+  background: #67865a;
+}
+
+
+/* CART + MENU */
+
+.hero-icon-button {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,0.55);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #fff;
+
+  text-decoration: none;
+}
+
+
+.hero-icon-button svg {
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* menu lines */
+
+.hero-menu-button {
+  flex-direction: column;
+
+  gap: 5px;
+
+  cursor: pointer;
+}
+
+
+.hero-menu-button span {
+  display: block;
+
+  width: 17px;
+  height: 1.5px;
+
+  background: #fff;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .hero-header {
+    padding: 17px 16px;
+
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+
+  /* social icons hidden on small screens */
+
+  .hero-socials {
+    display: none;
+  }
+
+
+  .hero-home-link {
+    font-size: 0.62rem;
+  }
+
+
+  .hero-header-center {
+    gap: 7px;
+  }
+
+
+  .logo-line {
+    width: 18px;
+  }
+
+
+  .hero-logo {
+    width: 82px;
+  }
+
+
+  .order-art-button {
+    display: none;
+  }
+
+
+  .hero-icon-button {
+    width: 36px;
+    height: 36px;
+  }
+
+
+  .hero-header-right {
+    gap: 6px;
+  }
+
+}
