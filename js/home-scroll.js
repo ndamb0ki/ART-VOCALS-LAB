@@ -25,13 +25,18 @@
     // Typography separates during the hero scroll.
     const heroProgress = clamp(y / (heroH * 0.82), 0, 1);
 
-    // Tube travels from the upper hero, through its centre, to the lower bio.
-    // It completes the hand-off before Explore the Lab begins.
-    const travelDistance = heroH + bioH * 0.72;
-    const tubeProgress = clamp(y / Math.max(travelDistance, 1), 0, 1);
+    // One continuous 3D timeline from the hero into Explore the Lab.
+    // Use document coordinates so the model does not jump when section heights change.
+    const exploreTop = explore
+      ? explore.getBoundingClientRect().top + y
+      : heroH + bioH;
+    const travelEnd = Math.max(heroH, exploreTop + window.innerHeight * 0.18);
+    const tubeProgress = clamp(y / Math.max(travelEnd, 1), 0, 1);
 
+    // CSS keeps this for compatibility; Three.js reads the numeric target directly.
     root.style.setProperty("--hero-scroll-progress", heroProgress.toFixed(4));
     root.style.setProperty("--tube-scroll-progress", tubeProgress.toFixed(4));
+    window.__ndambukiTubeTarget = tubeProgress;
 
     const spread = heroProgress * Math.min(112, window.innerHeight * 0.13);
     back?.style.setProperty("--hero-spread", `${spread}px`);
