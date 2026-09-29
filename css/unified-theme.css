@@ -1,0 +1,328 @@
+/* =========================================================
+   NDAMBUKI ART LAB — UNIFIED PUBLIC SITE THEME
+   Preview layer based on the current homepage identity.
+   Loaded after legacy styles so pages can migrate safely.
+   ========================================================= */
+
+@font-face {
+  font-family: "Bouncy Scriber";
+  src: url("../fonts/bouncy-scriber.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --nal-paper: #e9e6de;
+  --nal-paper-light: #f3f1eb;
+  --nal-ink: #111111;
+  --nal-dark: #181818;
+  --nal-muted: #6f6d67;
+  --nal-line: rgba(17, 17, 17, 0.16);
+  --nal-line-soft: rgba(17, 17, 17, 0.09);
+  --nal-accent: #ff5b35;
+  --nal-display: "Space Grotesk", Arial, sans-serif;
+  --nal-body: "DM Sans", Arial, sans-serif;
+  --nal-art: "Bouncy Scriber", cursive;
+  --nal-page-x: clamp(22px, 4vw, 64px);
+  --nal-section-y: clamp(72px, 9vw, 140px);
+  --nal-radius: 28px;
+}
+
+html {
+  background: var(--nal-paper);
+}
+
+body.unified-theme {
+  margin: 0;
+  padding-top: 82px;
+  background: var(--nal-paper) !important;
+  color: var(--nal-ink) !important;
+  font-family: var(--nal-body) !important;
+  line-height: 1.5;
+  cursor: auto !important;
+  overflow-x: hidden;
+}
+
+body.unified-theme *,
+body.unified-theme *::before,
+body.unified-theme *::after {
+  box-sizing: border-box;
+}
+
+body.unified-theme h1,
+body.unified-theme h2,
+body.unified-theme h3,
+body.unified-theme h4 {
+  font-family: var(--nal-display);
+  color: var(--nal-ink);
+  letter-spacing: -0.045em;
+}
+
+body.unified-theme p {
+  color: var(--nal-muted);
+}
+
+body.unified-theme a {
+  color: inherit;
+}
+
+/* Shared header */
+body.unified-theme .site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 82px;
+  z-index: 1200;
+  background: rgba(233, 230, 222, 0.88) !important;
+  border-bottom: 1px solid var(--nal-line-soft);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+body.unified-theme .site-nav,
+body.unified-theme .site-nav .nav-inner {
+  width: 100%;
+}
+
+body.unified-theme .site-nav .nav-inner {
+  max-width: none;
+  height: 82px;
+  margin: 0;
+  padding: 0 var(--nal-page-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body.unified-theme .brand {
+  font-family: var(--nal-display) !important;
+  color: var(--nal-ink) !important;
+  font-size: clamp(.85rem, 1vw, 1rem);
+  font-weight: 700;
+  letter-spacing: -.035em;
+  text-decoration: none;
+}
+
+body.unified-theme .nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.5vw, 42px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+body.unified-theme .nav-links a {
+  position: relative;
+  padding: 8px 0;
+  color: var(--nal-ink) !important;
+  font-family: var(--nal-body);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-decoration: none;
+}
+
+body.unified-theme .nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 0;
+  height: 1px;
+  background: var(--nal-ink);
+  transition: width .3s ease;
+}
+
+body.unified-theme .nav-links a:hover::after,
+body.unified-theme .nav-links a[aria-current="page"]::after {
+  width: 100%;
+}
+
+body.unified-theme .nav-cta,
+body.unified-theme .btn {
+  border: 1px solid var(--nal-ink);
+  border-radius: 0;
+  background: var(--nal-ink) !important;
+  color: var(--nal-paper) !important;
+  font-family: var(--nal-body);
+  font-weight: 700;
+  letter-spacing: .02em;
+  box-shadow: none;
+  transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+
+body.unified-theme .nav-cta:hover,
+body.unified-theme .btn:hover {
+  background: transparent !important;
+  color: var(--nal-ink) !important;
+  transform: translateY(-2px);
+}
+
+/* Shared editorial page language */
+body.unified-theme main,
+body.unified-theme .page-shell {
+  position: relative;
+}
+
+body.unified-theme .section-title,
+body.unified-theme .feed-heading h2 {
+  font-family: var(--nal-display) !important;
+  font-size: clamp(2.4rem, 5vw, 5.4rem);
+  line-height: .95;
+  font-weight: 600;
+  letter-spacing: -.065em;
+  text-transform: uppercase;
+}
+
+body.unified-theme .section-sub,
+body.unified-theme .feed-heading p {
+  color: var(--nal-muted) !important;
+  font-size: clamp(.95rem, 1.2vw, 1.08rem);
+  line-height: 1.6;
+}
+
+body.unified-theme .artlab-feed {
+  width: auto;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(52px, 7vw, 96px) var(--nal-page-x) var(--nal-section-y);
+}
+
+body.unified-theme .feed-heading {
+  padding-bottom: clamp(24px, 4vw, 48px);
+  margin-bottom: clamp(24px, 3vw, 40px);
+  border-bottom: 1px solid var(--nal-line);
+}
+
+/* Preserve the Art Classes bento layout, but give it the new brand finish. */
+body.unified-theme .community-grid {
+  gap: clamp(12px, 1.4vw, 20px);
+}
+
+body.unified-theme .community-card {
+  border-radius: var(--nal-radius);
+  background: var(--nal-dark);
+  border: 1px solid rgba(17, 17, 17, .08);
+  box-shadow: 0 16px 42px rgba(17, 17, 17, .08);
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease;
+}
+
+body.unified-theme .community-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 60px rgba(17, 17, 17, .14);
+}
+
+body.unified-theme .community-card img {
+  transition: transform .8s cubic-bezier(.2,.8,.2,1);
+}
+
+body.unified-theme .community-card:hover img {
+  transform: scale(1.035);
+}
+
+/* Keep text over photography readable while matching homepage restraint. */
+body.unified-theme .card-gradient {
+  background: linear-gradient(180deg, transparent 32%, rgba(0,0,0,.76) 100%);
+}
+
+body.unified-theme .community-card h2,
+body.unified-theme .community-card h3,
+body.unified-theme .community-card p,
+body.unified-theme .community-card button,
+body.unified-theme .community-card a {
+  color: #fff;
+}
+
+/* Inputs / comment surfaces */
+body.unified-theme input,
+body.unified-theme textarea,
+body.unified-theme select {
+  font: inherit;
+}
+
+body.unified-theme input:not([type="checkbox"]):not([type="radio"]),
+body.unified-theme textarea,
+body.unified-theme select {
+  border: 1px solid var(--nal-line);
+  border-radius: 0;
+  background: var(--nal-paper-light);
+  color: var(--nal-ink);
+  outline: none;
+}
+
+body.unified-theme input:focus,
+body.unified-theme textarea:focus,
+body.unified-theme select:focus {
+  border-color: var(--nal-ink);
+}
+
+/* Footer */
+body.unified-theme footer,
+body.unified-theme .site-footer {
+  background: var(--nal-ink) !important;
+  color: var(--nal-paper) !important;
+  border-top: 0;
+}
+
+body.unified-theme footer p,
+body.unified-theme .site-footer p,
+body.unified-theme footer a,
+body.unified-theme .site-footer a {
+  color: var(--nal-paper) !important;
+}
+
+@media (max-width: 900px) {
+  body.unified-theme {
+    padding-top: 72px;
+  }
+
+  body.unified-theme .site-header,
+  body.unified-theme .site-nav .nav-inner {
+    height: 72px;
+  }
+
+  body.unified-theme .nav-links {
+    gap: 14px;
+  }
+
+  body.unified-theme .feed-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --nal-page-x: 18px;
+    --nal-radius: 20px;
+  }
+
+  body.unified-theme .nav-links {
+    display: none;
+  }
+
+  body.unified-theme .section-title,
+  body.unified-theme .feed-heading h2 {
+    font-size: clamp(2.35rem, 13vw, 4.5rem);
+  }
+
+  body.unified-theme .community-grid {
+    gap: 12px;
+  }
+
+  body.unified-theme .community-card {
+    border-radius: var(--nal-radius);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.unified-theme *,
+  body.unified-theme *::before,
+  body.unified-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
