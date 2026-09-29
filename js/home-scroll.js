@@ -5,6 +5,16 @@
 (function () {
   "use strict";
 
+  // Load final hero layout overrides after the legacy homepage stylesheet.
+  // Keeping this separate lets us remove old hero rules safely later.
+  if (!document.querySelector('link[data-hero-safe-layout]')) {
+    const safeLayout = document.createElement("link");
+    safeLayout.rel = "stylesheet";
+    safeLayout.href = "css/hero-safe-layout.css";
+    safeLayout.dataset.heroSafeLayout = "true";
+    document.head.appendChild(safeLayout);
+  }
+
   const root = document.documentElement;
   const header = document.querySelector(".hero-header");
   const hero = document.querySelector(".hero-landing");
@@ -36,30 +46,26 @@
 
     root.style.setProperty("--hero-scroll-progress", eased.toFixed(4));
 
-    // Keep the animation safely inside the hero's padded content area.
-    // On small screens movement is intentionally much tighter.
     const mobile = window.innerWidth <= 700;
     const horizontal = mobile
-      ? Math.min(window.innerWidth * 0.018, 7)
-      : Math.min(window.innerWidth * 0.025, 34);
+      ? Math.min(window.innerWidth * 0.012, 5)
+      : Math.min(window.innerWidth * 0.018, 24);
     const vertical = mobile
-      ? Math.min(window.innerHeight * 0.028, 20)
-      : Math.min(window.innerHeight * 0.05, 38);
+      ? Math.min(window.innerHeight * 0.018, 13)
+      : Math.min(window.innerHeight * 0.032, 24);
 
-    // Do not push left-aligned words farther left — that was clipping VOCAL.
-    transform(vocal,  lerp(0, horizontal * 0.22, eased), lerp(0, -vertical * 0.28, eased), lerp(1, 0.975, eased), lerp(0, -0.35, eased));
-    transform(enough, lerp(0, horizontal * 0.62, eased), lerp(0, -vertical * 0.08, eased), lerp(1, 0.985, eased), lerp(0, 0.3, eased));
-    transform(letme,  lerp(0, horizontal * 0.12, eased), lerp(0, vertical * 0.25, eased), lerp(1, 0.99, eased), 0);
-    transform(paint,  lerp(0, horizontal * 0.38, eased), lerp(0, vertical * 0.42, eased), lerp(1, 1.01, eased), lerp(0, -0.2, eased));
+    transform(vocal,  lerp(0, horizontal * 0.18, eased), lerp(0, -vertical * 0.20, eased), lerp(1, 0.985, eased), lerp(0, -0.2, eased));
+    transform(enough, lerp(0, horizontal * 0.40, eased), lerp(0, -vertical * 0.05, eased), lerp(1, 0.99, eased), lerp(0, 0.15, eased));
+    transform(letme,  lerp(0, horizontal * 0.10, eased), lerp(0, vertical * 0.18, eased), lerp(1, 0.995, eased), 0);
+    transform(paint,  lerp(0, horizontal * 0.22, eased), lerp(0, vertical * 0.24, eased), lerp(1, 1.005, eased), lerp(0, -0.1, eased));
 
     if (dash) {
-      dash.style.transform = `translate3d(${lerp(0, horizontal * 0.16, eased)}px, ${lerp(0, vertical * 0.30, eased)}px, 0)`;
-      dash.style.opacity = String(lerp(1, 0.72, eased));
+      dash.style.transform = `translate3d(${lerp(0, horizontal * 0.10, eased)}px, ${lerp(0, vertical * 0.18, eased)}px, 0)`;
+      dash.style.opacity = String(lerp(1, 0.78, eased));
     }
 
     if (promise) {
-      promise.style.transform = `translate3d(${lerp(0, horizontal * 0.25, eased)}px, ${lerp(0, vertical * 0.46, eased)}px, 0)`;
-      promise.style.letterSpacing = `${lerp(0, mobile ? 0.012 : 0.03, eased)}em`;
+      promise.style.transform = `translate3d(${lerp(0, horizontal * 0.15, eased)}px, ${lerp(0, vertical * 0.25, eased)}px, 0)`;
     }
 
     header?.classList.toggle("is-scrolled", y > 12);
