@@ -1,0 +1,132 @@
+/* Hero safe-layout overrides: keeps all display type inside the viewport. */
+.hero-landing {
+  min-height: 100svh !important;
+  height: 100svh !important;
+  overflow: hidden !important;
+}
+
+.hero-main-title {
+  top: 38% !important;
+  width: 88vw !important;
+  max-width: 1420px;
+  line-height: .88 !important;
+}
+
+.hero-vocal,
+.hero-enough {
+  font-size: clamp(4.8rem, 9.1vw, 9.6rem) !important;
+  line-height: .88 !important;
+  letter-spacing: -.055em !important;
+}
+
+.hero-letme {
+  margin-top: .22em !important;
+  font-size: clamp(2.7rem, 4.5vw, 4.8rem) !important;
+  line-height: .92 !important;
+}
+
+.hero-paint-it {
+  left: 50% !important;
+  top: 63% !important;
+  width: 88vw !important;
+  max-width: 1420px;
+  font-size: clamp(4.8rem, 9.2vw, 9.8rem) !important;
+  line-height: .88 !important;
+  letter-spacing: -.055em !important;
+  text-align: center !important;
+}
+
+.hero-dash-track {
+  top: 75% !important;
+  width: min(66vw, 900px) !important;
+}
+
+.hero-promise {
+  left: 50% !important;
+  top: 81% !important;
+  width: 88vw !important;
+  font-size: clamp(1.65rem, 3.15vw, 3.35rem) !important;
+  line-height: 1 !important;
+  letter-spacing: -.035em !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+/* Old 3D CSS is retained in the legacy stylesheet but must never render. */
+.hero-canvas,
+#hero-3d-canvas,
+.tube-destination,
+.tube-destination-inner {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+@media (max-width: 900px) {
+  .hero-main-title {
+    top: 38% !important;
+    width: 90vw !important;
+  }
+  .hero-vocal,
+  .hero-enough {
+    font-size: clamp(3.2rem, 11vw, 5.8rem) !important;
+  }
+  .hero-letme {
+    font-size: clamp(1.9rem, 6vw, 3.2rem) !important;
+  }
+  .hero-paint-it {
+    top: 61% !important;
+    width: 90vw !important;
+    font-size: clamp(3.3rem, 11.5vw, 6rem) !important;
+  }
+  .hero-dash-track {
+    top: 71.5% !important;
+    width: 72vw !important;
+  }
+  .hero-promise {
+    top: 77% !important;
+    width: 90vw !important;
+    font-size: clamp(1.35rem, 4.6vw, 2.5rem) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-main-title {
+    top: 36% !important;
+    width: 88vw !important;
+  }
+  .hero-vocal,
+  .hero-enough {
+    display: block !important;
+    font-size: clamp(3rem, 16vw, 5.2rem) !important;
+    line-height: .82 !important;
+  }
+  .hero-letme {
+    margin-top: .18em !important;
+    font-size: clamp(1.8rem, 8.5vw, 2.8rem) !important;
+  }
+  .hero-paint-it {
+    top: 61% !important;
+    width: 88vw !important;
+    font-size: clamp(3.1rem, 16vw, 5.3rem) !important;
+  }
+  .hero-dash-track {
+    top: 70.5% !important;
+    width: 68vw !important;
+  }
+  .hero-promise {
+    top: 76% !important;
+    width: 90vw !important;
+    font-size: clamp(1rem, 5.6vw, 1.65rem) !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 901px) {
+  .hero-main-title { top: 37% !important; }
+  .hero-vocal,
+  .hero-enough { font-size: clamp(4.3rem, 8.3vw, 8.5rem) !important; }
+  .hero-letme { font-size: clamp(2.3rem, 4vw, 4rem) !important; }
+  .hero-paint-it { top: 61% !important; font-size: clamp(4.3rem, 8.4vw, 8.7rem) !important; }
+  .hero-dash-track { top: 72.5% !important; }
+  .hero-promise { top: 78% !important; font-size: clamp(1.5rem, 2.8vw, 2.8rem) !important; }
+}
