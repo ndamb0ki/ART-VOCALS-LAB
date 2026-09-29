@@ -1,30 +1,30 @@
 // =====================================================
 // NDAMBUKI ART LAB — HERO SCROLL CONTROLLER
-// Keep the hero composition stable while scrolling.
+// Scroll drives wrapper layers only. Individual hero words remain untouched.
 // No 3D / paint tube behaviour.
 // =====================================================
 (function () {
   "use strict";
 
-  // Final hero layout overrides load after the legacy homepage stylesheet.
-  if (!document.querySelector('link[data-hero-safe-layout]')) {
-    const safeLayout = document.createElement("link");
-    safeLayout.rel = "stylesheet";
-    safeLayout.href = "css/hero-safe-layout.css";
-    safeLayout.dataset.heroSafeLayout = "true";
-    document.head.appendChild(safeLayout);
-  }
-
   const header = document.querySelector(".hero-header");
+  const hero = document.querySelector(".hero-landing");
   const bio = document.querySelector(".artist-bio-scroll");
+  let ticking = false;
 
-  // IMPORTANT:
-  // Do not write inline transforms to the hero words on scroll.
-  // Their CSS reveal animation already uses transform/clip-path. Writing a
-  // second transform from JavaScript caused the text to jump and clip as soon
-  // as the first scroll event fired.
+  if (!hero) return;
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
   function update() {
     const y = window.scrollY || document.documentElement.scrollTop;
+    const heroHeight = Math.max(hero.offsetHeight, 1);
+
+    // 0 at the top, 1 after roughly half a hero of scrolling.
+    // CSS applies this value only to wrapper layers, so the load reveal on
+    // VOCAL / ENOUGH / LET ME JUST / PAINT IT never gets overwritten.
+    const progress = clamp(y / (heroHeight * 0.58), 0, 1);
+    const eased = progress * progress * (3 - 2 * progress);
+    hero.style.setProperty("--hero-scroll", eased.toFixed(4));
 
     header?.classList.toggle("is-scrolled", y > 12);
 
@@ -32,9 +32,17 @@
       const rect = bio.getBoundingClientRect();
       bio.classList.toggle("in-view", rect.top < window.innerHeight * 0.84);
     }
+
+    ticking = false;
   }
 
-  window.addEventListener("scroll", update, { passive: true });
-  window.addEventListener("resize", update);
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
   update();
 })();
