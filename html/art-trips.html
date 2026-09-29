@@ -3,27 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="../images/icons8-homer-simpson-40.apng.png">
+  <link rel="icon" type="image/png" href="../images/icons8-homer-simpson-40.apng.png">
   <title>Ndambuki Art Lab - Art Trips</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/unified-theme.css">
+
+  <style>
+    body.unified-theme .page-hero {
+      min-height: clamp(390px, 58vh, 660px);
+      padding: clamp(105px, 13vw, 180px) var(--nal-page-x) clamp(60px, 8vw, 105px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: var(--nal-paper);
+      border-bottom: 1px solid var(--nal-line);
+    }
+    body.unified-theme .page-hero h1 {
+      margin: 0;
+      font-family: var(--nal-display);
+      font-size: clamp(4.2rem, 12vw, 11rem);
+      line-height: .8;
+      font-weight: 600;
+      letter-spacing: -.085em;
+      text-transform: uppercase;
+      color: var(--nal-ink);
+    }
+    body.unified-theme .page-hero p {
+      width: min(100%, 650px);
+      margin: clamp(30px, 4vw, 52px) 0 0 auto;
+      font-size: clamp(1rem, 1.35vw, 1.18rem);
+      line-height: 1.65;
+      color: var(--nal-muted);
+    }
+    body.unified-theme .trips-bento {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: var(--nal-section-y) var(--nal-page-x);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(14px, 2vw, 26px);
+      background: var(--nal-paper);
+    }
+    body.unified-theme .trips-bento .bento-card {
+      position: relative;
+      grid-column: span 6;
+      min-height: clamp(430px, 55vw, 720px);
+      overflow: hidden;
+      border-radius: var(--nal-radius);
+      background: var(--nal-dark);
+      border: 1px solid var(--nal-line-soft);
+      box-shadow: none;
+    }
+    body.unified-theme .trips-bento .bento-card:first-child {
+      grid-column: span 8;
+    }
+    body.unified-theme .trips-bento .bento-card:nth-child(2) {
+      grid-column: span 4;
+    }
+    body.unified-theme .trips-bento .bento-card:nth-child(3) {
+      grid-column: span 12;
+      min-height: clamp(430px, 48vw, 680px);
+    }
+    body.unified-theme .bento-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    body.unified-theme .bento-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 35%, rgba(0,0,0,.8) 100%);
+      pointer-events: none;
+    }
+    body.unified-theme .bento-card:hover img {
+      transform: scale(1.035);
+    }
+    body.unified-theme .bento-text {
+      position: absolute;
+      z-index: 2;
+      left: clamp(20px, 3vw, 42px);
+      right: clamp(20px, 3vw, 42px);
+      bottom: clamp(20px, 3vw, 38px);
+      padding: 0;
+      background: transparent;
+      color: #fff;
+    }
+    body.unified-theme .bento-text h3 {
+      margin: 0 0 10px;
+      font-family: var(--nal-display);
+      font-size: clamp(1.8rem, 3.4vw, 4rem);
+      line-height: .95;
+      letter-spacing: -.055em;
+      color: #fff;
+    }
+    body.unified-theme .bento-text p {
+      max-width: 590px;
+      margin: 0;
+      color: rgba(255,255,255,.82);
+      font-size: clamp(.92rem, 1.15vw, 1.05rem);
+    }
+    body.unified-theme .contact {
+      padding: var(--nal-section-y) var(--nal-page-x);
+      background: var(--nal-paper-light);
+      border-top: 1px solid var(--nal-line);
+      text-align: left;
+    }
+    body.unified-theme .contact h2 {
+      max-width: 1000px;
+      margin: 0 0 24px;
+      font-family: var(--nal-display);
+      font-size: clamp(3rem, 7vw, 7rem);
+      line-height: .9;
+      letter-spacing: -.065em;
+      text-transform: uppercase;
+    }
+    body.unified-theme .contact p {
+      max-width: 600px;
+      margin: 0 0 32px;
+    }
+    body.unified-theme .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    body.unified-theme .contact-links a {
+      padding: 12px 18px;
+      border: 1px solid var(--nal-ink);
+      background: var(--nal-ink);
+      color: var(--nal-paper);
+      text-decoration: none;
+      font-weight: 700;
+      transition: .25s ease;
+    }
+    body.unified-theme .contact-links a:hover {
+      background: transparent;
+      color: var(--nal-ink);
+      transform: translateY(-2px);
+    }
+    @media (max-width: 900px) {
+      body.unified-theme .trips-bento .bento-card,
+      body.unified-theme .trips-bento .bento-card:first-child,
+      body.unified-theme .trips-bento .bento-card:nth-child(2),
+      body.unified-theme .trips-bento .bento-card:nth-child(3) {
+        grid-column: span 12;
+        min-height: 560px;
+      }
+    }
+    @media (max-width: 640px) {
+      body.unified-theme .page-hero h1 { font-size: clamp(3.8rem, 21vw, 6.2rem); }
+      body.unified-theme .trips-bento { gap: 12px; padding-top: 60px; padding-bottom: 70px; }
+      body.unified-theme .trips-bento .bento-card,
+      body.unified-theme .trips-bento .bento-card:first-child,
+      body.unified-theme .trips-bento .bento-card:nth-child(2),
+      body.unified-theme .trips-bento .bento-card:nth-child(3) { min-height: 460px; }
+    }
+  </style>
 </head>
-<body>
+<body class="unified-theme">
 
   <header class="site-header">
     <nav class="site-nav">
       <div class="nav-inner">
         <a class="brand" href="../index.html">Ndambuki Art Lab</a>
         <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
         </button>
         <ul class="nav-links">
           <li><a href="../index.html">Home</a></li>
           <li><a href="art-classes.html">Art Classes</a></li>
           <li><a href="shop.html">Shop</a></li>
-          <li><a href="art-trips.html" class="active">Art Trips</a></li>
+          <li><a href="art-trips.html" class="active" aria-current="page">Art Trips</a></li>
           <li><a href="../index.html#contact">Contact</a></li>
         </ul>
         <button class="nav-cta">Support</button>
@@ -32,48 +191,26 @@
     </nav>
   </header>
 
-  <!-- PAGE HERO -->
   <section class="page-hero">
     <h1>Art Trips</h1>
     <p>Follow me on inspiring trips where art meets culture and community. Highlights and photos of my journey creating art in different locations.</p>
   </section>
 
-  <!-- BENTO / ART TRIP GRID -->
   <section class="bento trips-bento">
-
-    <!-- Trip 1 -->
     <div class="bento-card">
-      <img src="../images/trip1.jpg" alt="Maasai Community Trip" loading="lazy">
-      <div class="bento-text">
-        <h3>Ardhi Art Gallery</h3>
-        <p>Art has great opportunities when connecting with other artists and
-    exploring creative spaces together.</p>
-      </div>
+      <img src="../images/trip1.jpg" alt="Ardhi Art Gallery" loading="lazy">
+      <div class="bento-text"><h3>Ardhi Art Gallery</h3><p>Art has great opportunities when connecting with other artists and exploring creative spaces together.</p></div>
     </div>
-
-    <!-- Trip 2 -->
     <div class="bento-card">
-      <img src="../images/trip2.jpg" alt="Coastal Painting Trip" loading="lazy">
-      <div class="bento-text">
-        <h3>Collaborations</h3>
-        <p>A chance to visit galleries and see me doing collaborations with other
-    artists as we grow together.</p>
-      </div>
+      <img src="../images/trip2.jpg" alt="Art collaborations" loading="lazy">
+      <div class="bento-text"><h3>Collaborations</h3><p>A chance to visit galleries and see me doing collaborations with other artists as we grow together.</p></div>
     </div>
-
-    <!-- Trip 3 -->
     <div class="bento-card">
-      <img src="../images/trip3.jpg" alt="Urban Art Exploration" loading="lazy">
-      <div class="bento-text">
-        <h3>Art Conferences in Mathare</h3>
-        <p>Other artists also get a chance to make trips to the art laboratory,
-    making it a meaningful and inspiring experience.</p>
-      </div>
+      <img src="../images/trip3.jpg" alt="Art conferences in Mathare" loading="lazy">
+      <div class="bento-text"><h3>Art Conferences in Mathare</h3><p>Other artists also get a chance to make trips to the art laboratory, making it a meaningful and inspiring experience.</p></div>
     </div>
-
   </section>
 
-  <!-- CONTACT SECTION -->
   <section id="contact" class="contact">
     <h2>Get in Touch</h2>
     <p>Reach out for commissions, support, or collaborations.</p>
@@ -84,7 +221,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-content">
       <h3>Ndambuki Art Lab</h3>
