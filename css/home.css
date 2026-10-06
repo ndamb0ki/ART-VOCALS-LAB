@@ -4137,3 +4137,82 @@ body.lab-entered .hero-type-front {
   visibility: visible !important;
   opacity: 1 !important;
 }
+
+
+/* HERO COMPOSITION RESET — keep the full phrase inside the viewport */
+.hero-landing .hero-inner{position:relative!important;overflow:hidden!important}
+.hero-landing .hero-type-back,
+.hero-landing .hero-type-front{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  pointer-events:none;
+}
+.hero-landing .hero-main-title{
+  position:absolute!important;
+  top:17%!important;
+  left:50%!important;
+  width:min(92vw,1450px)!important;
+  margin:0!important;
+  transform:translateX(-50%)!important;
+  text-align:center!important;
+}
+.hero-landing .hero-main-title .hero-word{
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  position:static!important;
+  text-align:center!important;
+}
+.hero-landing .hero-vocal,
+.hero-landing .hero-enough{
+  display:inline!important;
+  font-size:clamp(5rem,9.2vw,10.2rem)!important;
+  line-height:.84!important;
+}
+.hero-landing .hero-vocal::after{content:" "!important}
+.hero-landing .hero-letme{
+  margin-top:clamp(18px,2.2vh,30px)!important;
+  font-size:clamp(2.6rem,4.5vw,5.2rem)!important;
+  line-height:.9!important;
+}
+.hero-landing .hero-paint-it{
+  position:absolute!important;
+  top:52%!important;
+  left:50%!important;
+  width:100%!important;
+  margin:0!important;
+  transform:translate(-50%,-50%)!important;
+  text-align:center!important;
+  font-size:clamp(5rem,9.2vw,10.2rem)!important;
+  line-height:.84!important;
+}
+.hero-landing .hero-dash-track{
+  position:absolute!important;
+  top:66%!important;
+  left:50%!important;
+  width:min(72vw,1220px)!important;
+  transform:translateX(-50%)!important;
+}
+.hero-landing .hero-promise{
+  position:absolute!important;
+  top:71%!important;
+  left:50%!important;
+  width:90%!important;
+  margin:0!important;
+  transform:translateX(-50%)!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:clamp(1.8rem,3vw,3.6rem)!important;
+  line-height:1!important;
+}
+body.lab-entered .hero-promise{transform:translateX(-50%)!important}
+@media(max-width:768px){
+ .hero-landing .hero-main-title{top:20%!important;width:94vw!important}
+ .hero-landing .hero-vocal,.hero-landing .hero-enough,.hero-landing .hero-paint-it{font-size:clamp(3.3rem,14vw,6rem)!important}
+ .hero-landing .hero-letme{font-size:clamp(2rem,8vw,3.5rem)!important}
+ .hero-landing .hero-paint-it{top:51%!important}
+ .hero-landing .hero-dash-track{top:63%!important;width:82vw!important}
+ .hero-landing .hero-promise{top:68%!important;font-size:clamp(1.35rem,6vw,2.3rem)!important}
+}
