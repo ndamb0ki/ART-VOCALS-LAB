@@ -4040,3 +4040,29 @@ body.tube-behind .hero-canvas { z-index: 1 !important; }
 .hero-letme {
   line-height: 0.86 !important;
 }
+
+
+/* HERO TYPE SCALE + SENTENCE CASE — OCT 2026 */
+.hero-main-title,
+.hero-paint-it,
+.hero-promise {
+  text-transform: none !important;
+}
+.hero-vocal,
+.hero-enough,
+.hero-letme,
+.hero-paint-it,
+.hero-promise {
+  font-size: clamp(4.8rem, 9vw, 10rem) !important;
+  line-height: .88 !important;
+  letter-spacing: -.065em !important;
+}
+@media (max-width: 768px) {
+  .hero-vocal,
+  .hero-enough,
+  .hero-letme,
+  .hero-paint-it,
+  .hero-promise {
+    font-size: clamp(3rem, 13vw, 5.8rem) !important;
+  }
+}
