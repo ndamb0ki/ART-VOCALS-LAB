@@ -4011,3 +4011,32 @@ body.tube-behind .hero-canvas { z-index: 1 !important; }
     animation:none;
   }
 }
+
+
+/* =========================================================
+   HERO TYPOGRAPHY + SITE-PALETTE GRADIENT — OCT 2026
+   Match the "Art is not one thing." display treatment.
+========================================================= */
+.hero-landing {
+  background:
+    radial-gradient(circle at 14% 18%, rgba(238,231,220,.34) 0%, rgba(238,231,220,0) 34%),
+    radial-gradient(circle at 86% 22%, rgba(85,116,77,.82) 0%, rgba(85,116,77,0) 42%),
+    radial-gradient(circle at 74% 82%, rgba(255,91,53,.34) 0%, rgba(255,91,53,0) 38%),
+    linear-gradient(135deg, #6f2936 0%, #8f4b55 42%, #55744d 100%) !important;
+}
+
+.hero-main-title,
+.hero-main-title .hero-word {
+  font-family: var(--home-display) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.075em !important;
+}
+
+.hero-vocal,
+.hero-enough {
+  line-height: 0.82 !important;
+}
+
+.hero-letme {
+  line-height: 0.86 !important;
+}
