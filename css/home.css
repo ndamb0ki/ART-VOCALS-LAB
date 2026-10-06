@@ -4109,3 +4109,31 @@ body.lab-entered .hero-promise{animation-delay:.58s!important}
 body.lab-entered .hero-meta,body.lab-entered .hero-word-ring{animation-delay:.66s!important}
 body.lab-entered .hero-bottom,body.lab-entered .hero-scroll{animation-delay:.76s!important}
 @keyframes labHeroIn{0%{opacity:0;filter:blur(9px)}100%{opacity:1;filter:blur(0)}}
+
+
+/* HERO VISIBILITY FIX — entrance owns the reveal */
+body.lab-entered .hero-vocal,
+body.lab-entered .hero-enough,
+body.lab-entered .hero-letme,
+body.lab-entered .hero-paint-it,
+body.lab-entered .hero-promise {
+  visibility: visible !important;
+  clip-path: inset(0 0 0 0) !important;
+}
+body.lab-entered .hero-vocal,
+body.lab-entered .hero-enough,
+body.lab-entered .hero-letme {
+  transform: translate3d(0,0,0) scale(1) !important;
+}
+body.lab-entered .hero-paint-it {
+  transform: translate(-50%,-50%) scale(1) !important;
+}
+body.lab-entered .hero-promise {
+  transform: translate3d(0,0,0) scale(1) !important;
+}
+body.lab-entered .hero-main-title,
+body.lab-entered .hero-type-back,
+body.lab-entered .hero-type-front {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
