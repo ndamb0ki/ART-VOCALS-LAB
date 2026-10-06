@@ -4066,3 +4066,46 @@ body.tube-behind .hero-canvas { z-index: 1 !important; }
     font-size: clamp(3rem, 13vw, 5.8rem) !important;
   }
 }
+
+
+/* CINEMATIC HERO REVEAL AFTER LAB ENTRANCE */
+body.lab-intro-active .hero-vocal,
+body.lab-intro-active .hero-enough,
+body.lab-intro-active .hero-letme,
+body.lab-intro-active .hero-paint-it,
+body.lab-intro-active .hero-promise,
+body.lab-intro-active .hero-dash-track,
+body.lab-intro-active .hero-meta,
+body.lab-intro-active .hero-bottom,
+body.lab-intro-active .hero-scroll,
+body.lab-intro-active .hero-word-ring {
+  opacity: 0 !important;
+  animation: none !important;
+}
+body.lab-intro-active .hero-vocal { transform: translateY(100px) scale(.86) !important; }
+body.lab-intro-active .hero-enough { transform: translateY(125px) scale(.86) !important; }
+body.lab-intro-active .hero-letme { transform: translateY(145px) scale(.86) !important; }
+body.lab-intro-active .hero-paint-it { transform: translate(-50%,calc(-50% + 170px)) scale(.86) !important; }
+
+body.lab-entered .hero-vocal,
+body.lab-entered .hero-enough,
+body.lab-entered .hero-letme,
+body.lab-entered .hero-paint-it,
+body.lab-entered .hero-promise,
+body.lab-entered .hero-dash-track,
+body.lab-entered .hero-meta,
+body.lab-entered .hero-bottom,
+body.lab-entered .hero-scroll,
+body.lab-entered .hero-word-ring {
+  opacity: 0;
+  animation: labHeroIn 1.05s cubic-bezier(.16,1,.3,1) forwards !important;
+}
+body.lab-entered .hero-vocal{animation-delay:.08s!important}
+body.lab-entered .hero-enough{animation-delay:.17s!important}
+body.lab-entered .hero-letme{animation-delay:.27s!important}
+body.lab-entered .hero-paint-it{animation-delay:.38s!important}
+body.lab-entered .hero-dash-track{animation-delay:.5s!important}
+body.lab-entered .hero-promise{animation-delay:.58s!important}
+body.lab-entered .hero-meta,body.lab-entered .hero-word-ring{animation-delay:.66s!important}
+body.lab-entered .hero-bottom,body.lab-entered .hero-scroll{animation-delay:.76s!important}
+@keyframes labHeroIn{0%{opacity:0;filter:blur(9px)}100%{opacity:1;filter:blur(0)}}
