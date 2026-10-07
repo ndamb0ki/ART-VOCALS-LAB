@@ -136,3 +136,41 @@
     opacity: 1 !important;
   }
 }
+
+
+/* Continuous Ocean Depths surface across header + hero */
+body{
+  background:#0a1e2b;
+}
+.hero-header{
+  background:#0a1e2b !important;
+  background-image:linear-gradient(180deg,#0a1e2b 0%,#102c39 100%)!important;
+  border-color:rgba(102,217,255,.16)!important;
+}
+.hero-header::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.28;
+  background:
+    radial-gradient(circle at 15% 30%,rgba(102,217,255,.18),transparent 28%),
+    radial-gradient(circle at 82% 10%,rgba(102,217,255,.12),transparent 24%);
+  mix-blend-mode:screen;
+}
+.hero-landing.cinematic-hero{
+  min-height:100svh!important;
+  height:100svh!important;
+  background:linear-gradient(180deg,#0a1e2b 0%,#1a3b4a 50%,#092934 90%,#032630 100%)!important;
+}
+.hero-landing.cinematic-hero .cinematic-hero-bg.ocean-depths-pattern{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  background:linear-gradient(180deg,#0a1e2b 0%,#1a3b4a 50%,#092934 90%,#032630 100%)!important;
+  filter:url(#ocean-texture)!important;
+}
