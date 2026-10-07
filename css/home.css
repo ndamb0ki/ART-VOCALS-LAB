@@ -4443,3 +4443,32 @@ body.lab-entered .spray-tag span{
   0%{opacity:.35;filter:blur(3px)}
   100%{opacity:1;filter:none}
 }
+
+
+/* Full-viewport Ocean Depths hero */
+.hero-landing.cinematic-hero{
+  position:relative;
+  isolation:isolate;
+  background:linear-gradient(180deg,#0a1e2b 0%,#1a3b4a 50%,#092934 90%,#032630 100%)!important;
+  overflow:hidden;
+}
+.hero-landing.cinematic-hero .ocean-depths-pattern{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  z-index:0!important;
+  background:linear-gradient(180deg,#0a1e2b 0%,#1a3b4a 50%,#092934 90%,#032630 100%)!important;
+  filter:url(#ocean-texture)!important;
+  transform:none!important;
+}
+.hero-landing.cinematic-hero .cinematic-hero-shade{
+  z-index:1!important;
+  background:linear-gradient(180deg,rgba(3,20,27,.08) 0%,rgba(3,20,27,.02) 48%,rgba(3,20,27,.18) 100%)!important;
+}
+.hero-landing.cinematic-hero .cinematic-hero-content,
+.hero-landing.cinematic-hero .cinematic-scroll{
+  position:relative;
+  z-index:2!important;
+}
