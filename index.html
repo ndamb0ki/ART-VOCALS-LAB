@@ -38,10 +38,17 @@
 </header>
 <main>
 <section class="hero-landing cinematic-hero" id="home">
-  <div class="cinematic-hero-bg" aria-hidden="true">
-    <div class="cinematic-orb cinematic-orb-a"></div>
-    <div class="cinematic-orb cinematic-orb-b"></div>
-    <div class="cinematic-orb cinematic-orb-c"></div>
+  <div class="cinematic-hero-bg ocean-depths-pattern" aria-hidden="true">
+    <svg class="texture-filter" width="0" height="0" focusable="false" aria-hidden="true">
+      <filter id="ocean-texture">
+        <feTurbulence result="noise" numOctaves="3" baseFrequency="0.6" type="turbulence"></feTurbulence>
+        <feSpecularLighting result="specular" lighting-color="#66d9ff" specularExponent="20" specularConstant="0.8" surfaceScale="2" in="noise">
+          <fePointLight z="100" y="120" x="120"></fePointLight>
+        </feSpecularLighting>
+        <feComposite result="litNoise" operator="over" in2="SourceGraphic" in="specular"></feComposite>
+        <feBlend mode="screen" in2="litNoise" in="SourceGraphic"></feBlend>
+      </filter>
+    </svg>
   </div>
   <div class="cinematic-hero-shade" aria-hidden="true"></div>
   <div class="cinematic-hero-content">
