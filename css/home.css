@@ -4411,3 +4411,35 @@ body.lab-entered .spray-tag span{
   .spray-title .spray-line::after,.spray-title .spray-ink::before{display:none!important}
   .spray-title em{animation:none!important}
 }
+
+
+/* Spray hero visibility safeguard */
+.spray-title .spray-ink{
+  opacity:1!important;
+  clip-path:none!important;
+  filter:none!important;
+}
+.spray-tag span{
+  opacity:1!important;
+  clip-path:none!important;
+  filter:none!important;
+}
+body.lab-entered .spray-line-one .spray-ink{
+  animation:sprayVisiblePass 1.7s .12s cubic-bezier(.22,.72,.22,1) both!important;
+}
+body.lab-entered .spray-line-two .spray-ink{
+  animation:sprayVisiblePass 2.05s 1.42s cubic-bezier(.22,.72,.22,1) both!important;
+}
+body.lab-entered .spray-tag span{
+  animation:sprayTagVisible 1.05s 3.72s ease-out both!important;
+}
+@keyframes sprayVisiblePass{
+  0%{opacity:.32;filter:blur(6px);clip-path:inset(0 92% 0 0)}
+  35%{opacity:.78;filter:blur(2.5px);clip-path:inset(0 55% 0 0)}
+  72%{opacity:.96;filter:blur(.7px);clip-path:inset(0 12% 0 0)}
+  100%{opacity:1;filter:none;clip-path:inset(0 0 0 0)}
+}
+@keyframes sprayTagVisible{
+  0%{opacity:.35;filter:blur(3px)}
+  100%{opacity:1;filter:none}
+}
