@@ -4255,3 +4255,23 @@ body.lab-entered .cinematic-scroll{animation:cinematicSideReveal .9s .62s cubic-
 @keyframes orbC{to{transform:translate3d(7vw,-10vh,0) scale(1.16)}}
 @media(max-width:768px){.cinematic-hero-content{width:88vw;padding-top:120px}.cinematic-title{font-size:clamp(3.6rem,16vw,6.6rem);line-height:.86}.cinematic-title span:nth-child(2){font-size:.72em;line-height:.96}.cinematic-footer{align-items:flex-start;flex-direction:column}.cinematic-scroll{display:none}.cinematic-eyebrow{margin-bottom:30px}}
 @media(prefers-reduced-motion:reduce){.cinematic-hero-bg,.cinematic-orb{animation:none!important}}
+
+
+/* Ocean Depths hero background — replaces previous gradient/orbs */
+.cinematic-hero .ocean-depths-pattern{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(180deg,#0a1e2b,#1a3b4a 50%,#092934 90%,#032630);
+  filter:url(#ocean-texture);
+  transform:none;
+  animation:none;
+}
+.cinematic-hero .texture-filter{
+  position:absolute;
+  width:0;
+  height:0;
+  overflow:hidden;
+}
+.cinematic-hero .cinematic-orb{display:none!important;}
